@@ -123,6 +123,7 @@ jcli address account --testing --prefix addr $(cat owner.pub) > owner.addr
 {
   "owner": "ed25519_pk1qppzz38el9zxtgaw0ttmf6d6zytllfu3fnwcl5tlc3pp044artxqru55mx",
   "name": "My Stake Pool",
+  "description": "My really awesome stakepool"
   "ticker": "ADA1",
   "homepage": "https://cardanofoundation.org",
   "pledge_address": "addr1s0nyt67uwcg7dahrxug698h5xfasnyd5qhnsd0h0peqlqvtfqf48ymz680l"
@@ -131,7 +132,7 @@ jcli address account --testing --prefix addr $(cat owner.pub) > owner.addr
 
 
 NOTE: "owner" is the contents of `owner.pub`.  
-NOTE: "pledge_address" is the contents of `owner.addr`. 
+NOTE: "pledge_address" is the contents of `owner.addr` (OR) some other "addr" prefixed address (for which you possess the pub/private keys).
 (ctrl+o to save the file, ctrl+x to exit) . 
 
 
@@ -140,19 +141,21 @@ NOTE: "pledge_address" is the contents of `owner.addr`.
 jcli key sign --secret-key owner.prv --output "$(cat owner.pub)".sig "$(cat owner.pub)".json
 ```
 
-
-### Go back to the terminal tab for your LOCAL machine
-```
-cd ~/incentivized-testnet-stakepool-registry/registry/
-pwd
-```
-
 ### Copy the .json & .sig file to your current location
-Execute the following command for EACH of the two .json & .sig files, which will copy them to your current location.  
+ On your LOCAL machine, execute the following command for EACH of the two .json & .sig files, which will copy them to your current location.  
 
 ```
 scp -P <YOUR SSH PORT> -i ~/.ssh/<YOUR SSH PRIVATE KEY> <YOUR VPS USERNAME>@<VPS PUBLIC IP ADDRESS>:jormungandr/<FILENAME> .
 ```
+
+### Check that you're happy with the .json file before you move it to the massively populated registry directory
+cat <FILENAME>.json
+
+### If you need to make changes, delete the two files, go back to where your public/private keys are and start over.
+(Let's assume you're happy now with the files)
+
+### Move both files to the registry directory
+mv <FILENAME> ~/incentivized-testnet-stakepool-registry/registry
 
 ### Check that you can push to the "submission" branch
 ```
