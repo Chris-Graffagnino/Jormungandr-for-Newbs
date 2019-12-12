@@ -532,7 +532,7 @@ jormungandr --full-version
 jcli --full-version
 ```
 
-# Script Usage
+## Script Usage
 ```
 # send-lovelaces.sh
 ~/files/send-lovelaces.sh <DESTINATION ADDRESS> <AMOUNT LOVELACES TO SEND> ${REST_PORT} $(cat ~/files/receiver_secret.key)
@@ -554,7 +554,7 @@ usage: ~/files/delegate-account.sh <STAKE_POOL_ID> <REST-LISTEN-PORT> <ACCOUNT-S
     <ACCOUNT-SK>     The Secret key of the Account address
 ```
 
-### Execute script
+## Create stake pool
 ```
 # This may take a minute or two to finish
 ~/files/createStakePool.sh ${REST_PORT} <TAX VALUE> <TAX RATIO> <TAX LIMIT> $(cat ~/files/receiver_secret.key)
