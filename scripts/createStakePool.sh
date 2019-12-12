@@ -84,7 +84,7 @@ $CLI certificate sign \
 echo "SIGNED_STAKE_POOL_CERTIFICATE: $(cat ${SIGNED_STAKE_POOL_CERTIFICATE_FILE})"
 
 echo " ##4. Send the signed Stake Pool certificate to the blockchain"
-./send-certificate.sh stake_pool.cert ${REST_PORT} ${ACCOUNT_SK}
+~/files/send-certificate.sh stake_pool.cert ${REST_PORT} ${ACCOUNT_SK}
 
 echo " ##5. Retrieve your stake pool id (NodeId)"
 cat stake_pool.cert | $CLI certificate get-stake-pool-id | tee stake_pool.id
