@@ -61,7 +61,7 @@ function start_leader() {
 }
 
 function logs() {
-    tail -n 60 ~/logs/node.out
+    tail ~/logs/node.out
 }
 
 function empty_logs() {
@@ -74,7 +74,7 @@ function leader_logs() {
 }
 
 function pool_stats() {
-    echo "(jcli rest v0 stake-pool get $(cat ~/files/stake_pool.id) -h http://127.0.0.1:${REST_PORT}/api)"
+    echo "$(jcli rest v0 stake-pool get $(cat ~/files/stake_pool.id) -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
 function problems() {
