@@ -20,7 +20,7 @@ function bal() {
 }
 
 function faucet() {
-    echo "$(curl -X POST https://faucet.faucet.jormungandr-testnet.iohkdev.io/send-money/$(cat ~/files/receiver_account.txt))"
+    echo "$(curl -X POST https://faucet.${CHAIN_NAME}.jormungandr-testnet.iohkdev.io/send-money/$(cat ~/files/receiver_account.txt))"
 }
 
 function get_ip() {
@@ -74,7 +74,7 @@ function leader_logs() {
 }
 
 function pool_stats() {
-    echo "(jcli rest v0 stake-pool get $(cat ~/files/stake_pool.id) -h http://127.0.0.1:${REST_PORT}/api)"
+    echo "$(jcli rest v0 stake-pool get $(cat ~/files/stake_pool.id) -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
 function problems() {
