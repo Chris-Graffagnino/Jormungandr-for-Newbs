@@ -61,7 +61,7 @@ function start_leader() {
 }
 
 function logs() {
-    tail ~/logs/node.out
+    tail -n 60 ~/logs/node.out
 }
 
 function empty_logs() {
