@@ -89,9 +89,6 @@ mkdir /home/<USERNAME>/.cargo && mkdir /home/<USERNAME>/.cargo/bin
 chown -R <USERNAME> /home/<USERNAME>/.cargo
 touch /home/<USERNAME>/.profile
 chown <USERNAME> /home/<USERNAME>/.profile
-touch /home/<USERNAME>/.bashrc && touch /home/<USERNAME>/.bash_profile
-chown <USERNAME> /home/<USERNAME>/.bashrc
-chown <USERNAME> /home/<USERNAME>/.bash_profile
 ```
 
 ## Increase open file limit
@@ -181,234 +178,32 @@ sudo nano /etc/ssh/sshd_config
 sudo service sshd restart
 ```
 
-
-## Configure .bash_profile
-`sudo nano ~/.bash_profile`
-(Paste the following into .bash_profile)
+### Download some scripts
 ```
-export ARCHFLAGS="-arch x86_64"
-test -f ~/.bashrc && source ~/.bashrc
+# Download files from my repo
+git clone https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs.git -b files-only --single-branch files
 
-function start() {
-    GREEN=$(printf "\033[0;32m")
-    nohup jormungandr --config ~/files/node-config.yaml --genesis-block-hash $GENESIS_BLOCK_HASH >> ~/logs/node.out 2>&1 &
-    echo ${GREEN}$(ps | grep jormungandr)
-}
+# Make the scripts executable
+chmod +x ~/files/send-lovelaces.sh
+chmod +x ~/files/createStakePool.sh
+chmod +x ~/files/send-certificate.sh
+chmod +x ~/files/delegate-account.sh
 
-function stop() {
-    echo "$(jcli rest v0 shutdown get -h http://127.0.0.1:${REST_PORT}/api)"
-}
+# Create .bashrc && .bash_profile
+cat files/.bashrc > ~/.bashrc && cat files/.bash_profile > ~/.bash_profile
 
-function stats() {
-    echo "$(jcli rest v0 node stats get -h http://127.0.0.1:${REST_PORT}/api)"
-}
+# Change ownership of .bashrc and .bash_profile
+chown <USERNAME> /home/<USERNAME>/.bashrc
+chown <USERNAME> /home/<USERNAME>/.bash_profile
 
-function bal() {
-    echo "$(jcli rest v0 account get $(cat ~/files/receiver_account.txt) -h  http://127.0.0.1:${REST_PORT}/api)"
-}
+# Restrict access to .bashrc and .bash_profile
+chmod 700 ~/.bashrc && chmod 700 ~/.bash_profile
 
-function faucet() {
-    echo "$(curl -X POST https://faucet.faucet.jormungandr-testnet.iohkdev.io/send-money/$(cat ~/files/receiver_account.txt))"
-}
-
-function get_ip() {
-    echo "${PUBLIC_IP_ADDR}"
-}
-
-function get_pid() {
-    ps auxf | grep jor
-}
-
-function memory() {
-    top -o %MEM
-}
-
-function nodes() {
-    nodes="$(netstat -tupan | grep jor | grep EST | cut -c 1-80)"
-    total="$(netstat -tupan | grep jor | grep EST | cut -c 1-80 | wc -l)"
-    printf "%s\n" "${nodes}" "----------" "Total:" "${total}"
-}
-
-function num_open_files() {
-    echo "Calculating number of open files..."
-    echo "$(lsof -u $(whoami) | wc -l)"
-}
-
-function is_pool_visible() {
-    echo ${GREEN}$(jcli rest v0 stake-pools get --host "http://127.0.0.1:${REST_PORT}/api" | grep $(cat ~/files/stake_pool.id))
-}
-
-function delegate() {
-    echo "$(~/files/delegate-account.sh $(cat ~/files/stake_pool.id) ${REST_PORT} $(cat ~/files/receiver_secret.key))"
-}
-
-function start_leader() {
-    GREEN=$(printf "\033[0;32m")
-    nohup jormungandr --config ~/files/node-config.yaml --secret ~/files/node_secret.yaml --genesis-block-hash ${GENESIS_BLOCK_HASH} >> ~/logs/node.out 2>&1 &
-    echo "${GREEN}$(ps | grep jormungandr)"
-}
-
-function logs() {
-    tail ~/logs/node.out
-}
-
-function empty_logs() {
-    > ~/logs/node.out
-}
-
-function leader_logs() {
-    echo "Has this node been scheduled to be leader?"
-    echo "$(jcli rest v0 leaders logs get -h http://127.0.0.1:${REST_PORT}/api)"
-}
-
-function pool_stats() {
-    echo "(jcli rest v0 stake-pool get $(cat ~/files/stake_pool.id) -h http://127.0.0.1:${REST_PORT}/api)"
-}
-
-function problems() {
-    grep -E -i 'cannot|stuck|exit|unavailable' ~/logs/node.out
-}
+# Reload environment variables in to your current shell
+source ~/.bash_profile
 ```
 
-## Configure .bashrc
-`sudo nano ~/.bashrc` 
-(Paste the following into .bashrc)
-
-```
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
-
-# If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
-
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-#force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-        # We have color support; assume it's compliant with Ecma-48
-        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-        # a case would tend to support setf rather than setaf.)
-        color_prompt=yes
-    else
-        color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# enable color support of ls and also add handy aliases
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    #alias dir='dir --color=auto'
-    #alias vdir='vdir --color=auto'
-
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
-
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# colored vars
-GREEN=$(printf "\033[0;32m")
-
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
-fi
-
-function parse_git_branch() {
-    BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-    if [ ! "${BRANCH}" == "" ]
-    then
-        echo "(${BRANCH})"
-    else
-        echo ""
-    fi
-}
-
-# Comment the following line if you prefer a prompt *not* include git branch info
-export PS1="\[\e[36m\]\w\[\e[m\]\[\e[35m\] \`parse_git_branch\`\[\e[m\] \[\e[36m\]:\[\e[m\] "
-
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/bin/python3"
-```
-
-### A word about environment variables
+### About environment variables
 ```
 # All-caps words are variables available to the current shell, ie "environment".
 # You can declare an environment variable like this, (go ahead and try it): 
@@ -423,7 +218,7 @@ echo $HELLO
 # Want to see all the environment variables?:
 printenv
 
-# Next, we'll add some commands to .bashrc so important values are loaded as
+# Okay, enough about that. Next, we'll add some commands to .bashrc so important values are loaded as
 # environment variables every time we log in.
 ```
 
@@ -451,12 +246,6 @@ echo "export GENESIS_BLOCK_HASH='<BETA OR NIGHTLY GENESIS BLOCK HASH>'" >> ~/.ba
 
 # Genesis block hash for v0.8.0 nightly (Updated 12/11/19)
 # 65a9b15f82619fffd5a7571fdbf973a18480e9acf1d2fddeb606ebb53ecca839
-```
-
-### Source config files to make our new variables available in the current shell
-```
-# FYI There's a command in .bash_profile that sources .bashrc.
-source ~/.bash_profile
 ```
 
 ## Configure Swap to handle memory spikes
@@ -537,6 +326,7 @@ git config --global user.email <YOUR EMAIL ADDRESS>
 
 # Download jormungandr
 git clone https://github.com/input-output-hk/jormungandr
+
 cd jormungandr
 git checkout v0.8.0
 git checkout -b <NEW BRANCH NAME eg 8.0>
@@ -556,16 +346,15 @@ mkdir ~/logs
 touch ~/logs/node.out
 ```
 
-### Create node-config.yaml
+### Modify node-config.yaml
 ```
 nano ~/files/node-config.yaml
-
 
 # Check Telegram (StakePool Best Practice Workgroup) for up-to-date genesis-hash & trusted peers
 # https://t.me/CardanoStakePoolWorkgroup/74812
 
 # This is for the ** NIGHTLY ** release v0.8.0 (last updated 12/11/19)
-# Paste the following into node-config.yaml, replacing <YOUR REST PORT> with the appropriate value
+# Replace <THE PLACEHOLDERS> with the appropriate values
 ```
 ```
 ---
@@ -607,11 +396,6 @@ mempool:
 ### create a directory for storage
 ```
 mkdir /home/<YOUR USERNAME>/storage
-```
-
-### create a directory for your keys/scripts
-```
-mkdir /home/<YOUR USERNAME>/files
 ```
 
 ### generate the secret key
@@ -736,7 +520,7 @@ git checkout <A VERSION NUMBER SUCH AS v0.8.0-rc9+1>
 git tag -l | xargs git tag -d && git fetch -t
 
 # Create a new branch for yourself
-git checkout -b <NAME OF BRANCH, e.g. 8rc9+1>
+git checkout -b <NAME OF BRANCH, e.g. 8.0>
 
 # Compile the binaries
 git submodule update --init --recursive
@@ -748,478 +532,26 @@ jormungandr --full-version
 jcli --full-version
 ```
 
-## Create script to send lovelaces
+# Script Usage
 ```
-nano ~/files/send-lovelaces.sh
-
-# Paste the following into send-lovelaces.sh
-# This script is intended to be used, as-is... ie no placeholders need to be replaced.
-```
-```
-#!/bin/sh
-
-# Disclaimer:
-#
-#  The following use of shell script is for demonstration and understanding
-#  only, it should *NOT* be used at scale or for any sort of serious
-#  deployment, and is solely used for learning how the node and blockchain
-#  works, and how to interact with everything.
-#
-#  It also asumes that `jcli` is in the same folder with the script.
-#  The script works only for Account addresses type.
-#
-#  Tutorials can be found here: https://iohk.zendesk.com/hc/en-us/categories/360002383814-Shelley-Networked-Testnet
-
-### CONFIGURATION
-CLI="jcli"
-COLORS=1
-ADDRTYPE="--testing"
-TIMEOUT_NO_OF_BLOCKS=200
-
-getTip() {
-  echo $($CLI rest v0 tip get -h "${REST_URL}")
-}
-
-waitNewBlockCreated() {
-  COUNTER=${TIMEOUT_NO_OF_BLOCKS}
-  echo "  ##Waiting for new block to be created (timeout = $COUNTER blocks = $((${COUNTER} * ${SLOT_DURATION}))s)"
-  initialTip=$(getTip)
-  actualTip=$(getTip)
-
-  while [ "${actualTip}" = "${initialTip}" ]; do
-    sleep ${SLOT_DURATION}
-    actualTip=$(getTip)
-    COUNTER=$((COUNTER - 1))
-    if [ ${COUNTER} -lt 2 ]; then
-      echo "  ##ERROR: Waited $(($COUNTER * $SLOT_DURATION))s secs ($COUNTER*$SLOT_DURATION) and no new block created"
-      exit 1
-    fi
-  done
-  echo "New block was created - $(getTip)"
-}
-
-### COLORS
-if [ ${COLORS} -eq 1 ]; then
-  GREEN=$(printf "\033[0;32m")
-  RED=$(printf "\033[0;31m")
-  BLUE=$(printf "\033[0;33m")
-  WHITE=$(printf "\033[0m")
-else
-  GREEN=""
-  RED=""
-  BLUE=""
-  WHITE=""
-fi
-
-if [ $# -ne 4 ]; then
-  echo "usage: $0 <ADDRESS> <AMOUNT> <REST-LISTEN-PORT> <SOURCE-SK>"
-  echo "    <ADDRESS>     Address where to send the funds"
-  echo "    <AMOUNT>      Amount to be sent (in lovelace) - tx fees will be paid by the source address"
-  echo "    <REST-LISTEN-PORT>   The REST Listen Port set in node-config.yaml file (EX: 3101)"
-  echo "    <SOURCE-SK>   The Secret key of the Source address"
-  exit 1
-fi
-
-DESTINATION_ADDRESS="$1"
-DESTINATION_AMOUNT="$2"
-REST_PORT="$3"
-SOURCE_SK="$4"
-
-REST_URL="http://127.0.0.1:${REST_PORT}/api"
-BLOCK0_HASH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'block0Hash:' | sed -e 's/^[[:space:]]*//' | sed -e 's/block0Hash: //')
-FEE_CONSTANT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'constant:' | sed -e 's/^[[:space:]]*//' | sed -e 's/constant: //')
-FEE_COEFFICIENT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'coefficient:' | sed -e 's/^[[:space:]]*//' | sed -e 's/coefficient: //')
-MAX_TXS_PER_BLOCK=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'maxTxsPerBlock:' | sed -e 's/^[[:space:]]*//' | sed -e 's/maxTxsPerBlock: //')
-SLOT_DURATION=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotDuration:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotDuration: //')
-SLOTS_PER_EPOCH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotsPerEpoch:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotsPerEpoch: //')
-
-echo "================Send Money================="
-echo "DESTINATION_ADDRESS: ${DESTINATION_ADDRESS}"
-echo "DESTINATION_AMOUNT: ${DESTINATION_AMOUNT}"
-echo "REST_PORT: ${REST_PORT}"
-echo "SOURCE_SK: ${SOURCE_SK}"
-echo "BLOCK0_HASH: ${BLOCK0_HASH}"
-echo "FEE_CONSTANT: ${FEE_CONSTANT}"
-echo "FEE_COEFFICIENT: ${FEE_COEFFICIENT}"
-echo "=================================================="
-
-STAGING_FILE="staging.$$.transaction"
-
-#CLI transaction
-if [ -f "${STAGING_FILE}" ]; then
-  echo "error: staging already exist. restart"
-  exit 2
-fi
-
-set -e
-
-SOURCE_PK=$(echo ${SOURCE_SK} | $CLI key to-public)
-SOURCE_ADDR=$($CLI address account ${ADDRTYPE} ${SOURCE_PK})
-
-echo "## Sending ${RED}${DESTINATION_AMOUNT}${WHITE} to ${BLUE}${DESTINATION_ADDRESS}${WHITE}"
-$CLI address info "${DESTINATION_ADDRESS}"
-
-# TODO we should do this in one call to increase the atomicity, but otherwise
-SOURCE_COUNTER=$($CLI rest v0 account get "${SOURCE_ADDR}" -h "${REST_URL}" | grep '^counter:' | sed -e 's/counter: //')
-
-# the source account is going to pay for the fee ... so calculate how much
-# FEE_COEFFICIENT should be multiplied witht the no of (INPUTS + OUTPUTS) - we use only 1 Source and 1 Destination
-ACCOUNT_AMOUNT=$((${DESTINATION_AMOUNT} + ${FEE_CONSTANT} + $((2 * ${FEE_COEFFICIENT}))))
-
-# Create the transaction
-# FROM: ACCOUNT for AMOUNT+FEES
-# TO: DESTINATION ADDRESS for AMOUNT
-echo " ##1. Create the offline transaction file"
-$CLI transaction new --staging ${STAGING_FILE}
-
-echo " ##2. Add input details"
-$CLI transaction add-account "${SOURCE_ADDR}" "${ACCOUNT_AMOUNT}" --staging "${STAGING_FILE}"
-
-echo " ##3. Add output details"
-$CLI transaction add-output "${DESTINATION_ADDRESS}" "${DESTINATION_AMOUNT}" --staging "${STAGING_FILE}"
-
-echo " ##4. Finalize the transactions"
-$CLI transaction finalize --staging ${STAGING_FILE}
-
-TRANSACTION_ID=$($CLI transaction data-for-witness --staging ${STAGING_FILE})
-
-echo " ##5. Create the witness"
-# Create the witness for the 1 input (add-account) and add it
-WITNESS_SECRET_FILE="witness.secret.$$"
-WITNESS_OUTPUT_FILE="witness.out.$$"
-
-printf "${SOURCE_SK}" >${WITNESS_SECRET_FILE}
-
-$CLI transaction make-witness ${TRANSACTION_ID} \
-  --genesis-block-hash ${BLOCK0_HASH} \
-  --type "account" --account-spending-counter "${SOURCE_COUNTER}" \
-  ${WITNESS_OUTPUT_FILE} ${WITNESS_SECRET_FILE}
-
-echo " ##6. Add the witness to the transaction"
-$CLI transaction add-witness ${WITNESS_OUTPUT_FILE} --staging "${STAGING_FILE}"
-
-echo " ##7. Show the transaction info"
-$CLI transaction info --fee-constant ${FEE_CONSTANT} --fee-coefficient ${FEE_COEFFICIENT} --staging "${STAGING_FILE}"
-
-echo " ##7. Finalize the transaction and send it"
-$CLI transaction seal --staging "${STAGING_FILE}"
-$CLI transaction to-message --staging "${STAGING_FILE}" | $CLI rest v0 message post -h "${REST_URL}"
-
-echo " ##8. Remove the temporary files"
-rm ${STAGING_FILE} ${WITNESS_SECRET_FILE} ${WITNESS_OUTPUT_FILE}
-
-waitNewBlockCreated
-
-echo " ##9. Check the account's balance"
-$CLI rest v0 account get ${DESTINATION_ADDRESS} -h ${REST_URL}
-
-exit 0
-```
-
-### Make send-lovelaces.sh executable
-```
-# Make script executable
-chmod +x ~/files/send-lovelaces.sh
-
-# Usage
+# send-lovelaces.sh
 ~/files/send-lovelaces.sh <DESTINATION ADDRESS> <AMOUNT LOVELACES TO SEND> ${REST_PORT} $(cat ~/files/receiver_secret.key)
-```
 
-## Create a stakepool
-(Do this while your node is running in passive mode…edit node-config.yaml so blocks=normal, messages=low)
+# createStakePool.sh
+usage: ~/files/createStakePool.sh <REST-LISTEN-PORT> <TAX_VALUE> <TAX_RATIO> <TAX_LIMIT> <ACCOUNT_SK>
+    <REST-LISTEN-PORT>   The REST Listen Port set in node-config.yaml file (EX: 3101)
+    <TAX_VALUE>   The fixed cut the stake pool will take from the total reward
+    <TAX_RATIO>   The percentage of the remaining value that will be taken from the total
+    <TAX_LIMIT>   A value that can be set to limit the pool's Tax.
+    <SOURCE-SK>   The Secret key of the Source address
 
-### Create scripts to register your node as stake pool
-```
-nano ~/files/createStakePool.sh
+# send-certificate.sh is called by createStakePool.sh and is not intended for you.
 
-# Paste the following into createStakePool.sh
-# This script is intended to be used, as-is... ie no placeholders need to be replaced.
-```
-```
-#!/bin/sh
-
-# Disclaimer:
-#
-#  The following use of shell script is for demonstration and understanding
-#  only, it should *NOT* be used at scale or for any sort of serious
-#  deployment, and is solely used for learning how the node and blockchain
-#  works, and how to interact with everything.
-#
-#  It also asumes that `jcli` is in the same folder with the script.
-#
-# Scenario:
-#   Configure 1 stake pool having as owner the provided account address (secret key)
-#
-#  Tutorials can be found here: https://iohk.zendesk.com/hc/en-us/categories/360002383814-Shelley-Networked-Testnet
-
-### CONFIGURATION
-CLI="jcli"
-COLORS=1
-ADDRTYPE="--testing"
-
-if [ $# -ne 5 ]; then
-    echo "usage: $0 <REST-LISTEN-PORT> <TAX_VALUE> <TAX_RATIO> <TAX_LIMIT> <ACCOUNT_SK>"
-    echo "    <REST-LISTEN-PORT>   The REST Listen Port set in node-config.yaml file (EX: 3101)"
-    echo "    <TAX_VALUE>   The fixed cut the stake pool will take from the total reward"
-    echo "    <TAX_RATIO>   The percentage of the remaining value that will be taken from the total"
-    echo "    <TAX_LIMIT>   A value that can be set to limit the pool's Tax."
-    echo "    <SOURCE-SK>   The Secret key of the Source address"
-    exit 1
-fi
-
-REST_PORT="$1"
-TAX_VALUE="$2"
-TAX_RATIO="$3"
-TAX_LIMIT="$4"
-ACCOUNT_SK="$5"
-
-REST_URL="http://127.0.0.1:${REST_PORT}/api"
-BLOCK0_HASH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'block0Hash:' | sed -e 's/^[[:space:]]*//' | sed -e 's/block0Hash: //')
-FEE_CONSTANT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'constant:' | sed -e 's/^[[:space:]]*//' | sed -e 's/constant: //')
-FEE_COEFFICIENT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'coefficient:' | sed -e 's/^[[:space:]]*//' | sed -e 's/coefficient: //')
-FEE_CERTIFICATE=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate: //')
-
-ACCOUNT_PK=$(echo ${ACCOUNT_SK} | $CLI key to-public)
-ACCOUNT_ADDR=$($CLI address account ${ADDRTYPE} ${ACCOUNT_PK})
-
-echo "================ Blockchain details ================="
-echo "REST_PORT:        ${REST_PORT}"
-echo "ACCOUNT_SK:       ${ACCOUNT_SK}"
-echo "BLOCK0_HASH:      ${BLOCK0_HASH}"
-echo "FEE_CONSTANT:     ${FEE_CONSTANT}"
-echo "FEE_COEFFICIENT:  ${FEE_COEFFICIENT}"
-echo "FEE_CERTIFICATE:  ${FEE_CERTIFICATE}"
-echo "=================================================="
-
-echo " ##1. Create VRF keys"
-POOL_VRF_SK=$($CLI key generate --type=Curve25519_2HashDH)
-POOL_VRF_PK=$(echo ${POOL_VRF_SK} | $CLI key to-public)
-
-echo POOL_VRF_SK: ${POOL_VRF_SK}
-echo POOL_VRF_PK: ${POOL_VRF_PK}
-
-echo " ##2. Create KES keys"
-POOL_KES_SK=$($CLI key generate --type=SumEd25519_12)
-POOL_KES_PK=$(echo ${POOL_KES_SK} | $CLI key to-public)
-
-echo POOL_KES_SK: ${POOL_KES_SK}
-echo POOL_KES_PK: ${POOL_KES_PK}
-
-echo " ##3. Create the Stake Pool certificate using above VRF and KEY public keys"
-ACCOUNT_SK_FILE="account.privateKey"
-STAKE_POOL_CERTIFICATE_FILE="stake_pool.cert"
-SIGNED_STAKE_POOL_CERTIFICATE_FILE="stake_pool_certificate.signed"
-echo ${ACCOUNT_SK} > ${ACCOUNT_SK_FILE}
-
-$CLI certificate new stake-pool-registration --tax-fixed ${TAX_VALUE} --tax-ratio ${TAX_RATIO} --tax-limit ${TAX_LIMIT} --kes-key ${POOL_KES_PK} --vrf-key ${POOL_VRF_PK} --owner ${ACCOUNT_PK} --start-validity 0 --management-threshold 1 >${STAKE_POOL_CERTIFICATE_FILE}
-
-echo " Sign the Stake Pool certificate"
-$CLI certificate sign \
-    --certificate ${STAKE_POOL_CERTIFICATE_FILE} \
-    --key ${ACCOUNT_SK_FILE} \
-    --output ${SIGNED_STAKE_POOL_CERTIFICATE_FILE}
-
-echo "SIGNED_STAKE_POOL_CERTIFICATE: $(cat ${SIGNED_STAKE_POOL_CERTIFICATE_FILE})"
-
-echo " ##4. Send the signed Stake Pool certificate to the blockchain"
-./send-certificate.sh stake_pool.cert ${REST_PORT} ${ACCOUNT_SK}
-
-echo " ##5. Retrieve your stake pool id (NodeId)"
-cat stake_pool.cert | $CLI certificate get-stake-pool-id | tee stake_pool.id
-
-NODE_ID=$(cat stake_pool.id)
-
-echo "============== Stake Pool details ================"
-echo "Stake Pool ID:    ${NODE_ID}"
-echo "Stake Pool owner: ${ACCOUNT_ADDR}"
-echo "TAX_VALUE:        ${TAX_VALUE}"
-echo "TAX_RATIO:        ${TAX_RATIO}"
-echo "TAX_LIMIT:        ${TAX_LIMIT}"
-echo "=================================================="
-
-rm ${STAKE_POOL_CERTIFICATE_FILE} ${ACCOUNT_SK_FILE} ${SIGNED_STAKE_POOL_CERTIFICATE_FILE}
-
-echo " ##6. Create the node_secret.yaml file"
-#define the template.
-cat > node_secret.yaml << EOF
-genesis:
-  sig_key: ${POOL_KES_SK}
-  vrf_key: ${POOL_VRF_SK}
-  node_id: ${NODE_ID}
-EOF
-
-```
-
-`nano ~/files/send-certificate.sh`
-(Paste the following into send-certificate.sh)
-```
-#!/bin/sh
-
-# Disclaimer:
-#
-#  The following use of shell script is for demonstration and understanding
-#  only, it should *NOT* be used at scale or for any sort of serious
-#  deployment, and is solely used for learning how the node and blockchain
-#  works, and how to interact with everything.
-#
-#  It also asumes that `jcli` is in the same folder with the script.
-#
-#  Tutorials can be found here: https://iohk.zendesk.com/hc/en-us/categories/360002383814-Shelley-Networked-Testnet
-
-### CONFIGURATION
-CLI="jcli"
-COLORS=1
-ADDRTYPE="--testing"
-TIMEOUT_NO_OF_BLOCKS=200
-
-getTip() {
-  echo $($CLI rest v0 tip get -h "${REST_URL}")
-}
-
-waitNewBlockCreated() {
-  COUNTER=${TIMEOUT_NO_OF_BLOCKS}
-  echo "  ##Waiting for new block to be created (timeout = $COUNTER blocks = $((${COUNTER}*${SLOT_DURATION}))s)"
-  initialTip=$(getTip)
-  actualTip=$(getTip)
-
-  while [ "${actualTip}" = "${initialTip}" ]; do
-    sleep ${SLOT_DURATION}
-    actualTip=$(getTip)
-    COUNTER=$((COUNTER - 1))
-    if [ ${COUNTER} -lt 2 ]; then
-      echo "  ##ERROR: Waited $(($COUNTER * $SLOT_DURATION))s secs ($COUNTER*$SLOT_DURATION) and no new block created"
-      exit 1
-    fi
-  done
-  echo "New block was created - $(getTip)"
-}
-
-### COLORS
-if [ ${COLORS} -eq 1 ]; then
-    GREEN=`printf "\033[0;32m"`
-    RED=`printf "\033[0;31m"`
-    BLUE=`printf "\033[0;33m"`
-    WHITE=`printf "\033[0m"`
-else
-    GREEN=""
-    RED=""
-    BLUE=""
-    WHITE=""
-fi
-
-if [ $# -ne 3 ]; then
-    echo "usage: $0 <CERTIFICATE-PATH> <REST-LISTEN-PORT> <ACCOUNT-SOURCE-SK>"
-    echo "    <CERT-PATH>   Path to a readable certificate file"
-    echo "    <REST-PORT>   The REST Listen Port set in node-config.yaml file (EX: 3101)"
-    echo "    <SOURCE-SK>   The Secret key of the Source address"
-    exit 1
-fi
-
-CERTIFICATE_PATH="$1"
-REST_PORT="$2"
-ACCOUNT_SK="$3"
-
-REST_URL="http://127.0.0.1:${REST_PORT}/api"
-
-FEE_CONSTANT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'constant:' | sed -e 's/^[[:space:]]*//' | sed -e 's/constant: //')
-FEE_COEFFICIENT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'coefficient:' | sed -e 's/^[[:space:]]*//' | sed -e 's/coefficient: //')
-FEE_CERTIFICATE=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate: //')
-BLOCK0_HASH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'block0Hash:' | sed -e 's/^[[:space:]]*//' | sed -e 's/block0Hash: //')
-MAX_TXS_PER_BLOCK=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'maxTxsPerBlock:' | sed -e 's/^[[:space:]]*//' | sed -e 's/maxTxsPerBlock: //')
-SLOT_DURATION=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotDuration:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotDuration: //')
-SLOTS_PER_EPOCH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotsPerEpoch:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotsPerEpoch: //')
-
-echo "===============Send Certificate================="
-echo "CERTIFICATE_PATH: ${CERTIFICATE_PATH}"
-echo "REST_PORT: ${REST_PORT}"
-echo "ACCOUNT_SK: ${ACCOUNT_SK}"
-echo "BLOCK0_HASH: ${BLOCK0_HASH}"
-echo "FEE_CONSTANT: ${FEE_CONSTANT}"
-echo "FEE_COEFFICIENT: ${FEE_COEFFICIENT}"
-echo "FEE_CERTIFICATE: ${FEE_CERTIFICATE}"
-echo "=================================================="
-
-STAGING_FILE="staging.$$.transaction"
-
-if [ ! -r ${CERTIFICATE_PATH} ]; then
-    echo "certificate file does not exist or is not readable"
-    usage ${0}
-    exit 1
-fi
-
-#CLI transaction
-if [ -f "${STAGING_FILE}" ]; then
-    echo "error: staging already exist. restart"
-    exit 2
-fi
-
-set -e
-
-ACCOUNT_PK=$(echo ${ACCOUNT_SK} | $CLI key to-public)
-ACCOUNT_ADDR=$($CLI address account ${ADDRTYPE} ${ACCOUNT_PK})
-
-# TODO we should do this in one call to increase the atomicity, but otherwise
-ACCOUNT_COUNTER=$( $CLI rest v0 account get "${ACCOUNT_ADDR}" -h "${REST_URL}" | grep '^counter:' | sed -e 's/counter: //' )
-
-# the account is going to pay for the fee ... so calculate how much
-ACCOUNT_AMOUNT=$((${FEE_CONSTANT} + ${FEE_COEFFICIENT} + ${FEE_CERTIFICATE}))
-
-# Create the transaction
-# FROM: ACCOUNT for FEES
-echo " ##1. Create the offline transaction file"
-$CLI transaction new --staging ${STAGING_FILE}
-
-echo " ##2. Add the Account to the transaction"
-$CLI transaction add-account "${ACCOUNT_ADDR}" "${ACCOUNT_AMOUNT}" --staging "${STAGING_FILE}"
-
-echo " ##3. Add the certificate to the transaction"
-$CLI transaction add-certificate --staging ${STAGING_FILE} $(cat ${CERTIFICATE_PATH})
-
-echo " ##4. Finalize the transaction"
-$CLI transaction finalize --staging ${STAGING_FILE}
-
-TRANSACTION_ID=$($CLI transaction data-for-witness --staging ${STAGING_FILE})
-
-# Create the witness for the 1 input (add-account) and add it
-WITNESS_SECRET_FILE="witness.secret.$$"
-WITNESS_OUTPUT_FILE="witness.out.$$"
-
-printf "${ACCOUNT_SK}" > ${WITNESS_SECRET_FILE}
-
-echo " ##5. Make the witness"
-$CLI transaction make-witness ${TRANSACTION_ID} \
-    --genesis-block-hash ${BLOCK0_HASH} \
-    --type "account" --account-spending-counter "${ACCOUNT_COUNTER}" \
-    ${WITNESS_OUTPUT_FILE} ${WITNESS_SECRET_FILE}
-
-echo " ##6. Add the witness to the transaction"
-$CLI transaction add-witness ${WITNESS_OUTPUT_FILE} --staging "${STAGING_FILE}"
-
-echo " ##7. Show the transaction info"
-$CLI transaction info --fee-constant ${FEE_CONSTANT} --fee-coefficient ${FEE_COEFFICIENT} --fee-certificate ${FEE_CERTIFICATE} --staging "${STAGING_FILE}"
-
-echo " ##8. Seal the transaction"
-$CLI transaction seal --staging "${STAGING_FILE}"
-
-echo " ##9. Auth the transactions"
-$CLI transaction auth --key ${WITNESS_SECRET_FILE} --staging "${STAGING_FILE}"
-
-echo " ##10. Encode and send the transaction"
-$CLI transaction to-message --staging "${STAGING_FILE}" | $CLI rest v0 message post -h "${REST_URL}"
-
-echo " ##11. Remove the temporary files"
-rm ${STAGING_FILE} ${WITNESS_SECRET_FILE} ${WITNESS_OUTPUT_FILE}
-
-waitNewBlockCreated
-
-exit 0
-
-```
-
-### Change permissions so scripts are executable
-```
-chmod +x ~/files/createStakePool.sh
-chmod +x ~/files/send-certificate.sh
+# delegate-account.sh
+usage: ~/files/delegate-account.sh <STAKE_POOL_ID> <REST-LISTEN-PORT> <ACCOUNT-SK>
+    <STAKE_POOL_ID>  The ID of the Stake Pool you want to delegate to
+    <REST-PORT>      The REST Listen Port set in node-config.yaml file (EX: 3101)
+    <ACCOUNT-SK>     The Secret key of the Account address
 ```
 
 ### Execute script
@@ -1227,21 +559,12 @@ chmod +x ~/files/send-certificate.sh
 # This may take a minute or two to finish
 ~/files/createStakePool.sh ${REST_PORT} <TAX VALUE> <TAX RATIO> <TAX LIMIT> $(cat ~/files/receiver_secret.key)
 
-<TAX VALUE> The fixed cut the stake pool will take from the total reward, e.g. 25000
-<TAX RATIO> The percentage of the remaining value that will be taken from the total e.g. 10/100
-<TAX LIMIT> A value that can be set to limit the pool's Tax, e.g. 10000000
-
 # Move node_secret & stake_pool.id to ~/files
 mv node_secret.yaml ~/files && mv stake_pool.id ~/files
 ```
 
 ### Check that your stake pool is visible
 ```
-# This will return your node id if it’s visible on the network)
-# Note: takes current +1 epoch
-jcli rest v0 stake-pools get --host "http://127.0.0.1:${REST_PORT}/api" | grep $(cat ~/files/stake_pool.id)
-
-# Or use this function that does the same as above
 is_pool_visible
 ```
 
@@ -1259,14 +582,19 @@ nano ~/files/node-config.yaml
 
 ### Run node as a leader candidate - “Connecting to a Genesis blockchain”
 ```
-# Start the node, pasting in the genesis-block-hash
-nohup jormungandr --config ~/files/node-config.yaml --secret ~/files/node_secret.yaml --genesis-block-hash ${GENESIS_BLOCK_HASH} >> ~/logs/node.out 2>&1 &
-
-# Or use this function that does the same as above
+# Start the node as leader
 start_leader
 
 # Always check the logs for errors when starting the node
 logs
+```
+
+# Delegate your funds to your stake pool
+```
+~/files/delegate-account.sh $(cat ~/files/stake_pool.id) ${REST_PORT} $(cat ~/files/receiver_secret.key)
+
+# Or use this shell function that executes the same thing
+delegate
 ```
 
 ### Back up staking keys, etc
@@ -1275,208 +603,6 @@ logs
 # Copy staking keys to your local machine
 
 scp -P <YOUR SSH PORT> -i ~/.ssh/<YOUR SSH PRIVATE KEY> <YOUR VPS USERNAME>@<YOUR PUBLIC IP ADDR>:files/<FILENAME> ~/jormungandr-backups/<JORMUNGANDR VERSION>/
-```
-
-### Create script to delegate stake to your node
-```
-nano ~/files/delegate-account.sh
-
-# Paste the following into delegate-account.sh
-# This script is intended to be used, as-is... ie no placeholders need to be replaced.
-```
-```
-#!/bin/sh
-
-# Disclaimer:
-#
-#  The following use of shell script is for demonstration and understanding
-#  only, it should *NOT* be used at scale or for any sort of serious
-#  deployment, and is solely used for learning how the node and blockchain
-#  works, and how to interact with everything.
-#
-#  It also asumes that `jcli` is in the same folder with the script.
-#
-#  Tutorials can be found here: https://github.com/input-output-hk/shelley-testnet/wiki
-
-### CONFIGURATION
-CLI="jcli"
-COLORS=1
-ADDRTYPE="--testing"
-TIMEOUT_NO_OF_BLOCKS=200
-
-getTip() {
-  echo $($CLI rest v0 tip get -h "${REST_URL}")
-}
-
-waitNewBlockCreated() {
-  COUNTER=${TIMEOUT_NO_OF_BLOCKS}
-  echo "  ##Waiting for new block to be created (timeout = ${COUNTER} blocks = $((${COUNTER}*${SLOT_DURATION}))s)"
-  initialTip=$(getTip)
-  actualTip=$(getTip)
-
-  while [ "${actualTip}" = "${initialTip}" ]; do
-    sleep ${SLOT_DURATION}
-    actualTip=$(getTip)
-    COUNTER=$((COUNTER - 1))
-    if [ ${COUNTER} -lt 2 ]; then
-      echo "  !!!!!! ERROR: Waited $((${TIMEOUT_NO_OF_BLOCKS} * ${SLOT_DURATION}))s secs (${TIMEOUT_NO_OF_BLOCKS}*${SLOT_DURATION}) and no new block created"
-      exit 1
-    fi
-  done
-  echo "New block was created - $(getTip)"
-}
-
-### COLORS
-if [ ${COLORS} -eq 1 ]; then
-    GREEN=`printf "\033[0;32m"`
-    RED=`printf "\033[0;31m"`
-    BLUE=`printf "\033[0;33m"`
-    WHITE=`printf "\033[0m"`
-else
-    GREEN=""
-    RED=""
-    BLUE=""
-    WHITE=""
-fi
-
-if [ $# -ne 3 ]; then
-    echo "usage: $0 <STAKE_POOL_ID> <REST-LISTEN-PORT> <ACCOUNT-SK>"
-    echo "    <STAKE_POOL_ID>  The ID of the Stake Pool you want to delegate to"
-    echo "    <REST-PORT>      The REST Listen Port set in node-config.yaml file (EX: 3101)"
-    echo "    <ACCOUNT-SK>     The Secret key of the Account address"
-    exit 1
-fi
-
-STAKE_POOL_ID="$1"
-REST_PORT="$2"
-ACCOUNT_SK="$3"
-
-REST_URL="http://127.0.0.1:${REST_PORT}/api"
-BLOCK0_HASH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'block0Hash:' | sed -e 's/^[[:space:]]*//' | sed -e 's/block0Hash: //')
-FEE_CONSTANT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'constant:' | sed -e 's/^[[:space:]]*//' | sed -e 's/constant: //')
-FEE_COEFFICIENT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'coefficient:' | sed -e 's/^[[:space:]]*//' | sed -e 's/coefficient: //')
-FEE_CERTIFICATE=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate: //')
-MAX_TXS_PER_BLOCK=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'maxTxsPerBlock:' | sed -e 's/^[[:space:]]*//' | sed -e 's/maxTxsPerBlock: //')
-SLOT_DURATION=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotDuration:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotDuration: //')
-SLOTS_PER_EPOCH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotsPerEpoch:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotsPerEpoch: //')
-
-echo "================DELEGATE ACCOUNT================="
-echo "REST_PORT:        ${REST_PORT}"
-echo "ACCOUNT_SK:       ${ACCOUNT_SK}"
-echo "BLOCK0_HASH:      ${BLOCK0_HASH}"
-echo "FEE_CONSTANT:     ${FEE_CONSTANT}"
-echo "FEE_COEFFICIENT:  ${FEE_COEFFICIENT}"
-echo "FEE_CERTIFICATE:  ${FEE_CERTIFICATE}"
-echo "=================================================="
-
-STAGING_FILE="staging.$$.transaction"
-
-#CLI transaction
-if [ -f "${STAGING_FILE}" ]; then
-    echo "error: staging already exist. restart"
-    exit 2
-fi
-
-ACCOUNT_PK=$(echo ${ACCOUNT_SK} | $CLI key to-public)
-ACCOUNT_ADDR=$($CLI address account ${ADDRTYPE} ${ACCOUNT_PK})
-
-echo " ##1. Create the delegation certificate for the Account address"
-
-ACCOUNT_SK_FILE="account.prv"
-CERTIFICATE_FILE="account_delegation_certificate"
-SIGNED_CERTIFICATE_FILE="account_delegation_certificate.signed"
-echo ${ACCOUNT_SK} > ${ACCOUNT_SK_FILE}
-
-$CLI certificate new stake-delegation \
-    ${ACCOUNT_PK} \
-    ${STAKE_POOL_ID} \
-    --output ${CERTIFICATE_FILE}
-
-echo "Sign the delegation certificate"
-$CLI certificate sign \
-    --certificate ${CERTIFICATE_FILE} \
-    --key ${ACCOUNT_SK_FILE} \
-    --output ${SIGNED_CERTIFICATE_FILE}
-
-ACCOUNT_COUNTER=$( $CLI rest v0 account get "${ACCOUNT_ADDR}" -h "${REST_URL}" | grep '^counter:' | sed -e 's/counter: //' )
-ACCOUNT_AMOUNT=$((${FEE_CONSTANT} + ${FEE_COEFFICIENT} + ${FEE_CERTIFICATE}))
-
-echo " ##2. Create the offline delegation transaction for the Account address"
-$CLI transaction new --staging ${STAGING_FILE}
-
-echo " ##3. Add input account to the transaction"
-$CLI transaction add-account "${ACCOUNT_ADDR}" "${ACCOUNT_AMOUNT}" --staging "${STAGING_FILE}"
-
-echo " ##4. Add the certificate to the transaction"
-#cat ${SIGNED_CERTIFICATE_FILE} | xargs $CLI transaction add-certificate --staging ${STAGING_FILE}
-cat ${CERTIFICATE_FILE} | xargs $CLI transaction add-certificate --staging ${STAGING_FILE}
-
-echo " ##5. Finalize the transaction"
-$CLI transaction finalize --staging ${STAGING_FILE}
-
-# get the transaction data-for-witness
-TRANSACTION_ID=$($CLI transaction data-for-witness --staging ${STAGING_FILE})
-
-echo " ##6. Create the withness"
-WITNESS_SECRET_FILE="witness.secret.$$"
-WITNESS_OUTPUT_FILE="witness.out.$$"
-printf "${ACCOUNT_SK}" > ${WITNESS_SECRET_FILE}
-
-$CLI transaction make-witness ${TRANSACTION_ID} \
-    --genesis-block-hash ${BLOCK0_HASH} \
-    --type "account" --account-spending-counter "${ACCOUNT_COUNTER}" \
-    ${WITNESS_OUTPUT_FILE} ${WITNESS_SECRET_FILE}
-
-echo " ##7. Add the witness to the transaction"
-$CLI transaction add-witness ${WITNESS_OUTPUT_FILE} --staging "${STAGING_FILE}"
-
-echo " ##8. Show the transaction info"
-$CLI transaction info --fee-constant ${FEE_CONSTANT} --fee-coefficient ${FEE_COEFFICIENT} --fee-certificate ${FEE_CERTIFICATE} --staging "${STAGING_FILE}"
-
-echo " ##9. Seal the transaction"
-$CLI transaction seal --staging "${STAGING_FILE}"
-
-echo " ##10. Auth the transactions"
-$CLI transaction auth --key ${WITNESS_SECRET_FILE} --staging "${STAGING_FILE}"
-
-echo " ##11. Encode and send the transaction"
-$CLI transaction to-message --staging "${STAGING_FILE}" | $CLI rest v0 message post -h "${REST_URL}"
-
-waitNewBlockCreated
-
-echo " Account delegation signed certificate: $(cat ${SIGNED_CERTIFICATE_FILE})"
-
-echo " ##10. Check the account's delegation status"
-$CLI rest v0 account get ${ACCOUNT_ADDR} -h ${REST_URL}
-
-rm ${STAGING_FILE} ${ACCOUNT_SK_FILE} ${CERTIFICATE_FILE} ${SIGNED_CERTIFICATE_FILE} ${WITNESS_SECRET_FILE} ${WITNESS_OUTPUT_FILE}
-
-exit 0
-
-```
-### Execute the script to delegate stake
-```
-# Make the script executable
-chmod +x ~/files/delegate-account.sh
-
-# Execute the script
-~/files/delegate-account.sh $(cat ~/files/stake_pool.id) ${REST_PORT} $(cat ~/files/receiver_secret.key)
-
-# Or use this shell function that executes the same thing
-delegate
-```
-
-### Add delegation scripts to version control
-```
-# See what files have changed (red text)
-git status
-
-# Add files to the staging area
-# FYI https://medium.com/@lucasmaurer/git-gud-the-working-tree-staging-area-and-local-repo-a1f0f4822018
-git add .
-
-# Save the changes as a commit (-m means "add a one-line comment")
-git commit -m 'Add delegation scripts, etc.'
 ```
 
 ### Troubleshooting
