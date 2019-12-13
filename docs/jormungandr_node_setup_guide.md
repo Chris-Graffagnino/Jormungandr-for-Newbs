@@ -234,7 +234,7 @@ echo "export PUBLIC_IP_ADDR='<YOUR PUBLIC IP ADDRESS>'" >> ~/.bashrc
 echo "export REST_PORT='<YOUR REST PORT>'" >> ~/.bashrc
 echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bashrc
 echo "export RUST_BACKTRACE=1" >> ~/.bashrc
-echo "export CHAIN_NAME=<CHAIN NAME e.g. legacy/beta/nightly>" >> ~/.bashrc
+echo "export CHAIN_NAME='nightly'" >> ~/.bashrc
 echo "export GENESIS_BLOCK_HASH='<BETA OR NIGHTLY GENESIS BLOCK HASH>'" >> ~/.bashrc
 
 # What did we just do?
