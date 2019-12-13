@@ -190,11 +190,15 @@ chmod +x ~/files/send-certificate.sh
 chmod +x ~/files/delegate-account.sh
 
 # Create .bashrc && .bash_profile
-cat files/.bashrc > ~/.bashrc && cat files/.bash_profile > ~/.bash_profile
+# Note: You downloaded these to the files directory, although they are hidden. Type "ls -la ~/files"
+cat ~/files/.bashrc > ~/.bashrc && cat ~/files/.bash_profile > ~/.bash_profile
+
+# Now that you've copied the files to the proper location, delete the duplicate from the files directory
+rm ~/files/.bashrc && rm ~/files/.bash_profile
 
 # Change ownership of .bashrc and .bash_profile
-chown <USERNAME> /home/<USERNAME>/.bashrc
-chown <USERNAME> /home/<USERNAME>/.bash_profile
+chown <USERNAME> ~/.bashrc
+chown <USERNAME> ~/.bash_profile
 
 # Restrict access to .bashrc and .bash_profile
 chmod 700 ~/.bashrc && chmod 700 ~/.bash_profile
