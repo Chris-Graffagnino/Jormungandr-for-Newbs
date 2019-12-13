@@ -15,7 +15,7 @@
 
 ## Generate private/public ssh keys
 (If you don’t have a ssh key on your machine)
-```
+```shell
 # Generate private & public keys on your *LOCAL MACHINE* (public key will have a ".pub" extension)
 # When prompted, name it something other than "id_rsa" (in case you're using that somewhere else)
 ssh-keygen
@@ -45,7 +45,7 @@ ssh-copy-id -i ~/.ssh/<YOUR KEYNAME>.pub root@<YOUR VPS PUBLIC IP ADDRESS>
 `ssh -i ~/.ssh/<PATH TO SSH PRIVATE KEY ON YOUR LOCAL MACHINE> root@<YOUR VPS PUBLIC IP ADDRESS>`
 
 ## Create non-root user
-```
+```shell
 # Create user and password
 useradd <USERNAME> && passwd <USERNAME>
 
@@ -76,7 +76,7 @@ chsh -s /bin/bash <USERNAME>
 
 
 ## Update Linux and make files/directories
-```
+```shell
 apt update
 apt upgrade
 apt install -y build-essential libssl-dev
@@ -92,7 +92,7 @@ chown <USERNAME> /home/<USERNAME>/.profile
 ```
 
 ## Increase open file limit
-```
+```shell
 nano /etc/security/limits.conf
 
 # Add the following at the bottom of the file
@@ -104,14 +104,14 @@ ctrl+x
 ```
 
 ## Disable firewall
-```
+```shell
 # We're going to change the default ssh port to be a bit more secure
 # To avoid any lockouts, disable the firewall
 ufw disable
 ```
 
 ## Change default ssh port
-```
+```shell
 # Changing this setting REQUIRES also opening the same port with ufw (next section of this guide)
 # Don't skip the ufw section, or else you will be locked out.
 
@@ -129,7 +129,7 @@ nano /etc/ssh/sshd_config
 ```
 
 ## Configure "uncomplicated firewall" (ufw)
-```
+```shell
 # Set defaults for incoming/outgoing ports
 ufw default deny incoming
 ufw default allow outgoing
@@ -152,13 +152,13 @@ reboot
 ```
 
 ## Sign-in as non-root user
-```
+```shell
 # Sign-in as non-root user
 ssh -i ~/.ssh/<YOUR SSH PRIVATE KEY> <USERNAME>@<YOUR VPS PUBLIC IP ADDRESS> -p <SSH PORT>
 ```
 
 ## Disable root login (and miscellaneous improvements)
-```
+```shell
 # FYI You already edited this file just a couple minutes ago
 sudo nano /etc/ssh/sshd_config
 
@@ -179,7 +179,7 @@ sudo service sshd restart
 ```
 
 ### Download some scripts
-```
+```shell
 # Download files from my repo
 git clone https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs.git -b files-only --single-branch files
 
@@ -208,7 +208,7 @@ source ~/.bash_profile
 ```
 
 ### About environment variables
-```
+```shell
 # All-caps words are variables available to the current shell, ie "environment".
 # You can declare an environment variable like this, (go ahead and try it): 
 HELLO="Hello"
@@ -228,7 +228,7 @@ printenv
 
 ## Type each of the following commands in terminal
 ##### (replace placeholder text)
-```
+```shell
 echo "export USERNAME='<YOUR USERNAME>'" >> ~/.bashrc
 echo "export PUBLIC_IP_ADDR='<YOUR PUBLIC IP ADDRESS>'" >> ~/.bashrc
 echo "export REST_PORT='<YOUR REST PORT>'" >> ~/.bashrc
@@ -243,7 +243,7 @@ echo "export GENESIS_BLOCK_HASH='<BETA OR NIGHTLY GENESIS BLOCK HASH>'" >> ~/.ba
 # ">>" means "take the output of the previous command and append it to the end of a file (.bashrc, in this case)
 ```
 
-```
+```shell
 # You'll need one of these hashes in the previous command
 
 # Genesis block hash for beta
@@ -254,7 +254,7 @@ echo "export GENESIS_BLOCK_HASH='<BETA OR NIGHTLY GENESIS BLOCK HASH>'" >> ~/.ba
 ```
 
 ## Configure Swap to handle memory spikes
-```
+```shell
 # Swap utilizes diskspace to temporarily handle spikes in memory usage
 # Skip this section if you have limited diskspace, (you're running a raspberry-pi, for instance).
 
@@ -361,7 +361,7 @@ nano ~/files/node-config.yaml
 # This is for the ** NIGHTLY ** release v0.8.0 (last updated 12/11/19)
 # Replace <THE PLACEHOLDERS> with the appropriate values
 ```
-```
+```yaml
 ---
 log:
 - output: stderr
@@ -399,7 +399,7 @@ mempool:
 (Did you remember to replace the PLACEHOLDERS with the appropriate values)?
 
 ### create a directory for storage
-```
+```shell
 mkdir /home/<YOUR USERNAME>/storage
 ```
 
@@ -419,7 +419,7 @@ jcli address account --testing --prefix addr $(cat ~/files/receiver_public.key) 
 ` Anyone who posesses receiver_secret.key can take the funds belonging to this key/address!`
 
 ### Backup keys to your local machine
-```
+```shell
 # Open a new tab in terminal on your local machine
 mkdir ~/jormungandr-backups
 mkdir ~/jormungandr-backups/<JORMUNGANDR VERSION>
@@ -429,7 +429,7 @@ scp -P <YOUR SSH PORT> -i ~/.ssh/<YOUR SSH PRIVATE KEY> <YOUR VPS USERNAME>@<VPS
 ```
 
 ### Start the node in the background
-```
+```shell
 # Start the node
 nohup jormungandr --config node-config.yaml --genesis-block-hash ${GENESIS_BLOCK_HASH} >> ~/logs/node.out 2>&1 &
 
@@ -439,20 +439,20 @@ start
 
 ### Inspect the output 
 
-```
+```shell
 # Always check the logs when starting a node to make sure it started without error
 logs
 ```
 
 ### Access faucet to receive funds
-```
+```shell
 # This faucet will be turned off once incentivized-testnet officially launches (est 12/12/19)
 faucet
 ```
 
 ## Monitor the node
 (These are a list of various commands… execute when necessary)
-```
+```shell
 # Find the PID of jormungandr (will be the first number on the left)
 get_pid
 
@@ -501,7 +501,7 @@ du -a ${JORMUNGANDR_STORAGE_DIR} | sort -n -r | head -n 10
 ```
 
 ## Update 
-```
+```shell
 # If you ever need to update your node, do the following
 
 # Stop jormungandr
@@ -538,7 +538,7 @@ jcli --full-version
 ```
 
 ## Script Usage
-```
+```shell
 # send-lovelaces.sh
 ~/files/send-lovelaces.sh <DESTINATION ADDRESS> <AMOUNT LOVELACES TO SEND> ${REST_PORT} $(cat ~/files/receiver_secret.key)
 
@@ -560,7 +560,7 @@ usage: ~/files/delegate-account.sh <STAKE_POOL_ID> <REST-LISTEN-PORT> <ACCOUNT-S
 ```
 
 ## Create stake pool
-```
+```shell
 # This may take a minute or two to finish
 ~/files/createStakePool.sh ${REST_PORT} <TAX VALUE> <TAX RATIO> <TAX LIMIT> $(cat ~/files/receiver_secret.key)
 
@@ -569,12 +569,12 @@ mv node_secret.yaml ~/files && mv stake_pool.id ~/files
 ```
 
 ### Check that your stake pool is visible
-```
+```shell
 is_pool_visible
 ```
 
 ### Stop node, edit node-config.yaml
-```
+```shell
 # Stop jormungandr
 stop
 
@@ -586,7 +586,7 @@ nano ~/files/node-config.yaml
 ```
 
 ### Run node as a leader candidate - “Connecting to a Genesis blockchain”
-```
+```shell
 # Start the node as leader
 start_leader
 
@@ -595,7 +595,7 @@ logs
 ```
 
 # Delegate your funds to your stake pool
-```
+```shell
 ~/files/delegate-account.sh $(cat ~/files/stake_pool.id) ${REST_PORT} $(cat ~/files/receiver_secret.key)
 
 # Or use this shell function that executes the same thing
@@ -603,7 +603,7 @@ delegate
 ```
 
 ### Back up staking keys, etc
-```
+```shell
 # In the terminal tab for your LOCAL machine
 # Copy staking keys to your local machine
 
@@ -611,7 +611,7 @@ scp -P <YOUR SSH PORT> -i ~/.ssh/<YOUR SSH PRIVATE KEY> <YOUR VPS USERNAME>@<YOU
 ```
 
 ### Troubleshooting
-```
+```shell
 # ERROR
 # Can't log in to VPS
 
@@ -639,7 +639,7 @@ scp -P <YOUR SSH PORT> -i ~/.ssh/<YOUR SSH PRIVATE KEY> <YOUR VPS USERNAME>@<YOU
 ```
 
 ### Bonus: git cheat-sheet
-```
+```shell
 # Git is version control software. Github is a centralized code repository.
 # A "branch" is a version of your code. The "master" branch is best reserved as an exact copy of "production code."
 # It is considered best-practice to make a copy of the master branch, and modify from there;
@@ -705,7 +705,7 @@ git reset --soft <HASH OF THE COMMIT I WANT TO REVERT TO>
 ## Optional .bash_aliases
 `nano .bash_aliases`
 
-```
+```shell
 # Cast Python2 aside and don't look back
 alias python="python3"
 alias pip="pip3"
