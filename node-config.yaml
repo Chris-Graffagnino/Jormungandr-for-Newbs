@@ -7,7 +7,7 @@ p2p:
   topics_of_interest:
     blocks: normal
     messages: low
-  max_connections: 256
+  max_connections: 128
   trusted_peers:
   - address: "/ip4/13.230.137.72/tcp/3000"
     id: fe3332044877b2034c8632a08f08ee47f3fbea6c64165b3b
