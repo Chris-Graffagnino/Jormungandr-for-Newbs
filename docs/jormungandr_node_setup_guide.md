@@ -407,11 +407,11 @@ mkdir /home/<YOUR USERNAME>/storage
 `jcli key generate --type=Ed25519Extended > ~/files/receiver_secret.key`
 
 ### derive the public key from the secret key
-`cat receiver_secret.key | jcli key to-public > ~/files/receiver_public.key`
+`cat ~/files/receiver_secret.key | jcli key to-public > ~/files/receiver_public.key`
 
 ### derive the public address from the public key
 ```
-jcli address account --testing --prefix addr $(cat ~/files/receiver_public.key) | tee files/receiver_account.txt
+jcli address account --testing --prefix addr $(cat ~/files/receiver_public.key) | tee ~/files/receiver_account.txt
 ```
 
 ## Backup the keys
