@@ -361,6 +361,7 @@ nano ~/files/node-config.yaml
 # This is for the ** ITN ** release v0.8.2 (last updated 12/13/19)
 # Replace <THE PLACEHOLDERS> with the appropriate values
 ```
+```
 {
   "log": [
     {
