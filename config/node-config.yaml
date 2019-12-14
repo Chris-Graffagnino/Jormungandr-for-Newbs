@@ -25,7 +25,7 @@ p2p:
     id: 3d1f8891bf53eb2946a18fb46cf99309649f0163b4f71b34
 rest:
   listen: 127.0.0.1:<YOUR REST PORT>
-storage: "/home/<USERNAME>/storage"
+storage: "/home/<YOUR USERNAME>/storage"
 mempool:
     fragment_ttl: 2h
     log_ttl: 12h
