@@ -179,6 +179,7 @@ sudo service sshd restart
 ```
 
 ### Download some scripts
+### IMPORTANT: These scripts don't work as of 12/13/19. I will update these ASAP
 ```
 # Download files from my repo
 git clone https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs.git -b files-only --single-branch files
@@ -234,8 +235,7 @@ echo "export PUBLIC_IP_ADDR='<YOUR PUBLIC IP ADDRESS>'" >> ~/.bashrc
 echo "export REST_PORT='<YOUR REST PORT>'" >> ~/.bashrc
 echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bashrc
 echo "export RUST_BACKTRACE=1" >> ~/.bashrc
-echo "export CHAIN_NAME='nightly'" >> ~/.bashrc
-echo "export GENESIS_BLOCK_HASH='<BETA OR NIGHTLY GENESIS BLOCK HASH>'" >> ~/.bashrc
+echo "export GENESIS_BLOCK_HASH='<SOME GENESIS BLOCK HASH>'" >> ~/.bashrc
 
 # What did we just do?
 # "echo" essentially means "print to screen"
@@ -246,8 +246,8 @@ echo "export GENESIS_BLOCK_HASH='<BETA OR NIGHTLY GENESIS BLOCK HASH>'" >> ~/.ba
 ```
 # You'll need one of these hashes in the previous command
 
-# Genesis block hash for beta
-# (Use nightly until Incentivized-Test-Net, ITN, is released)
+# Genesis block hash for Incentivized-Test-Net (ITN)
+# 8e4d2a343f3dcf9330ad9035b3e8d168e6728904262f2c434a4f8f934ec7b676
 
 # Genesis block hash for v0.8.0 nightly (Updated 12/11/19)
 # 65a9b15f82619fffd5a7571fdbf973a18480e9acf1d2fddeb606ebb53ecca839
@@ -333,8 +333,8 @@ git config --global user.email <YOUR EMAIL ADDRESS>
 git clone https://github.com/input-output-hk/jormungandr
 
 cd jormungandr
-git checkout v0.8.0
-git checkout -b <NEW BRANCH NAME eg 8.0>
+git checkout v0.8.2
+git checkout -b <NEW BRANCH NAME eg 8.2>
 git submodule update --init --recursive
 ```
 
@@ -358,42 +358,58 @@ nano ~/files/node-config.yaml
 # Check Telegram (StakePool Best Practice Workgroup) for up-to-date genesis-hash & trusted peers
 # https://t.me/CardanoStakePoolWorkgroup/74812
 
-# This is for the ** NIGHTLY ** release v0.8.0 (last updated 12/11/19)
+# This is for the ** ITN ** release v0.8.2 (last updated 12/13/19)
 # Replace <THE PLACEHOLDERS> with the appropriate values
 ```
-```
----
-log:
-- output: stderr
-  format: plain
-  level: info
-p2p:
-  topics_of_interest:
-    blocks: normal
-    messages: low
-  max_connections: 256
-  trusted_peers:
-  - address: "/ip4/13.230.137.72/tcp/3000"
-    id: fe3332044877b2034c8632a08f08ee47f3fbea6c64165b3b
-  - address: "/ip4/13.230.48.191/tcp/3000"
-    id: c38aabb936944776ef15bbe4b5b02454c46a8a80d871f873
-  - address: "/ip4/18.196.168.220/tcp/3000"
-    id: 7e2222179e4f3622b31037ede70949d232536fdc244ca3d9
-  - address: "/ip4/3.124.132.123/tcp/3000"
-    id: 9085fa5caeb39eace748a7613438bd2a62c8c8ee00040b71
-  - address: "/ip4/18.184.181.30/tcp/3000"
-    id: f131b71d65c49116f3c23c8f1dd7ceaa98f5962979133404
-  - address: "/ip4/184.169.162.15/tcp/3000"
-    id: fdb88d08c7c759b5d30e854492cb96f8203c2d875f6f3e00
-  - address: "/ip4/52.52.67.33/tcp/3000"
-    id: 3d1f8891bf53eb2946a18fb46cf99309649f0163b4f71b34
-rest:
-  listen: 127.0.0.1:<YOUR REST PORT>
-storage: "/home/<YOUR USERNAME>/storage"
-mempool:
-    fragment_ttl: 2h
-    log_ttl: 12h
-    garbage_collection_interval: 2h
+`{
+  "log": [
+    {
+      "format": "plain",
+      "level": "info",
+      "output": "stderr"
+    }
+  ],
+  "p2p": {
+    "topics_of_interest": {
+      "blocks": "normal",
+      "messages": "low"
+    },
+    "trusted_peers": [
+      {
+        "address": "/ip4/52.9.132.248/tcp/3000",
+        "id": "671a9e7a5c739532668511bea823f0f5c5557c99b813456c"
+      },
+      {
+        "address": "/ip4/52.8.15.52/tcp/3000",
+        "id": "18bf81a75e5b15a49b843a66f61602e14d4261fb5595b5f5"
+      },
+      {
+        "address": "/ip4/13.114.196.228/tcp/3000",
+        "id": "7e1020c2e2107a849a8353876d047085f475c9bc646e42e9"
+      },
+      {
+        "address": "/ip4/13.112.181.42/tcp/3000",
+        "id": "52762c49a84699d43c96fdfe6de18079fb2512077d6aa5bc"
+      },
+      {
+        "address": "/ip4/3.125.75.156/tcp/3000",
+        "id": "22fb117f9f72f38b21bca5c0f069766c0d4327925d967791"
+      },
+      {
+        "address": "/ip4/52.28.91.178/tcp/3000",
+        "id": "23b3ca09c644fe8098f64c24d75d9f79c8e058642e63a28c"
+      },
+      {
+        "address": "/ip4/3.124.116.145/tcp/3000",
+        "id": "99cb10f53185fbef110472d45a36082905ee12df8a049b74"
+      }
+    ]
+  },
+  "rest": {
+    "listen": "127.0.0.1:<REST PORT>"
+  },
+  "storage": "~/storage"
+}
 ```
 
 (Did you remember to replace the PLACEHOLDERS with the appropriate values)?
@@ -431,7 +447,7 @@ scp -P <YOUR SSH PORT> -i ~/.ssh/<YOUR SSH PRIVATE KEY> <YOUR VPS USERNAME>@<VPS
 ### Start the node in the background
 ```
 # Start the node
-nohup jormungandr --config node-config.yaml --genesis-block-hash ${GENESIS_BLOCK_HASH} >> ~/logs/node.out 2>&1 &
+nohup jormungandr --config ~/files/node-config.yaml --genesis-block-hash ${GENESIS_BLOCK_HASH} >> ~/logs/node.out 2>&1 &
 
 # Or use this shell function
 start
@@ -446,7 +462,7 @@ logs
 
 ### Access faucet to receive funds
 ```
-# This faucet will be turned off once incentivized-testnet officially launches (est 12/12/19)
+# This faucet may or may not work for nightly.
 faucet
 ```
 
@@ -538,6 +554,7 @@ jcli --full-version
 ```
 
 ## Script Usage
+## NOTE: These scripts do not work as of 12/13/19. I'll update these asap.
 ```
 # send-lovelaces.sh
 ~/files/send-lovelaces.sh <DESTINATION ADDRESS> <AMOUNT LOVELACES TO SEND> ${REST_PORT} $(cat ~/files/receiver_secret.key)
