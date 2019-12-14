@@ -15,16 +15,15 @@
 #  Tutorials can be found here: https://iohk.zendesk.com/hc/en-us/categories/360002383814-Shelley-Networked-Testnet
 
 ### CONFIGURATION
-CLI="jcli"
+CLI="./jcli"
 COLORS=1
 ADDRTYPE="--testing"
 
-if [ $# -ne 5 ]; then
-    echo "usage: $0 <REST-LISTEN-PORT> <TAX_VALUE> <TAX_RATIO> <TAX_LIMIT> <ACCOUNT_SK>"
+if [ $# -ne 4 ]; then
+    echo "usage: $0 <REST-LISTEN-PORT> <TAX_VALUE> <TAX_RATIO> <ACCOUNT_SK>"
     echo "    <REST-LISTEN-PORT>   The REST Listen Port set in node-config.yaml file (EX: 3101)"
     echo "    <TAX_VALUE>   The fixed cut the stake pool will take from the total reward"
-    echo "    <TAX_RATIO>   The percentage of the remaining value that will be taken from the total"
-    echo "    <TAX_LIMIT>   A value that can be set to limit the pool's Tax."
+    echo "    <TAX_RATIO>   The percentage of the remaining value that will be taken from the total (EX: '1/10')"
     echo "    <SOURCE-SK>   The Secret key of the Source address"
     exit 1
 fi
@@ -32,25 +31,20 @@ fi
 REST_PORT="$1"
 TAX_VALUE="$2"
 TAX_RATIO="$3"
-TAX_LIMIT="$4"
-ACCOUNT_SK="$5"
+ACCOUNT_SK="$4"
 
 REST_URL="http://127.0.0.1:${REST_PORT}/api"
 BLOCK0_HASH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'block0Hash:' | sed -e 's/^[[:space:]]*//' | sed -e 's/block0Hash: //')
-FEE_CONSTANT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'constant:' | sed -e 's/^[[:space:]]*//' | sed -e 's/constant: //')
-FEE_COEFFICIENT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'coefficient:' | sed -e 's/^[[:space:]]*//' | sed -e 's/coefficient: //')
-FEE_CERTIFICATE=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate: //')
 
 ACCOUNT_PK=$(echo ${ACCOUNT_SK} | $CLI key to-public)
 ACCOUNT_ADDR=$($CLI address account ${ADDRTYPE} ${ACCOUNT_PK})
 
 echo "================ Blockchain details ================="
-echo "REST_PORT:        ${REST_PORT}"
-echo "ACCOUNT_SK:       ${ACCOUNT_SK}"
-echo "BLOCK0_HASH:      ${BLOCK0_HASH}"
-echo "FEE_CONSTANT:     ${FEE_CONSTANT}"
-echo "FEE_COEFFICIENT:  ${FEE_COEFFICIENT}"
-echo "FEE_CERTIFICATE:  ${FEE_CERTIFICATE}"
+echo "BLOCK0_HASH:  ${BLOCK0_HASH}"
+echo "REST_PORT:    ${REST_PORT}"
+echo "TAX_VALUE:    ${TAX_VALUE}"
+echo "TAX_RATIO:    ${TAX_RATIO}"
+echo "ACCOUNT_SK:   ${ACCOUNT_SK}"
 echo "=================================================="
 
 echo " ##1. Create VRF keys"
@@ -73,7 +67,7 @@ STAKE_POOL_CERTIFICATE_FILE="stake_pool.cert"
 SIGNED_STAKE_POOL_CERTIFICATE_FILE="stake_pool_certificate.signed"
 echo ${ACCOUNT_SK} > ${ACCOUNT_SK_FILE}
 
-$CLI certificate new stake-pool-registration --tax-fixed ${TAX_VALUE} --tax-ratio ${TAX_RATIO} --tax-limit ${TAX_LIMIT} --kes-key ${POOL_KES_PK} --vrf-key ${POOL_VRF_PK} --owner ${ACCOUNT_PK} --start-validity 0 --management-threshold 1 >${STAKE_POOL_CERTIFICATE_FILE}
+$CLI certificate new stake-pool-registration --tax-fixed ${TAX_VALUE} --tax-ratio ${TAX_RATIO} --kes-key ${POOL_KES_PK} --vrf-key ${POOL_VRF_PK} --owner ${ACCOUNT_PK} --start-validity 0 --management-threshold 1 >${STAKE_POOL_CERTIFICATE_FILE}
 
 echo " Sign the Stake Pool certificate"
 $CLI certificate sign \
@@ -96,7 +90,6 @@ echo "Stake Pool ID:    ${NODE_ID}"
 echo "Stake Pool owner: ${ACCOUNT_ADDR}"
 echo "TAX_VALUE:        ${TAX_VALUE}"
 echo "TAX_RATIO:        ${TAX_RATIO}"
-echo "TAX_LIMIT:        ${TAX_LIMIT}"
 echo "=================================================="
 
 rm ${STAKE_POOL_CERTIFICATE_FILE} ${ACCOUNT_SK_FILE} ${SIGNED_STAKE_POOL_CERTIFICATE_FILE}

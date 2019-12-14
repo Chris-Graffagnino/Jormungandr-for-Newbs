@@ -9,10 +9,10 @@
 #
 #  It also asumes that `jcli` is in the same folder with the script.
 #
-#  Tutorials can be found here: https://iohk.zendesk.com/hc/en-us/categories/360002383814-Shelley-Networked-Testnet
+#  Tutorials can be found here: https://github.com/input-output-hk/shelley-testnet/wiki
 
 ### CONFIGURATION
-CLI="jcli"
+CLI="./jcli"
 COLORS=1
 ADDRTYPE="--testing"
 TIMEOUT_NO_OF_BLOCKS=200
@@ -69,19 +69,23 @@ REST_URL="http://127.0.0.1:${REST_PORT}/api"
 FEE_CONSTANT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'constant:' | sed -e 's/^[[:space:]]*//' | sed -e 's/constant: //')
 FEE_COEFFICIENT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'coefficient:' | sed -e 's/^[[:space:]]*//' | sed -e 's/coefficient: //')
 FEE_CERTIFICATE=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate: //')
+FEE_CERTIFICATE_POOL_REGISTRATION=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate_pool_registration:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate_pool_registration: //')
+FEE_CERTIFICATE_STAKE_DELEGATION=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate_stake_delegation:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate_stake_delegation: //')
 BLOCK0_HASH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'block0Hash:' | sed -e 's/^[[:space:]]*//' | sed -e 's/block0Hash: //')
 MAX_TXS_PER_BLOCK=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'maxTxsPerBlock:' | sed -e 's/^[[:space:]]*//' | sed -e 's/maxTxsPerBlock: //')
 SLOT_DURATION=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotDuration:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotDuration: //')
 SLOTS_PER_EPOCH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotsPerEpoch:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotsPerEpoch: //')
 
 echo "===============Send Certificate================="
-echo "CERTIFICATE_PATH: ${CERTIFICATE_PATH}"
-echo "REST_PORT: ${REST_PORT}"
-echo "ACCOUNT_SK: ${ACCOUNT_SK}"
-echo "BLOCK0_HASH: ${BLOCK0_HASH}"
-echo "FEE_CONSTANT: ${FEE_CONSTANT}"
-echo "FEE_COEFFICIENT: ${FEE_COEFFICIENT}"
-echo "FEE_CERTIFICATE: ${FEE_CERTIFICATE}"
+echo "CERTIFICATE_PATH  : ${CERTIFICATE_PATH}"
+echo "REST_PORT         : ${REST_PORT}"
+echo "ACCOUNT_SK        : ${ACCOUNT_SK}"
+echo "BLOCK0_HASH       : ${BLOCK0_HASH}"
+echo "FEE_CONSTANT      : ${FEE_CONSTANT}"
+echo "FEE_COEFFICIENT   : ${FEE_COEFFICIENT}"
+echo "FEE_CERTIFICATE   : ${FEE_CERTIFICATE}"
+echo "FEE_CERTIFICATE_POOL_REGISTRATION:  ${FEE_CERTIFICATE_POOL_REGISTRATION}"
+echo "FEE_CERTIFICATE_STAKE_DELEGATION :  ${FEE_CERTIFICATE_STAKE_DELEGATION}"
 echo "=================================================="
 
 STAGING_FILE="staging.$$.transaction"
@@ -107,7 +111,7 @@ ACCOUNT_ADDR=$($CLI address account ${ADDRTYPE} ${ACCOUNT_PK})
 ACCOUNT_COUNTER=$( $CLI rest v0 account get "${ACCOUNT_ADDR}" -h "${REST_URL}" | grep '^counter:' | sed -e 's/counter: //' )
 
 # the account is going to pay for the fee ... so calculate how much
-ACCOUNT_AMOUNT=$((${FEE_CONSTANT} + ${FEE_COEFFICIENT} + ${FEE_CERTIFICATE}))
+ACCOUNT_AMOUNT=$((${FEE_CONSTANT} + ${FEE_COEFFICIENT} + ${FEE_CERTIFICATE_POOL_REGISTRATION}))
 
 # Create the transaction
 # FROM: ACCOUNT for FEES
@@ -123,7 +127,7 @@ $CLI transaction add-certificate --staging ${STAGING_FILE} $(cat ${CERTIFICATE_P
 echo " ##4. Finalize the transaction"
 $CLI transaction finalize --staging ${STAGING_FILE}
 
-TRANSACTION_ID=$($CLI transaction data-for-witness --staging ${STAGING_FILE})
+TRANSACTION_DATA_FOR_WITNESS=$($CLI transaction data-for-witness --staging ${STAGING_FILE})
 
 # Create the witness for the 1 input (add-account) and add it
 WITNESS_SECRET_FILE="witness.secret.$$"
@@ -132,7 +136,7 @@ WITNESS_OUTPUT_FILE="witness.out.$$"
 printf "${ACCOUNT_SK}" > ${WITNESS_SECRET_FILE}
 
 echo " ##5. Make the witness"
-$CLI transaction make-witness ${TRANSACTION_ID} \
+$CLI transaction make-witness ${TRANSACTION_DATA_FOR_WITNESS} \
     --genesis-block-hash ${BLOCK0_HASH} \
     --type "account" --account-spending-counter "${ACCOUNT_COUNTER}" \
     ${WITNESS_OUTPUT_FILE} ${WITNESS_SECRET_FILE}
