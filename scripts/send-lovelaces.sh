@@ -13,7 +13,7 @@
 #  Tutorials can be found here: https://iohk.zendesk.com/hc/en-us/categories/360002383814-Shelley-Networked-Testnet
 
 ### CONFIGURATION
-CLI="jcli"
+CLI="./jcli"
 COLORS=1
 ADDRTYPE="--testing"
 TIMEOUT_NO_OF_BLOCKS=200

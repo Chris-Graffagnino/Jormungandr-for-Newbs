@@ -12,7 +12,7 @@
 #  Tutorials can be found here: https://github.com/input-output-hk/shelley-testnet/wiki
 
 ### CONFIGURATION
-CLI="jcli"
+CLI="./jcli"
 COLORS=1
 ADDRTYPE="--testing"
 TIMEOUT_NO_OF_BLOCKS=200
@@ -69,7 +69,8 @@ BLOCK0_HASH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'block0Hash:' | 
 FEE_CONSTANT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'constant:' | sed -e 's/^[[:space:]]*//' | sed -e 's/constant: //')
 FEE_COEFFICIENT=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'coefficient:' | sed -e 's/^[[:space:]]*//' | sed -e 's/coefficient: //')
 FEE_CERTIFICATE=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate: //')
-MAX_TXS_PER_BLOCK=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'maxTxsPerBlock:' | sed -e 's/^[[:space:]]*//' | sed -e 's/maxTxsPerBlock: //')
+FEE_CERTIFICATE_POOL_REGISTRATION=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate_pool_registration:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate_pool_registration: //')
+FEE_CERTIFICATE_STAKE_DELEGATION=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'certificate_stake_delegation:' | sed -e 's/^[[:space:]]*//' | sed -e 's/certificate_stake_delegation: //')
 SLOT_DURATION=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotDuration:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotDuration: //')
 SLOTS_PER_EPOCH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'slotsPerEpoch:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotsPerEpoch: //')
 
@@ -80,6 +81,8 @@ echo "BLOCK0_HASH:      ${BLOCK0_HASH}"
 echo "FEE_CONSTANT:     ${FEE_CONSTANT}"
 echo "FEE_COEFFICIENT:  ${FEE_COEFFICIENT}"
 echo "FEE_CERTIFICATE:  ${FEE_CERTIFICATE}"
+echo "FEE_CERTIFICATE_POOL_REGISTRATION:  ${FEE_CERTIFICATE_POOL_REGISTRATION}"
+echo "FEE_CERTIFICATE_STAKE_DELEGATION :  ${FEE_CERTIFICATE_STAKE_DELEGATION}"
 echo "=================================================="
 
 STAGING_FILE="staging.$$.transaction"
@@ -112,7 +115,7 @@ $CLI certificate sign \
     --output ${SIGNED_CERTIFICATE_FILE}
 
 ACCOUNT_COUNTER=$( $CLI rest v0 account get "${ACCOUNT_ADDR}" -h "${REST_URL}" | grep '^counter:' | sed -e 's/counter: //' )
-ACCOUNT_AMOUNT=$((${FEE_CONSTANT} + ${FEE_COEFFICIENT} + ${FEE_CERTIFICATE}))
+ACCOUNT_AMOUNT=$((${FEE_CONSTANT} + ${FEE_COEFFICIENT} + ${FEE_CERTIFICATE_STAKE_DELEGATION}))
 
 echo " ##2. Create the offline delegation transaction for the Account address"
 $CLI transaction new --staging ${STAGING_FILE}
@@ -128,14 +131,14 @@ echo " ##5. Finalize the transaction"
 $CLI transaction finalize --staging ${STAGING_FILE}
 
 # get the transaction data-for-witness
-TRANSACTION_ID=$($CLI transaction data-for-witness --staging ${STAGING_FILE})
+TRANSACTION_DATA_FOR_WITNESS=$($CLI transaction data-for-witness --staging ${STAGING_FILE})
 
 echo " ##6. Create the withness"
 WITNESS_SECRET_FILE="witness.secret.$$"
 WITNESS_OUTPUT_FILE="witness.out.$$"
 printf "${ACCOUNT_SK}" > ${WITNESS_SECRET_FILE}
 
-$CLI transaction make-witness ${TRANSACTION_ID} \
+$CLI transaction make-witness ${TRANSACTION_DATA_FOR_WITNESS} \
     --genesis-block-hash ${BLOCK0_HASH} \
     --type "account" --account-spending-counter "${ACCOUNT_COUNTER}" \
     ${WITNESS_OUTPUT_FILE} ${WITNESS_SECRET_FILE}
@@ -157,7 +160,9 @@ $CLI transaction to-message --staging "${STAGING_FILE}" | $CLI rest v0 message p
 
 waitNewBlockCreated
 
+echo "=================================================="
 echo " Account delegation signed certificate: $(cat ${SIGNED_CERTIFICATE_FILE})"
+echo "=================================================="
 
 echo " ##10. Check the account's delegation status"
 $CLI rest v0 account get ${ACCOUNT_ADDR} -h ${REST_URL}
