@@ -179,7 +179,6 @@ sudo service sshd restart
 ```
 
 ### Download some scripts
-### IMPORTANT: These scripts don't work as of 12/13/19. I will update these ASAP
 ```
 # Download files from my repo
 git clone https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs.git -b files-only --single-branch files
@@ -555,7 +554,6 @@ jcli --full-version
 ```
 
 ## Script Usage
-## NOTE: These scripts do not work as of 12/13/19. I'll update these asap.
 ```
 # send-lovelaces.sh
 ~/files/send-lovelaces.sh <DESTINATION ADDRESS> <AMOUNT LOVELACES TO SEND> ${REST_PORT} $(cat ~/files/receiver_secret.key)
