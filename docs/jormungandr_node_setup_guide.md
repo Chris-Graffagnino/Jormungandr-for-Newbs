@@ -438,12 +438,6 @@ start
 logs
 ```
 
-### Access faucet to receive funds
-```
-# This faucet may or may not work for nightly.
-faucet
-```
-
 ## Monitor the node
 (These are a list of various commands… execute when necessary)
 ```
@@ -547,10 +541,9 @@ usage: ~/files/createStakePool.sh <REST-LISTEN-PORT> <TAX_VALUE> <TAX_RATIO> <TA
 # send-certificate.sh is called by createStakePool.sh and is not intended for you.
 
 # delegate-account.sh
-usage: ~/files/delegate-account.sh <STAKE_POOL_ID> <REST-LISTEN-PORT> <ACCOUNT-SK>
-    <STAKE_POOL_ID>  The ID of the Stake Pool you want to delegate to
-    <REST-PORT>      The REST Listen Port set in node-config.yaml file (EX: 3101)
+usage: ~/files/delegate-account.sh <ACCOUNT-SK> <STAKE_POOL_ID>
     <ACCOUNT-SK>     The Secret key of the Account address
+    <STAKE_POOL_ID>  The ID of the Stake Pool you want to delegate to
 ```
 
 ## Create stake pool

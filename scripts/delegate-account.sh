@@ -14,7 +14,7 @@
 if [ "$1" = "--help" ] || [ $# -lt 2 ]; then
     echo "usage: $0 <ACCOUNT_SK> <STAKE_POOL_ID>"
     echo "    <ACCOUNT_SK>     The Secret key of the Account address"
-    echo "    <STAKE_POOL_ID>  The Stake pool ID
+    echo "    <STAKE_POOL_ID>  The Stake pool ID"
     exit 1
 fi
 
@@ -103,4 +103,3 @@ $CLI rest v0 account get ${ACCOUNT_ADDR}
 rm ${STAGING_FILE} ${ACCOUNT_SK_FILE} ${CERTIFICATE_FILE} ${WITNESS_SECRET_FILE} ${WITNESS_OUTPUT_FILE}
 
 exit 0
-
