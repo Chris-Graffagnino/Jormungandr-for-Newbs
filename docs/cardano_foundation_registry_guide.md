@@ -123,7 +123,7 @@ jcli address account --testing --prefix addr $(cat owner.pub) > owner.addr
 {
   "owner": "ed25519_pk1qppzz38el9zxtgaw0ttmf6d6zytllfu3fnwcl5tlc3pp044artxqru55mx",
   "name": "My Stake Pool",
-  "description": "My really awesome stakepool"
+  "description": "My really awesome stakepool",
   "ticker": "ADA1",
   "homepage": "https://cardanofoundation.org",
   "pledge_address": "addr1s0nyt67uwcg7dahrxug698h5xfasnyd5qhnsd0h0peqlqvtfqf48ymz680l"
