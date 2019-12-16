@@ -12,7 +12,7 @@
 #  Tutorials can be found here: https://github.com/input-output-hk/shelley-testnet/wiki
 
 ### CONFIGURATION
-CLI="./jcli"
+CLI="jcli"
 COLORS=1
 ADDRTYPE="--testing"
 TIMEOUT_NO_OF_BLOCKS=200
