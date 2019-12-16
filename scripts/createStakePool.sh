@@ -14,8 +14,9 @@
 #
 #  Tutorials can be found here: https://iohk.zendesk.com/hc/en-us/categories/360002383814-Shelley-Networked-Testnet
 
+
 ### CONFIGURATION
-CLI="./jcli"
+CLI="jcli"
 COLORS=1
 ADDRTYPE="--testing"
 
@@ -38,6 +39,8 @@ BLOCK0_HASH=$($CLI rest v0 settings get -h "${REST_URL}" | grep 'block0Hash:' | 
 
 ACCOUNT_PK=$(echo ${ACCOUNT_SK} | $CLI key to-public)
 ACCOUNT_ADDR=$($CLI address account ${ADDRTYPE} ${ACCOUNT_PK})
+
+echo "FYI createStakePool.sh expects send-certificate.sh in: ~/files"
 
 echo "================ Blockchain details ================="
 echo "BLOCK0_HASH:  ${BLOCK0_HASH}"
@@ -78,7 +81,7 @@ $CLI certificate sign \
 echo "SIGNED_STAKE_POOL_CERTIFICATE: $(cat ${SIGNED_STAKE_POOL_CERTIFICATE_FILE})"
 
 echo " ##4. Send the signed Stake Pool certificate to the blockchain"
-./send-certificate.sh stake_pool.cert ${REST_PORT} ${ACCOUNT_SK}
+~/files/send-certificate.sh stake_pool.cert ${REST_PORT} ${ACCOUNT_SK}
 
 echo " ##5. Retrieve your stake pool id (NodeId)"
 cat stake_pool.cert | $CLI certificate get-stake-pool-id | tee stake_pool.id
