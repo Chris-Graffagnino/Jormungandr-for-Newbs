@@ -205,6 +205,13 @@ chmod 700 ~/.bashrc && chmod 700 ~/.bash_profile
 
 # Reload environment variables in to your current shell
 source ~/.bash_profile
+
+# Hey, my prompt looks funny now? Yes, it does. Did you really need it to tell you who you are :)
+# The prompt can get quite long, depending how deep in the directory structure you are. Better to
+# save space. So what you'll see now is your location in the directory tree, followed by which
+# git branch you're on.
+# If you like your original prompt better, open .bashrc and comment out this line
+# export PS1="\[\e[36m\]\w\[\e[m\]\[\e[35m\] \`parse_git_branch\`\[\e[m\] \[\e[36m\]:\[\e[m\] "
 ```
 
 ### About environment variables
