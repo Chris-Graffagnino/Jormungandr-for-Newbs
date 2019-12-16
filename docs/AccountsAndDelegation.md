@@ -52,7 +52,7 @@ Type ```cardano-wallet transaction create <wallet-id> --payment <amount_in_lovel
 
 Now we need to check if the transaction has worked. Enter the target address in the [Cardano Shelley Explorer](https://shelleyexplorer.cardano.org/en/). It may take half a minute or so to show up.
 
-_Note: To send funds from one reward account to another, you cannot use the above wallet command. Instead you will use a script called [sendADA.sh](https://github.com/rdlrt/Alternate-Jormungandr-Testnet/tree/master/scripts/jormu-helper-scripts). It has taken me some time to get my head around this._
+_Note: To send funds from one reward account to another, you cannot use the above wallet command. Instead you will use a script called [sendADA.sh](https://github.com/rdlrt/Alternate-Jormungandr-Testnet/tree/master/scripts/jormu-helper-scripts)._
 
 ### Delegation
 
