@@ -60,11 +60,15 @@ With our accounts setup and loaded, we can now delegate to our favorite stake po
 
 Copy the pool IDs of your two favorite pool (looks like ```6f23b9a72c....```).
 
-To delegate to your two favorite pools use the script ```delegate-acct.sh```twice:
-- ```./delegate-acct.sh <account_secret_one> <pool_id_one>``` where the account secret is the secret key of the first account generated in step 2 above
-- ```./delegate-acct.sh <account_secret_two> <pool_id_two>``` where the account secret is the secret key of the second account generated in step 2 above
+To delegate to your two favorite pools use the script ```delegate-account.sh```:
+- ```~/files/delegate-account.sh <ACCOUNT_SK> <STAKE_POOL_ID_1>:<WEIGHT> <STAKE_POOL_ID_2>:<WEIGHT>``` where <ACCOUNT_SK> is your secret key corresponding to the first account you generated in step 2 above.
 
-The script delegate-acct.sh is part of a script collection called [Alternate-Jormungandr-Testnet](https://github.com/rdlrt/Alternate-Jormungandr-Testnet/tree/master/scripts/jormu-helper-scripts).
+Weights are expressed as integers, and are calculated as follows: <WEIGHT> / <SUM_OF_ALL_WEIGHTS>
+
+For instance, delegating to three pools in a ration of 10/30/60:
+`~/files/delegate-account.sh <SECRET_KEY> 111:10 222:30 333:60`
+
+`delegate-account.sh` is part of a script collection called [Alternate-Jormungandr-Testnet](https://github.com/rdlrt/Alternate-Jormungandr-Testnet/tree/master/scripts/jormu-helper-scripts).
 
 You can verify the delegation with ```jcli rest v0 account get <account_public_key>``` where the public key is what you have obtained in step 3 above.
 
