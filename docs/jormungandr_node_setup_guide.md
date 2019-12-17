@@ -394,7 +394,7 @@ p2p:
     id: 99cb10f53185fbef110472d45a36082905ee12df8a049b74
 rest:
   listen: 127.0.0.1:<YOUR REST PORT>
-storage: "~/storage"
+storage: ~/storage
 ```
 
 (Did you remember to replace the PLACEHOLDERS with the appropriate values)?
