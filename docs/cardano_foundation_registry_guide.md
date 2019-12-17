@@ -242,69 +242,8 @@ git remote add submission git@github.com:<YOUR GITHUB USERNAME>/incentivized-tes
 git push submission HEAD
 ```
 
-#### Fix the errors
-```
-# In terminal app, go to the tab for your VPS
-
-# Fix the errors in the .json file
-
-# Delete the existing .sig file
-rm "$(cat owner.pub)".sig
-
-# Generate the .sig file once again
-jcli key sign --secret-key owner.prv --output "$(cat owner.pub)".sig "$(cat owner.pub)".json
-
-# Copy the files back down via scp
-# GIT add/commit/push
-
-# You won't have to open another pull request
-# Check the github page to see if the automated checks have passed
-```
-
 # What now?
 Check back periodically to see if the Cardano Foundation has approved your pull request.
-
-## How do I delegate my incentivized-testnet ADA?
-Once you've downloaded special incentivized-testnet wallet, restore using your 12 or 15
-word neumonic phrase. Then do the following:  
-```
-# Copy the contents of owner.addr
-cat owner.addr
-
-# From incentivized-testnet-daedalus, send a small amount of ADA to <ADDRESS YOU JUST COPIED>
-# Did you receive the ADA? Send more...
-
-# Now that owner.addr has a balance, create a stakepool & register it on the new blockchain.
-# You'll need three scripts from the original guide-4newbs if you don't already have them:  
-createStakePool.sh
-send-certificate.sh
-delegate-account.sh
-
-# If you didn't already have those, execute the following command for each of them:  
-chmod +x <FILENAME>
-
-# Create/register your stakepool on the new blockchain
-# Check to make sure you remember the correct order of args
-cat createStakePool.sh | grep usage
-
-# You should see something like this
-$0 <REST-LISTEN-PORT> <TAX_VALUE> <TAX_RATIO> <TAX_LIMIT> <ACCOUNT_SK>
-
-# Here's an example of how you might execute createStakePool.sh
-./createStakePool.sh 3101 50000000 1/10 10000000000 $(cat owner.prv)
-
-# If you hadn't noticed, createStakePool.sh calls send-certificate.sh
-
-# Execute the following command to delegate your owner stake
-./delegate-account.sh $(cat stake_pool.id) <REST-LISTEN-PORT> $(cat receiver_secret.key)
-
-# While you're waiting for the transaction to go through, open node-config.yaml to check that "blocks" & "messages"
-# are both set to "high". If not, fix that and start the node as leader:
-nohup jormungandr --config node-config.yaml --secret node_secret.yaml --genesis-block-hash <GENESIS BLOCK HASH> >> <PATH TO LOG FILE> 2>&1 &
-
-### Or if you setup the node using the original Guide-4newbs
-start_leader
-```
 
 # You finished! Buy me a beer?
 ```
