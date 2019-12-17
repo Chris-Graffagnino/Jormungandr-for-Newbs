@@ -7,28 +7,16 @@
 -- Note: anything all-caps in between "<>" is an placeholder; e.g. `"<FILENAME>"` could be `"foo.txt"`.   
 -- Note: anything in between "${}" is a variable that will be evaluated by your shell.  
 
--- IMPORTANT: There are two ways to do this, the simple way, and the way where you use the cardano-wallet api.
- 
-This guide ONLY covers the simple way. Once the *special incentivized-testnet Daedalu*s is released, restore using your seed phrase, then send funds to the address you create below, *owner.addr*.  The downside of this method is you won’t be able to see your rewards grow from the gorgeous Daedalus user interface. You will, however, be able to see your rewards grow from a slightly less gorgeous UNIX interface. We gonna party like it’s 1971…
-
 # Prerequisites
 The following steps assume you have jormungandr node up and running (not necessarily as leader-candidate).  
 If you don’t, go here:  
 [Cardano Shelley Node Setup Guide 4newbs (v0.8.0-rc9+1) · GitHub](https://gist.github.com/Chris-Graffagnino/4d1be0b88dcaa93440a81dcafdc47afd)
 
 # IMPORTANT
-If you followed the previous guide, you may have already registered the node on the blockchain as leader-candidate.  
-Understand that the REAL incentivized-testnet will launch with a new genesis-block-hash. That means that
-you'll start with a zero balance, although you'll be able to claim your tADA from the 11/29/19 main-net snapshot.   
+If you followed the previous guide, you may have already registered the node on the blockchain as leader-candidate. If
+this is the case, make SURE the address you register begins with "addr" (not "ca1").
 
-Once you claim your snapshot ADA, you can send it from incentivized-testnet Daedalus to *owner.addr*. Then you will
-run createStakePool.sh to register your (new) stakepool. Don't forget to run delegate-account.sh as well!  
-
-HOWEVER, until you get the snapshot ADA, you'll have to wait to register using the scripts I just mentioned.  
-
-Until then, Let's register your pool with the Cardano Foundation.  
-
-One last thing... this guide relies on the context of the original "Guide 4newbs." If any of what you're
+This guide relies on the context of the original "Guide 4newbs." If any of what you're
 about to read is confusing, consider the official tutorial:  
 https://github.com/cardano-foundation/incentivized-testnet-stakepool-registry/wiki/How-to-Register-Your-Stake-Pool
 
