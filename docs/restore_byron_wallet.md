@@ -22,8 +22,10 @@ curl -L https://github.com/input-output-hk/cardano-wallet/releases/download/v201
 ls ~/.local/bin
 
 # If ~/.local/bin already existed, check to see if it was in your $PATH
+echo $PATH
+
 # You're looking for (order doesn't matter):
-/home/<YOUR USERNAME>/.local/bin/<FILENAME>:<SOME PATH>:<SOME OTHER PATH>
+# /home/<YOUR USERNAME>/.local/bin/<FILENAME>:<SOME PATH>:<SOME OTHER PATH>
 
 # If it wasn't in your $PATH, add this line to the bottom of .bash_profile.
 # If it WAS in your $PATH, skip this step
