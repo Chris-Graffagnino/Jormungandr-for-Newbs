@@ -135,6 +135,12 @@ NOTE: "owner" is the contents of `owner.pub`.
 NOTE: "pledge_address" is the contents of `owner.addr` (OR) some other "addr" prefixed address (for which you possess the pub/private keys).
 (ctrl+o to save the file, ctrl+x to exit) . 
 
+### IMPORTANT
+The "owner" public key must match the key-pair that you register your node on the blockchain via createStakePool.sh (see jormungandr_node_setup_guide.md)
+https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md
+
+
+
 
 ### Execute the following command (as-is) to sign the .json file. This will create a .sig file
 ```
@@ -197,9 +203,21 @@ Some automated checks will run. Do you see Errors? Click "Details" for more info
 Look at the very bottom of the output for info about the error.
 ![errors](https://user-images.githubusercontent.com/8118351/70454753-e196c500-1aa2-11ea-92ab-76a3621f3a66.png)
 
-## How to properly edit your Cardano Foundation submisson
-(if the pull request has not been merged)
+## No errors? What now?
+Check back periodically to see if the Cardano Foundation has approved your pull request.
+
+### Errors? Want to change something?
+Keep reading...
+
+## How to edit your Cardano Foundation submisson
+
 ```
+# If you want to make a change AFTER your pull request has been merged, leave a
+# comment on the pull request, asking to make a change. Be sure to confirm that the
+# correct procedure is to open a new pull request, (possibly on a different branch name).
+
+# If you want to make a change BEFORE your pull request has been merged:
+
 git checkout master
 git pull origin master
 git branch -D submission
@@ -214,15 +232,21 @@ mv <YOUR PUBLIC KEY>.json > ../old_submission.json
 (Make sure it is correct so you don't have to redo again)
 
 mv <TEMP FILENAME>.json ./<YOUR PUBLIC KEY>.json
+```
 
-# Make SURE you have the .json file correct; check every single item
-# Single-quotes are not valid json
-# https links only
+#### Make SURE you have the .json file correct; check every single item
+```
+-- Single-quotes are not valid json
+-- https links only
 
 Paste your json into jsonlint.com
 cat <YOUR PUBLIC KEY>.json (copy the output to paste into a json validator)
+```
 
-# Everything 100% correct? Resign the file
+![jsonlint](https://user-images.githubusercontent.com/8118351/71024853-c14bb380-20fd-11ea-81c3-6bf26dd36ffa.png)
+
+### Everything 100% correct? Resign the file
+```
 jcli key sign --secret-key <FILE W/PRIVATE KEY> --output "$(cat <FILE W/PUBLIC KEY)".sig "$(cat <FILE W/PUBLIC KEY>)".json
 
 mv <YOUR PUBLIC KEY>.json registry
@@ -241,9 +265,6 @@ git remote add submission git@github.com:<YOUR GITHUB USERNAME>/incentivized-tes
 
 git push submission HEAD
 ```
-
-# What now?
-Check back periodically to see if the Cardano Foundation has approved your pull request.
 
 # You finished! Buy me a beer?
 ```
