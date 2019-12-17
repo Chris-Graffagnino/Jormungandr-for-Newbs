@@ -10,11 +10,11 @@
 # Prerequisites
 The following steps assume you have jormungandr node up and running (not necessarily as leader-candidate).  
 If you don’t, go here:  
-[Cardano Shelley Node Setup Guide 4newbs (v0.8.0-rc9+1) · GitHub](https://gist.github.com/Chris-Graffagnino/4d1be0b88dcaa93440a81dcafdc47afd)
+[Cardano Shelley Node Setup Guide 4newbs (v0.8.3) · GitHub](https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jormungandr_node_setup_guide.md)
 
 # IMPORTANT
 If you followed the previous guide, you may have already registered the node on the blockchain as leader-candidate. If
-this is the case, make SURE the address you register begins with "addr" (not "ca1").
+this is the case, make SURE the address you register begins with `addr` (not `ca1`).
 
 This guide relies on the context of the original "Guide 4newbs." If any of what you're
 about to read is confusing, consider the official tutorial:  
@@ -195,6 +195,8 @@ Look at the very bottom of the output for info about the error.
 Check back periodically to see if the Cardano Foundation has approved your pull request.
 
 ### Errors? Want to change something?
+NEVER EVER edit your submission from the github web interface. Because there's no way to re sign the edited file.
+You will have a bad time if you do this.
 Keep reading...
 
 ## How to edit your Cardano Foundation submisson
