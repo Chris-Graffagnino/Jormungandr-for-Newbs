@@ -236,14 +236,16 @@ mv <TEMP FILENAME>.json ./<YOUR PUBLIC KEY>.json
 
 #### Make SURE you have the .json file correct; check every single item
 ```
--- Single-quotes are not valid json
+-- Use double-quotes; single-quotes are not valid json
 -- https links only
+-- The last item does NOT end with a comma
 
 Paste your json into jsonlint.com
 cat <YOUR PUBLIC KEY>.json (copy the output to paste into a json validator)
 ```
 
-![jsonlint](https://user-images.githubusercontent.com/8118351/71024853-c14bb380-20fd-11ea-81c3-6bf26dd36ffa.png)
+![jsonlint](https://user-images.githubusercontent.com/8118351/71026225-a9c1fa00-2100-11ea-883e-7ca87327dd5f.png)
+
 
 ### Everything 100% correct? Resign the file
 ```
