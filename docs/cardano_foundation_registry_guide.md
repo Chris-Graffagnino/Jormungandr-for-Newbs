@@ -197,7 +197,50 @@ Some automated checks will run. Do you see Errors? Click "Details" for more info
 Look at the very bottom of the output for info about the error.
 ![errors](https://user-images.githubusercontent.com/8118351/70454753-e196c500-1aa2-11ea-92ab-76a3621f3a66.png)
 
+## How to properly edit your Cardano Foundation submisson
+(if the pull request has not been merged)
+```
+git checkout master
+git pull origin master
+git branch -D submission
 
+mv ./registry/<YOUR PUBLIC KEY>.json .
+rm ./registry <YOUR PUBLIC KEY>.sig
+
+cat <YOUR PUBLIC KEY>.json > <TEMP FILENAME>.json
+mv <YOUR PUBLIC KEY>.json > ../old_submission.json
+
+(edit your <TEMP FILENAME>.json)
+(Make sure it is correct so you don't have to redo again)
+
+mv <TEMP FILENAME>.json ./<YOUR PUBLIC KEY>.json
+
+# Make SURE you have the .json file correct; check every single item
+# Single-quotes are not valid json
+# https links only
+
+Paste your json into jsonlint.com
+cat <YOUR PUBLIC KEY>.json (copy the output to paste into a json validator)
+
+# Everything 100% correct? Resign the file
+jcli key sign --secret-key <FILE W/PRIVATE KEY> --output "$(cat <FILE W/PUBLIC KEY)".sig "$(cat <FILE W/PUBLIC KEY>)".json
+
+mv <YOUR PUBLIC KEY>.json registry
+mv <YOUR PUBLIC KEY>.sig registry
+
+git status (you should see two deleted files and the two new files you created)
+
+git add .
+git commit -m '<YOUR TICKER NAME>'
+
+git checkout -b submission
+git remote -v (you should see four entrys, two for master, two for submission)
+
+# If not, do this
+git remote add submission git@github.com:<YOUR GITHUB USERNAME>/incentivized-testnet-stakepool-registry
+
+git push submission HEAD
+```
 
 #### Fix the errors
 ```
