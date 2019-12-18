@@ -489,7 +489,7 @@ scp -P <YOUR SSH PORT> -i ~/.ssh/<YOUR PRIVATE KEY> <FILENAME> <USERNAME>@<VPS P
 # How much diskspace are you using?
 df -H
 
-# How much diskspace is jormungandr using? (alias "jordsk"
+# How much diskspace is jormungandr using? (alias "jordsk")
 du -sh ${JORMUNGANDR_STORAGE_DIR}
 
 # What are the biggest files on disk
