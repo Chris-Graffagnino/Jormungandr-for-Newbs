@@ -12,14 +12,15 @@
 . $(dirname $0)/env
 
 if [ "$1" = "--help" ] || [ $# -lt 2 ]; then
-    echo "usage: $0 <ACCOUNT_SK> <STAKE_POOL_IDS><"
-    echo "    <ACCOUNT_SK>     The Secret key of the Account address"
-    echo "    <STAKE_POOL_IDS> <ID>:<WEIGHT>"
+    echo "usage: $0 <ACCOUNT_SK> <STAKE_POOL_ID>:<WEIGHT>"
+    echo "    <ACCOUNT_SK>     The secret key"
+    echo "    <STAKE_POOL_ID>:<WEIGHT> The stake pool ID, followed by ':<INTEGER>'"
     echo ""
     echo "Multiple pools, separated by spaces, e.g. <ID>:<WEIGHT> <ID>:<WEIGHT>"
     echo "Weights expressed as integers; script calculates (weight/sum-of-all-weights)"
     exit 1
 fi
+
 
 ACCOUNT_SK="$1"
 STAKE_POOL_ID="${@:2}"
