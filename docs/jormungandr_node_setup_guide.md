@@ -239,6 +239,7 @@ printenv
 echo "export USERNAME='<YOUR USERNAME>'" >> ~/.bashrc
 echo "export PUBLIC_IP_ADDR='<YOUR PUBLIC IP ADDRESS>'" >> ~/.bashrc
 echo "export REST_PORT='<YOUR REST PORT>'" >> ~/.bashrc
+echo "export JORMUNGANDR_RESTAPI_URL='http://127.0.0.1:<YOUR REST PORT>/api'" >> ~/.bashrc
 echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bashrc
 echo "export RUST_BACKTRACE=1" >> ~/.bashrc
 echo "export GENESIS_BLOCK_HASH='<SOME GENESIS BLOCK HASH>'" >> ~/.bashrc
