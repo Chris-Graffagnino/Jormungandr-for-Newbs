@@ -51,7 +51,7 @@ function is_pool_visible() {
 }
 
 function delegate() {
-    echo "$(~/files/delegate-account.sh $(cat ~/files/stake_pool.id) ${REST_PORT} $(cat ~/files/receiver_secret.key))"
+    echo "$(~/files/delegate-account.sh $(cat ~/files/receiver_secret.key) $(cat ~/files/stake_pool.id):1)"
 }
 
 function start_leader() {

@@ -548,9 +548,11 @@ usage: ~/files/createStakePool.sh <REST-LISTEN-PORT> <TAX_VALUE> <TAX_RATIO> <TA
 # send-certificate.sh is called by createStakePool.sh and is not intended for you.
 
 # delegate-account.sh
-usage: ~/files/delegate-account.sh <ACCOUNT-SK> <STAKE_POOL_ID>
+usage: ~/files/delegate-account.sh <ACCOUNT-SK> <STAKE_POOL_ID>:1
     <ACCOUNT-SK>     The Secret key of the Account address
-    <STAKE_POOL_ID>  The ID of the Stake Pool you want to delegate to
+    <STAKE_POOL_ID:WEIGHT>  An ID of the Stake Pool you want to delegate to, followed by ":<SOME INTEGER>"
+
+    Multiple pools, separated by spaces, e.g. <ID>:<WEIGHT> <ID>:<WEIGHT>
 ```
 
 ## Create stake pool
@@ -590,7 +592,7 @@ logs
 
 # Delegate your funds to your stake pool
 ```
-~/files/delegate-account.sh $(cat ~/files/stake_pool.id) ${REST_PORT} $(cat ~/files/receiver_secret.key)
+~/files/delegate-account.sh $(cat ~/files/receiver_secret.key) $(cat ~/files/stake_pool.id):1
 
 # Or use this shell function that executes the same thing
 delegate

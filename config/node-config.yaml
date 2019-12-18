@@ -4,6 +4,7 @@ log:
   format: plain
   level: info
 p2p:
+  public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<YOUR REST PORT>"
   topics_of_interest:
     blocks: normal
     messages: low
