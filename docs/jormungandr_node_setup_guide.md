@@ -241,8 +241,6 @@ echo "export PUBLIC_IP_ADDR='<YOUR PUBLIC IP ADDRESS>'" >> ~/.bashrc
 echo "export REST_PORT='<YOUR REST PORT>'" >> ~/.bashrc
 echo "export JORMUNGANDR_RESTAPI_URL='http://127.0.0.1:<YOUR REST PORT>/api'" >> ~/.bashrc
 echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bashrc
-echo "export RUST_BACKTRACE=1" >> ~/.bashrc
-echo "export GENESIS_BLOCK_HASH='<SOME GENESIS BLOCK HASH>'" >> ~/.bashrc
 
 # What did we just do?
 # "echo" essentially means "print to screen"
@@ -254,10 +252,8 @@ echo "export GENESIS_BLOCK_HASH='<SOME GENESIS BLOCK HASH>'" >> ~/.bashrc
 # You'll need one of these hashes in the previous command
 
 # Genesis block hash for Incentivized-Test-Net (ITN)
-# 8e4d2a343f3dcf9330ad9035b3e8d168e6728904262f2c434a4f8f934ec7b676
+# 
 
-# Genesis block hash for v0.8.0 nightly (Updated 12/11/19)
-# 65a9b15f82619fffd5a7571fdbf973a18480e9acf1d2fddeb606ebb53ecca839
 ```
 
 ## Configure Swap to handle memory spikes
@@ -340,8 +336,8 @@ git config --global user.email <YOUR EMAIL ADDRESS>
 git clone https://github.com/input-output-hk/jormungandr
 
 cd jormungandr
-git checkout v0.8.2
-git checkout -b <NEW BRANCH NAME eg 8.2>
+git checkout v0.8.3
+git checkout -b <NEW BRANCH NAME eg 8.3>
 git submodule update --init --recursive
 ```
 
@@ -365,7 +361,7 @@ nano ~/files/node-config.yaml
 # Check Telegram (StakePool Best Practice Workgroup) for up-to-date genesis-hash & trusted peers
 # https://t.me/CardanoStakePoolWorkgroup/74812
 
-# This is for the ** ITN ** release v0.8.2 (last updated 12/13/19)
+# This is for the ** ITN ** release v0.8.3 (last updated 12/18/19)
 # Replace <THE PLACEHOLDERS> with the appropriate values
 ```
 ```
