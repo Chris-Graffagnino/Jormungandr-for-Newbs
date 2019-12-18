@@ -550,7 +550,7 @@ usage: ~/files/createStakePool.sh <REST-LISTEN-PORT> <TAX_VALUE> <TAX_RATIO> <TA
 # delegate-account.sh
 usage: ~/files/delegate-account.sh <ACCOUNT-SK> <STAKE_POOL_ID>:1
     <ACCOUNT-SK>     The Secret key of the Account address
-    <STAKE_POOL_ID:WEIGHT>  An ID of the Stake Pool you want to delegate to, followed by ":<SOME INTEGER>"
+    <STAKE_POOL_ID:WEIGHT>  An stake pool ID, followed by ":<SOME INTEGER>"
 
     Multiple pools, separated by spaces, e.g. <ID>:<WEIGHT> <ID>:<WEIGHT>
 ```
