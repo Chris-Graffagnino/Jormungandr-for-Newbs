@@ -136,7 +136,7 @@ First, we'll need to make a special config file for Jormungandr
 [jormungandr]
 title=Jormungandr
 description=allow all, deny REST_PORT
-ports=1024:<YOUR_REST_PORT_MINUS_ONE>/tcp|<YOUR_RUST_PORT_PLUS_ONE>:65535/tcp<Paste>
+ports=1024:<YOUR_REST_PORT_MINUS_ONE>/tcp|<YOUR_RUST_PORT_PLUS_ONE>:65535/tcp
 ```
 (ctrl+o to save, ctrl+x to quit)
 
@@ -315,7 +315,7 @@ sudo sysctl -p /etc/sysctl.conf
 
 ### Create a file to preserve our system settings on reboot
 sudo nano /etc/rc.local
-(paste the follwing into /etc/rc.local
+(paste the follwing into /etc/rc.local)
 ```
 #!/bin/bash
 
