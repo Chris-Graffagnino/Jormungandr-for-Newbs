@@ -257,6 +257,9 @@ echo "export REST_PORT='<YOUR REST PORT>'" >> ~/.bashrc
 echo "export JORMUNGANDR_RESTAPI_URL='http://127.0.0.1:<YOUR REST PORT>/api'" >> ~/.bashrc
 echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bashrc
 
+#finally execute this command for reload .bashrc file
+source ~/.bashrc
+
 # What did we just do?
 # "echo" essentially means "print to screen"
 # "export" declares a variable in a special way, so that any shells that spawn from it inherit the variable.
