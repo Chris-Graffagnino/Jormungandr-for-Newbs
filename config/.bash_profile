@@ -101,3 +101,6 @@ function delta() {
     echo "LastShellyBlock: " $shelleyLastBlockCount
     echo "DeltaCount: " $deltaBlockCount
 }
+
+#reload the cargo configuration environment
+source $HOME/.cargo/env
