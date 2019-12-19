@@ -150,7 +150,7 @@ ufw default allow outgoing
 ufw limit from any to any port <THE PORT YOU JUST CHOSE IN sshd_config> proto tcp
 
 # Open all useable ports to jormungandr, but not our REST port (because it is accessed internally)
-ufw allow jormungnadr
+ufw allow jormungandr
 
 # Re-enable firewall
 ufw enable
