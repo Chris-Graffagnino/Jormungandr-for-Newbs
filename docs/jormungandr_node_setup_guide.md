@@ -129,13 +129,28 @@ nano /etc/ssh/sshd_config
 ```
 
 ## Configure "uncomplicated firewall" (ufw)
+First, we'll need to make a special config file for Jormungandr
+`nano /etc/ufw/applications.d/jormungandr`
+(copy/paste the following into /etc/ufw/applications.d/jormungandr)
 ```
+[jormungandr]
+title=Jormungandr
+description=allow all, deny REST_PORT
+ports=1024:<YOUR_REST_PORT_MINUS_ONE>/tcp|<YOUR_RUST_PORT_PLUS_ONE>:65535/tcp<Paste>
+```
+(ctrl+o to save, ctrl+x to quit)
+
+```
+# Now that you've saved the file, continue modifying ufw rules via the command-line (aka "cli")
 # Set defaults for incoming/outgoing ports
 ufw default deny incoming
 ufw default allow outgoing
 
 # Open ssh port (rate limiting enabled - max 10 attempts within 30 seconds)
 ufw limit from any to any port <THE PORT YOU JUST CHOSE IN sshd_config> proto tcp
+
+# Open all useable ports to jormungandr, but not our REST port (because it is accessed internally)
+ufw allow jormungnadr
 
 # Re-enable firewall
 ufw enable
@@ -246,14 +261,6 @@ echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bash
 # "echo" essentially means "print to screen"
 # "export" declares a variable in a special way, so that any shells that spawn from it inherit the variable.
 # ">>" means "take the output of the previous command and append it to the end of a file (.bashrc, in this case)
-```
-
-```
-# You'll need one of these hashes in the previous command
-
-# Genesis block hash for Incentivized-Test-Net (ITN)
-# 
-
 ```
 
 ## Configure Swap to handle memory spikes
@@ -539,7 +546,6 @@ usage: ~/files/createStakePool.sh <REST-LISTEN-PORT> <TAX_VALUE> <TAX_RATIO> <TA
     <REST-LISTEN-PORT>   The REST Listen Port set in node-config.yaml file (EX: 3101)
     <TAX_VALUE>   The fixed cut the stake pool will take from the total reward
     <TAX_RATIO>   The percentage of the remaining value that will be taken from the total
-    <TAX_LIMIT>   A value that can be set to limit the pool's Tax.
     <SOURCE-SK>   The Secret key of the Source address
 
 # send-certificate.sh is called by createStakePool.sh and is not intended for you.
