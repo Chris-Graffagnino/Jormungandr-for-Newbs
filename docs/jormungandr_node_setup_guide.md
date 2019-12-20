@@ -136,7 +136,7 @@ First, we'll need to make a special config file for Jormungandr
 [jormungandr]
 title=Jormungandr
 description=allow all, deny REST_PORT
-ports=1024:<YOUR_REST_PORT_MINUS_ONE>/tcp|<YOUR_RUST_PORT_PLUS_ONE>:65535/tcp
+ports=1024:<YOUR_REST_PORT_MINUS_ONE>/tcp|<YOUR_REST_PORT_PLUS_ONE>:65535/tcp
 ```
 (ctrl+o to save, ctrl+x to quit)
 
@@ -150,7 +150,7 @@ ufw default allow outgoing
 ufw limit from any to any port <THE PORT YOU JUST CHOSE IN sshd_config> proto tcp
 
 # Open all useable ports to jormungandr, but not our REST port (because it is accessed internally)
-ufw allow jormungnadr
+ufw allow jormungandr
 
 # Re-enable firewall
 ufw enable
