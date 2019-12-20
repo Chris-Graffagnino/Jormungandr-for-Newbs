@@ -346,8 +346,9 @@ git config --global user.email <YOUR EMAIL ADDRESS>
 git clone https://github.com/input-output-hk/jormungandr
 
 cd jormungandr
-git checkout v0.8.3
-git checkout -b <NEW BRANCH NAME eg 8.3>
+git checkout v0.8.4
+# verify de latest tag in this URL https://github.com/input-output-hk/jormungandr/tags
+git checkout -b tags/v0.8.4
 git submodule update --init --recursive
 ```
 
