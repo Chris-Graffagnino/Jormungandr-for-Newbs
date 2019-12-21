@@ -44,7 +44,7 @@ cat id_rsa.pub
 ssh-keygen
 
 # Lock down private key
-chmod 400 ~/.ssh/<YOUR KEY>
+chmod 400 ~/.ssh/<THE KEY YOU JUST GENERATED>
 
 # Copy the public key to your clipboard
 ```
