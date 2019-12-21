@@ -369,8 +369,8 @@ p2p:
   topics_of_interest:
     blocks: normal
     messages: low
-  public_address: "/ip4/<THE IP ADDRESS OF YOUR NODE>/tcp/<THE PORT YOU OPENED FOR YOUR PUBLIC ADDRESS>"
-  listen_address: "/ip4/0.0.0.0/tcp/<THE PORT YOU OPENED FOR YOUR PUBLIC ADDRESS>"
+  public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<THE PORT YOU OPENED FOR PUBLIC ADDRESS>"
+  listen_address: "/ip4/0.0.0.0/tcp/<THE PORT YOU OPENED FOR PUBLIC ADDRESS>"
   trusted_peers:
   - address: "/ip4/52.9.132.248/tcp/3000"
     id: 671a9e7a5c739532668511bea823f0f5c5557c99b813456c
