@@ -129,8 +129,8 @@ nano /etc/ssh/sshd_config
 ```
 
 ## Configure "uncomplicated firewall" (ufw)
-First, we'll need to make a special config file for Jormungandr
-`nano /etc/ufw/applications.d/jormungandr`
+First, we'll need to make a special config file for Jormungandr  
+`sudo nano /etc/ufw/applications.d/jormungandr`
 (copy/paste the following into /etc/ufw/applications.d/jormungandr)
 ```
 [jormungandr]
