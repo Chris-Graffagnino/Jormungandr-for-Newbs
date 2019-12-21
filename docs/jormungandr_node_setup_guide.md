@@ -129,19 +129,7 @@ nano /etc/ssh/sshd_config
 ```
 
 ## Configure "uncomplicated firewall" (ufw)
-First, we'll need to make a special config file for Jormungandr  
-`sudo nano /etc/ufw/applications.d/jormungandr`
-(copy/paste the following into /etc/ufw/applications.d/jormungandr)
 ```
-[jormungandr]
-title=Jormungandr
-description=allow all, deny REST_PORT
-ports=1024:<YOUR_REST_PORT_MINUS_ONE>/tcp|<YOUR_REST_PORT_PLUS_ONE>:65535/tcp
-```
-(ctrl+o to save, ctrl+x to quit)
-
-```
-# Now that you've saved the file, continue modifying ufw rules via the command-line (aka "cli")
 # Set defaults for incoming/outgoing ports
 ufw default deny incoming
 ufw default allow outgoing
@@ -149,8 +137,8 @@ ufw default allow outgoing
 # Open ssh port (rate limiting enabled - max 10 attempts within 30 seconds)
 ufw limit from any to any port <THE PORT YOU JUST CHOSE IN sshd_config> proto tcp
 
-# Open all useable ports to jormungandr, but not our REST port (because it is accessed internally)
-ufw allow jormungandr
+# Open a port for your public address
+ufw allow from any to any port <CHOOSE A PORT BETWEEN 1024 AND 65535> proto tcp
 
 # Re-enable firewall
 ufw enable
@@ -381,6 +369,8 @@ p2p:
   topics_of_interest:
     blocks: normal
     messages: low
+  public_address: "/ip4/<THE IP ADDRESS OF YOUR NODE>/tcp/<THE PORT YOU OPENED FOR YOUR PUBLIC ADDRESS>"
+  listen_address: "/ip4/0.0.0.0/tcp/<THE PORT YOU OPENED FOR YOUR PUBLIC ADDRESS>"
   trusted_peers:
   - address: "/ip4/52.9.132.248/tcp/3000"
     id: 671a9e7a5c739532668511bea823f0f5c5557c99b813456c

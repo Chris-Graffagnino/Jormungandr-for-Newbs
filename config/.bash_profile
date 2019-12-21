@@ -96,6 +96,7 @@ function delta() {
     while [[ $counter -le $tries ]]
     do
         shelleyExplorerJson=`curl -X POST -H "Content-Type: application/json" --data '{"query": " query {   allBlocks (last: 3) {    pageInfo { hasNextPage hasPreviousPage startCursor endCursor  }  totalCount  edges {    node {     id  date { slot epoch {  id  firstBlock { id  }  lastBlock { id  }  totalBlocks }  }  transactions { totalCount edges {   node {    id  block { id date {   slot   epoch {    id  firstBlock { id  }  lastBlock { id  }  totalBlocks   } } leader {   __typename   ... on Pool {    id  blocks { totalCount  }  registration { startValidity managementThreshold owners operators rewards {   fixed   ratio {  numerator  denominator   }   maxLimit } rewardAccount {   id }  }   } }  }  inputs { amount address {   id }  }  outputs { amount address {   id }  }   }   cursor }  }  previousBlock { id  }  chainLength  leader { __typename ... on Pool {  id  blocks { totalCount  }  registration { startValidity managementThreshold owners operators rewards {   fixed   ratio {  numerator  denominator   }   maxLimit } rewardAccount {   id }  } }  }    }    cursor  }   } }  "}' https://explorer.incentivized-testnet.iohkdev.io/explorer/graphql 2> /dev/null`
+
         shelleyLastBlockCount=`echo $shelleyExplorerJson | grep -m 1 -o '"chainLength":"[^"]*' | cut -d'"' -f4 | awk '{print $NF}'`
         shelleyLastBlockCount=`echo $shelleyLastBlockCount|cut -d ' ' -f3`
         deltaBlockCount=`echo $(($shelleyLastBlockCount-$lastBlockCount))`
@@ -109,11 +110,12 @@ function delta() {
         sleep 3
     done
 
+
     if [[ -z "$shelleyLastBlockCount" ]]
     then
-        echo ""
-        echo -e ${RED}"INVALID FORK!"${NC}
-        echo ""
+         echo ""
+         echo -e ${RED}"INVALID FORK!"${NC}
+         echo ""
     else
         deltaBlockCount=`echo $(($shelleyLastBlockCount-$lastBlockCount))`
     fi
@@ -122,8 +124,10 @@ function delta() {
     echo "LastShelleyBlock: " $shelleyLastBlockCount
     echo "DeltaCount: " $deltaBlockCount
 
-    if [[ $deltaBlockCount > $deltaMax ]]; then
+    if [[ $deltaBlockCount -gt $deltaMax ]]; then
         echo -e ${RED}"Your node was possibily forked"${NC}
-    else
+    fi
+    if [[ $deltaBlockCount -lt $deltaMax ]]; then
         echo -e ${GREEN}"Your node is running well"${NC}
     fi
+}

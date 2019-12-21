@@ -46,7 +46,7 @@ ssh-keygen
 # Lock down private key
 chmod 400 ~/.ssh/<THE FILENAME CONTAINING THE KEY YOU JUST GENERATED>
 
-# Copy the public key to your clipboard
+# Copy the contents of the filename containing the public key to your clipboard
 ```
 
 ## Check that you have ssh keys on github
