@@ -143,8 +143,26 @@ ufw default allow outgoing
 # Open ssh port (rate limiting enabled - max 10 attempts within 30 seconds)
 ufw limit from any to any port <THE PORT YOU JUST CHOSE IN sshd_config> proto tcp
 
-# Open a port for your public address
-ufw allow from any to any port <CHOOSE A PORT BETWEEN 1024 AND 65535> proto tcp
+# Open a port for our REST api calls
+ufw allow from any to any port <CHOSE A PORT BETWEEN 1024 AND 65535> proto tcp
+```
+
+#### Make a config file that ufw will load for Jormungandr
+Open all ports, except the REST_PORT that is accessed internally.
+`sudo nano /etc/ufw/applications.d/jormungandr`  
+(copy/paste the following into /etc/ufw/applications.d/jormungandr)
+```
+[jormungandr]
+title=Jormungandr
+description=allow all, deny REST_PORT
+ports=1024:<YOUR_REST_PORT_MINUS_ONE>/tcp|<YOUR_REST_PORT_PLUS_ONE>:65535/tcp
+```
+(ctrl+o to save, ctrl+x to quit)
+
+### Finish configuring ufw
+```
+# Load the settings from our special config file
+ufw allow jormungandr
 
 # Re-enable firewall
 ufw enable
@@ -162,7 +180,6 @@ reboot
 
 ## Sign-in as non-root user
 ```
-# Sign-in as non-root user
 ssh -i ~/.ssh/<YOUR SSH PRIVATE KEY> <USERNAME>@<YOUR VPS PUBLIC IP ADDRESS> -p <SSH PORT>
 ```
 
@@ -187,7 +204,7 @@ sudo nano /etc/ssh/sshd_config
 sudo service sshd restart
 ```
 
-### Download some scripts
+## Download some scripts
 ```
 # Download files from my repo
 git clone https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs.git -b files-only --single-branch files
