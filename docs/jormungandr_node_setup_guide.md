@@ -84,6 +84,11 @@ apt install pkg-config
 apt install nload
 apt install python3-pip
 
+# Install ripgrep, because it's awesome
+curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
+sudo dpkg -i ripgrep_11.0.2_amd64.deb
+rm ripgrep_11.0.2_amd64.deb
+
 # These instructions will prevent certain errors when installing Rust
 mkdir /home/<USERNAME>/.cargo && mkdir /home/<USERNAME>/.cargo/bin
 chown -R <USERNAME> /home/<USERNAME>/.cargo
@@ -96,7 +101,8 @@ chown <USERNAME> /home/<USERNAME>/.profile
 nano /etc/security/limits.conf
 
 # Add the following at the bottom of the file
-<USERNAME> soft nofile 8192
+<USERNAME> soft nofile 32768
+<USERNAME> hard nofile 1048576
 
 # Save & close the file
 ctrl+o
