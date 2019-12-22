@@ -84,6 +84,7 @@ function problems() {
 function delta() {
     RED='\033[0;31m'
     GREEN='\033[0;32m'
+	ORANGE='\033[0;33m'
     NC='\033[0m' # No Color
 
     lastBlockHash=`stats | head -n 6 | tail -n 1 | awk '{print $2}'`
@@ -110,7 +111,6 @@ function delta() {
         sleep 3
     done
 
-
     if [[ -z "$shelleyLastBlockCount" ]]
     then
          echo ""
@@ -124,10 +124,15 @@ function delta() {
     echo "LastShelleyBlock: " $shelleyLastBlockCount
     echo "DeltaCount: " $deltaBlockCount
 
+    now=$(date +"%r")
+
+    if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
+       echo -e ${ORANGE}"$now: WARNING: Your node is about to going forked"${NC}
+    fi
     if [[ $deltaBlockCount -gt $deltaMax ]]; then
-        echo -e ${RED}"Your node was possibily forked"${NC}
+       echo -e ${RED}"$now: WARNING: Your node was possibly forked"${NC}
     fi
     if [[ $deltaBlockCount -lt $deltaMax ]]; then
-        echo -e ${GREEN}"Your node is running well"${NC}
+       echo -e ${GREEN}"$now: Your node is running well"${NC}
     fi
 }
