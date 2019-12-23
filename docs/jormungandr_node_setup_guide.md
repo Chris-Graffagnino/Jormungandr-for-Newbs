@@ -141,7 +141,7 @@ ufw default deny incoming
 ufw default allow outgoing
 
 # Open ssh port (rate limiting enabled - max 10 attempts within 30 seconds)
-ufw limit from any to any port <THE PORT YOU JUST CHOSE IN sshd_config> proto tcp
+ufw limit proto tcp from any to any port <THE PORT YOU JUST CHOSE IN sshd_config>
 
 # Choose a port between 1024 and 65535. This will be your PUBLIC_ADDRESS_PORT
  sudo ufw allow proto tcp from any to any port <NUMBER BETWEEN 1024 AND 65535>
@@ -414,8 +414,8 @@ p2p:
     messages: low
   listen_address: "/ip4/0.0.0.0/tcp/<YOUR PUBLIC ADDRESS PORT>"
   public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<YOUR PUBLIC ADDRESS PORT>"
-  # Adjust max_connections based on your cpu/ram usage. This setting typically works well for 2cpu/4G ram.
-  # Monitor usage w/ "memory" shell function; if you have multiple cpu's, press shift+i to measure the load across all cpu's
+  # Adjust max_connections based on your cpu/ram usage. 4096 typically works well for 2cpu/4G ram.
+  # Monitor usage w/ "memory" function; press shift+i to measure the load across all cpu's
   max_connections: 4096
   gossip_interval: 20s
   trusted_peers:
@@ -514,27 +514,80 @@ logs
 # Find the PID of jormungandr (will be the first number on the left)
 get_pid
 
+# What is the ip address of this node?
+get_ip
+
 # Stop jormungandr
 stop
+
+# Start node in passive-mode (before you register as a stake-pool)
+start
+
+# Start node as a stake-pool (once you've registered as a stake-pool)
+start_leader
 
 # Check stats
 stats
 
+# View the last 60 lines of your log file
+logs
+
+# Clear the log file
+empty_logs
+
 # Check balance
 bal
 
-# Check memory usage (alias "memory")
-top -o %MEM ("q" to quit)
+# How many nodes are connected?
+# Columns are [protocol, bytes-received, bytes-sent, your-ip, foreign-ip, state]
+nodes
 
-# Check set limits on virtual memory (system-wide)
-ulimit -Sa
+# Is node in sync with the network?
+delta
+
+# Check memory usage
+# If you have multiple cpu's, press shift+i for an accurate measurement
+memory (press "q" to quit)
+
+# Is my stake pool id visible to other nodes?
+is_pool_visible
+
+# Is node scheduled to be leader?
+leader_logs
+
+# Leader logs, by blockDate
+schedule
+
+# Leader logs, by blockTime
+when
+
+# How many chances to I have to find a block in the current epoch?
+elections
+
+# Stake pool stats
+pool_stats
+
+# Search the logs for common errors
+problems
+
+# List IP addresses that have been recently quarantined
+jail
+
+# How many nodes are have been in jail?
+jail_count
+
+# Has my node been recently quarantined
+busted
+
+# Show the last 150 ip addresses blocked by ufw
+blocked
+
+# Show the total number of ip addresses blocked by ufw
+nblocked
 
 # Check bandwidth usage
 (type q to quit)
 nload -m
-
-# What nodes are connected to your node?
-nodes
 
 # Check resource limits for your node by PID
 cat /proc/<PID>/limits
@@ -551,11 +604,8 @@ scp -P <YOUR SSH PORT> -i ~/.ssh/<YOUR PRIVATE KEY> <FILENAME> <USERNAME>@<VPS P
 # How much diskspace are you using?
 df -H
 
-# How much diskspace is jormungandr using? (alias "jordsk")
-du -sh ${JORMUNGANDR_STORAGE_DIR}
-
-# What are the biggest files on disk
-du -a ${JORMUNGANDR_STORAGE_DIR} | sort -n -r | head -n 10
+# How much diskspace is jormungandr using?
+jordsk
 ```
 
 ## Update 
@@ -761,7 +811,11 @@ git reset --soft <HASH OF THE COMMIT I WANT TO REVERT TO>
 ```
 
 ## Optional .bash_aliases
-`nano .bash_aliases`
+By now, your fingers are tired. Give them a rest by using .bash_aliases.    
+```
+cp ~/files/.bash_aliases ~/
+. ~/.bash_profile
+```
 
 ```
 # Cast Python2 aside and don't look back
