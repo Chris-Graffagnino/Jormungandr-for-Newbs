@@ -143,27 +143,8 @@ ufw default allow outgoing
 # Open ssh port (rate limiting enabled - max 10 attempts within 30 seconds)
 ufw limit from any to any port <THE PORT YOU JUST CHOSE IN sshd_config> proto tcp
 
-# Open a port for our REST api calls
-ufw allow from any to any port <CHOSE A PORT BETWEEN 1024 AND 65535> proto tcp
-```
-
-#### Make a config file that ufw will load for Jormungandr
-Open all ports, except the REST_PORT that is accessed internally.  
-`sudo nano /etc/ufw/applications.d/jormungandr`  
-
-(copy/paste the following into /etc/ufw/applications.d/jormungandr)
-```
-[jormungandr]
-title=Jormungandr
-description=allow all, deny REST_PORT
-ports=1024:<YOUR_REST_PORT_MINUS_ONE>/tcp|<YOUR_REST_PORT_PLUS_ONE>:65535/tcp
-```
-(ctrl+o to save, ctrl+x to quit)
-
-### Finish configuring ufw
-```
-# Load the settings from our special config file
-ufw allow jormungandr
+# Choose a port between 1024 and 6535 for other nodes to connect to. This will be your PUBLIC_ADDRESS_PORT
+ sudo ufw allow proto tcp from any to any port <NUMBER BETWEEN 1024 AND 65535>
 
 # Re-enable firewall
 ufw enable
@@ -266,6 +247,7 @@ printenv
 echo "export USERNAME='<YOUR USERNAME>'" >> ~/.bashrc
 echo "export PUBLIC_IP_ADDR='<YOUR PUBLIC IP ADDRESS>'" >> ~/.bashrc
 echo "export REST_PORT='<YOUR REST PORT>'" >> ~/.bashrc
+echo "export PUBLIC_ADDRESS_PORT='<YOUR PUBLIC ADDRESS PORT>'" >> ~/.bashrc
 echo "export JORMUNGANDR_RESTAPI_URL='http://127.0.0.1:<YOUR REST PORT>/api'" >> ~/.bashrc
 echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bashrc
 
@@ -430,6 +412,8 @@ p2p:
   topics_of_interest:
     blocks: normal
     messages: low
+  listen_address: "/ip4/0.0.0.0/tcp/<YOUR PUBLIC ADDRESS PORT>"
+  public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<YOUR PUBLIC ADDRESS PORT>"
   max_connections: 4096
   gossip_interval: 20s
   trusted_peers:
