@@ -185,14 +185,14 @@ function delta() {
 
     if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
        echo -e ${ORANGE}"$now: WARNING: Your node is about to be forked"${NC}
-	   exit
+	   return
     fi
     if [[ $deltaBlockCount -gt $deltaMax ]]; then
        echo -e ${RED}"$now: WARNING: Your node was possibly forked"${NC}
-	   exit
+	   return
     fi
-    if [[ $deltaBlockCount -lt 0 ]]; then
+    if [[ $deltaBlockCount -le 0 ]]; then
        echo -e ${GREEN}"$now: Your node is running well"${NC}
-	   exit
+	   return
     fi
 }
