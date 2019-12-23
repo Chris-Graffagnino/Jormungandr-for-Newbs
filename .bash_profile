@@ -16,7 +16,7 @@ function stats() {
 }
 
 function bal() {
-    echo "$(jcli rest v0 account get $(cat ~/files/mastr.addr) -h  http://127.0.0.1:${REST_PORT}/api)"
+    echo "$(jcli rest v0 account get $(cat ~/files/receiver_account.txt) -h  http://127.0.0.1:${REST_PORT}/api)"
 }
 
 function get_ip() {
@@ -66,8 +66,12 @@ function leader_logs() {
     echo "$(jcli rest v0 leaders logs get -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
-function schedule {
+function schedule() {
     leader_logs | grep scheduled_at_date | sort
+}
+
+function when() {
+    leader_logs | grep scheduled_at_time | sort
 }
 
 function elections() {
@@ -84,10 +88,35 @@ function problems() {
 }
 
 function jail() {
+    echo "List of IP addresses that were quarantined somewhat recently:"
     curl http://127.0.0.1:${REST_PORT}/api/v0/network/p2p/quarantined | rg -o "/ip4/.{0,16}" | tr -d '/ip4tcp' | uniq -u
+    echo "End of somewhat recently quarantined IP addresses."
+}
+
+function busted() {
+    echo "Have I been quarantined recently?"
+    this_node=`jail | rg "${PUBLIC_IP_ADDR}"`
+    if [[ ! -z ${this_node} ]]; then
+        echo "Busted! You were quarantined at some point in the recent past!"
+        echo "Execute 'nodes' to confirm that you are connecting to other nodes."
+    else
+        echo "You are clean as a whistle."
+    fi
+}
+
+function blocked() {
+    echo "These IP addresses were recently blocked by UFW:"
+    sudo tail -n 150 /var/log/syslog | grep UFW | grep TCP
+    echo "End of recently blocked IP addresses."
+}
+
+function nblocked() {
+    echo "How many IP addresses were blocked by UFW?"
+    sudo cat /var/log/syslog | grep UFW | grep TCP | wc -l
 }
 
 function jail_count() {
+    echo "How many IP addresses were quarantined?"
     jail | wc -l
 }
 
