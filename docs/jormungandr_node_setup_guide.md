@@ -352,10 +352,10 @@ vm.vfs_cache_pressure = 50
 ```
 
 ### reload /etc/sysctl.conf
-`sudo sysctl -p /etc/sysctl.conf'
+`sudo sysctl -p /etc/sysctl.conf`
 
 ### Create a file to preserve our system settings on reboot
-sudo nano /etc/rc.local  
+`sudo nano /etc/rc.local`   
 (paste the follwing into /etc/rc.local)
 ```
 #!/bin/bash
