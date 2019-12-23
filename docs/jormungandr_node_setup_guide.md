@@ -315,10 +315,11 @@ sudo swapon -a
 free -h
 ```
 
-# Optimize swap performance
-sudo nano /etc/sysctl.conf
+## Optimize linux performance
+sudo nano /etc/sysctl.conf  
 
 (Add the following to the bottom of /etc/sysctl.conf)
+```
 fs.file-max = 10000000
 fs.nr_open = 10000000
 
@@ -348,13 +349,13 @@ net.netfilter.nf_conntrack_tcp_timeout_time_wait = 15
 
 vm.swappiness = 5
 vm.vfs_cache_pressure = 50
-
-# reload /etc/sysctl.conf
-sudo sysctl -p /etc/sysctl.conf
 ```
 
+### reload /etc/sysctl.conf
+`sudo sysctl -p /etc/sysctl.conf'
+
 ### Create a file to preserve our system settings on reboot
-sudo nano /etc/rc.local
+sudo nano /etc/rc.local  
 (paste the follwing into /etc/rc.local)
 ```
 #!/bin/bash
