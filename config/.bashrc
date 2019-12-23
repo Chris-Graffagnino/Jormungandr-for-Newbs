@@ -129,4 +129,4 @@ function parse_git_branch() {
 export PS1="\[\e[36m\]\w\[\e[m\]\[\e[35m\] \`parse_git_branch\`\[\e[m\] \[\e[36m\]:\[\e[m\] "
 
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/usr/bin/python3"
-echo "export GENESIS_BLOCK_HASH='8e4d2a343f3dcf9330ad9035b3e8d168e6728904262f2c434a4f8f934ec7b676'"
+export GENESIS_BLOCK_HASH="8e4d2a343f3dcf9330ad9035b3e8d168e6728904262f2c434a4f8f934ec7b676"
