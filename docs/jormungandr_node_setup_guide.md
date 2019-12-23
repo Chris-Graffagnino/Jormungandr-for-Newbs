@@ -316,7 +316,7 @@ free -h
 ```
 
 ## Optimize linux performance
-sudo nano /etc/sysctl.conf  
+`sudo nano /etc/sysctl.conf`  
 
 (Add the following to the bottom of /etc/sysctl.conf)
 ```
