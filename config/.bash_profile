@@ -182,7 +182,12 @@ function delta() {
     echo "DeltaCount: " $deltaBlockCount
 
     now=$(date +"%r")
-
+	
+	isNumberRegex='^[0-9]+$'
+	if [[  -z $lastBlockCount || ! $lastBlockCount =~ $isNumberRegex ]]; then
+       echo -e ${RED}"$now: Your node is currently starting or not running at all. Write 'stats' to get more info"${NC}
+	   return
+    fi
     if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
        echo -e ${ORANGE}"$now: WARNING: Your node is about to be forked"${NC}
 	   return
