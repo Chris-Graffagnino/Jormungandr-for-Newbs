@@ -148,7 +148,7 @@ ufw allow from any to any port <CHOSE A PORT BETWEEN 1024 AND 65535> proto tcp
 ```
 
 #### Make a config file that ufw will load for Jormungandr
-Open all ports, except the REST_PORT that is accessed internally.
+Open all ports, except the REST_PORT that is accessed internally.  
 `sudo nano /etc/ufw/applications.d/jormungandr`  
 (copy/paste the following into /etc/ufw/applications.d/jormungandr)
 ```
@@ -381,8 +381,18 @@ git config --global user.email <YOUR EMAIL ADDRESS>
 git clone https://github.com/input-output-hk/jormungandr
 
 cd jormungandr
-git checkout v0.8.3
-git checkout -b <NEW BRANCH NAME eg 8.3>
+
+# Find the latest release
+git tag
+(press shift+g to jump to the bottom of the list)
+
+# Take note of the last item in the list, (ie v0.8.5-alpha3)
+(press 'q' to exit the list)
+
+git checkout <THE LAST TAG IN THE LIST>
+git checkout -b <NEW BRANCH NAME eg 8.5>
+
+# Update submodules
 git submodule update --init --recursive
 ```
 
@@ -406,11 +416,9 @@ nano ~/files/node-config.yaml
 # Check Telegram (StakePool Best Practice Workgroup) for up-to-date genesis-hash & trusted peers
 # https://t.me/CardanoStakePoolWorkgroup/74812
 
-# This is for the ** ITN ** release v0.8.3 (last updated 12/18/19)
 # Replace <THE PLACEHOLDERS> with the appropriate values
 ```
 ```
----
 log:
 - output: stderr
   format: plain
@@ -419,26 +427,48 @@ p2p:
   topics_of_interest:
     blocks: normal
     messages: low
-  public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<THE PORT YOU OPENED FOR PUBLIC ADDRESS>"
-  listen_address: "/ip4/0.0.0.0/tcp/<THE PORT YOU OPENED FOR PUBLIC ADDRESS>"
+  max_connections: 4096
+  gossip_interval: 20s
   trusted_peers:
-  - address: "/ip4/52.9.132.248/tcp/3000"
-    id: 671a9e7a5c739532668511bea823f0f5c5557c99b813456c
-  - address: "/ip4/52.8.15.52/tcp/3000"
-    id: 18bf81a75e5b15a49b843a66f61602e14d4261fb5595b5f5
-  - address: "/ip4/13.114.196.228/tcp/3000"
-    id: 7e1020c2e2107a849a8353876d047085f475c9bc646e42e9
-  - address: "/ip4/13.112.181.42/tcp/3000"
-    id: 52762c49a84699d43c96fdfe6de18079fb2512077d6aa5bc
-  - address: "/ip4/3.125.75.156/tcp/3000"
-    id: 22fb117f9f72f38b21bca5c0f069766c0d4327925d967791
-  - address: "/ip4/52.28.91.178/tcp/3000"
-    id: 23b3ca09c644fe8098f64c24d75d9f79c8e058642e63a28c
-  - address: "/ip4/3.124.116.145/tcp/3000"
-    id: 99cb10f53185fbef110472d45a36082905ee12df8a049b74
+    - address: "/ip4/13.56.0.226/tcp/3000"
+      id: 7ddf203c86a012e8863ef19d96aabba23d2445c492d86267
+    - address: "/ip4/54.183.149.167/tcp/3000"
+      id: df02383863ae5e14fea5d51a092585da34e689a73f704613
+    - address: "/ip4/52.9.77.197/tcp/3000"
+      id: fcdf302895236d012635052725a0cdfc2e8ee394a1935b63
+    - address: "/ip4/18.177.78.96/tcp/3000"
+      id: fc89bff08ec4e054b4f03106f5312834abdf2fcb444610e9
+    - address: "/ip4/3.115.154.161/tcp/3000"
+      id: 35bead7d45b3b8bda5e74aa12126d871069e7617b7f4fe62
+    - address: "/ip4/18.182.115.51/tcp/3000"
+      id: 8529e334a39a5b6033b698be2040b1089d8f67e0102e2575
+    - address: "/ip4/18.184.35.137/tcp/3000"
+      id: 06aa98b0ab6589f464d08911717115ef354161f0dc727858
+    - address: "/ip4/3.125.31.84/tcp/3000"
+      id: 8f9ff09765684199b351d520defac463b1282a63d3cc99ca
+    - address: "/ip4/3.125.183.71/tcp/3000"
+      id: 9d15a9e2f1336c7acda8ced34e929f697dc24ea0910c3e67
+    - address: "/ip4/52.9.132.248/tcp/3000"
+      id: 671a9e7a5c739532668511bea823f0f5c5557c99b813456c
+    - address: "/ip4/52.8.15.52/tcp/3000"
+      id: 18bf81a75e5b15a49b843a66f61602e14d4261fb5595b5f5
+    - address: "/ip4/13.114.196.228/tcp/3000"
+      id: 7e1020c2e2107a849a8353876d047085f475c9bc646e42e9
+    - address: "/ip4/13.112.181.42/tcp/3000"
+      id: 52762c49a84699d43c96fdfe6de18079fb2512077d6aa5bc
+    - address: "/ip4/3.125.75.156/tcp/3000"
+      id: 22fb117f9f72f38b21bca5c0f069766c0d4327925d967791
+    - address: "/ip4/52.28.91.178/tcp/3000"
+      id: 23b3ca09c644fe8098f64c24d75d9f79c8e058642e63a28c
+    - address: "/ip4/3.124.116.145/tcp/3000"
+      id: 99cb10f53185fbef110472d45a36082905ee12df8a049b74
 rest:
-  listen: 127.0.0.1:<YOUR REST PORT>
-storage: ~/storage
+  listen: "127.0.0.1:<REST_PORT>"
+storage: /home/<YOUR USERNAME>/storage
+mempool:
+    fragment_ttl: 2h
+    log_ttl: 24h
+    garbage_collection_interval: 2h
 ```
 
 (Did you remember to replace the PLACEHOLDERS with the appropriate values)?
