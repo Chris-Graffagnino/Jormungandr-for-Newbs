@@ -705,9 +705,6 @@ logs
 # Delegate your funds to your stake pool
 ```
 ~/files/delegate-account.sh $(cat ~/files/receiver_secret.key) $(cat ~/files/stake_pool.id):1
-
-# Or use this shell function that executes the same thing
-delegate
 ```
 
 ### Back up staking keys, etc
