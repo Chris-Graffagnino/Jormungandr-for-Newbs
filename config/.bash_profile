@@ -142,7 +142,6 @@ function tip() {
 function delta() {
     RED='\033[0;31m'
     GREEN='\033[0;32m'
-	ORANGE='\033[0;33m'
     NC='\033[0m' # No Color
 
     lastBlockHash=`stats | head -n 6 | tail -n 1 | awk '{print $2}'`
@@ -181,18 +180,9 @@ function delta() {
     echo "LastShelleyBlock: " $shelleyLastBlockCount
     echo "DeltaCount: " $deltaBlockCount
 
-    now=$(date +"%r")
-
-    if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
-       echo -e ${ORANGE}"$now: WARNING: Your node is about to be forked"${NC}
-	   exit
-    fi
-    if [[ $deltaBlockCount -gt $deltaMax ]]; then
-       echo -e ${RED}"$now: WARNING: Your node was possibly forked"${NC}
-	   exit
-    fi
-    if [[ $deltaBlockCount -lt 0 ]]; then
-       echo -e ${GREEN}"$now: Your node is running well"${NC}
-	   exit
+    if [[ $deltaBlockCount > $deltaMax ]]; then
+        echo -e ${RED}"Your node was possibily forked"${NC}
+    else
+        echo -e ${GREEN}"Your node is running well"${NC}
     fi
 }
