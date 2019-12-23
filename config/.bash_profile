@@ -44,7 +44,9 @@ function num_open_files() {
 }
 
 function is_pool_visible() {
-    echo ${GREEN}$(jcli rest v0 stake-pools get --host "http://127.0.0.1:${REST_PORT}/api" | grep $(cat ~/files/stake_pool.id))
+    stake_pool_id="$(cat ~/files/node_secret.yaml | grep node_id | awk -F: '{print $2 }')"
+    echo "Display my stake pool id if it is visible on the blockchain. Otherwise, return nothing."
+    echo ${GREEN}$(jcli rest v0 stake-pools get --host "http://127.0.0.1:${REST_PORT}/api" | grep $stake_pool_id)
 }
 
 function start_leader() {
@@ -80,7 +82,7 @@ function elections() {
 }
 
 function pool_stats() {
-    echo "$(jcli rest v0 stake-pool get $(cat ~/files/stake_pool.id) -h http://127.0.0.1:${REST_PORT}/api)"
+    echo "$(jcli rest v0 stake-pool get $(cat ~/files/node_secret.yaml | grep node_id | awk -F: '{print $2 }') -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
 function problems() {
@@ -136,7 +138,7 @@ function portsentry_stats() {
 }
 
 function tip() {
-    cat ~/logs/node.out | grep tip
+    grep ~/logs/node.out
 }
 
 function delta() {
