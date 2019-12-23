@@ -414,6 +414,8 @@ p2p:
     messages: low
   listen_address: "/ip4/0.0.0.0/tcp/<YOUR PUBLIC ADDRESS PORT>"
   public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<YOUR PUBLIC ADDRESS PORT>"
+  # Adjust max_connections based on your cpu/ram usage. This setting typically works well for 2cpu/4G ram.
+  # Monitor usage w/ "memory" shell function; if you have multiple cpu's, press shift+i to measure the load across all cpu's
   max_connections: 4096
   gossip_interval: 20s
   trusted_peers:
