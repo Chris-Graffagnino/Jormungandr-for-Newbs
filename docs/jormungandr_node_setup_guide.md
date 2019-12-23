@@ -143,7 +143,7 @@ ufw default allow outgoing
 # Open ssh port (rate limiting enabled - max 10 attempts within 30 seconds)
 ufw limit from any to any port <THE PORT YOU JUST CHOSE IN sshd_config> proto tcp
 
-# Choose a port between 1024 and 6535 for other nodes to connect to. This will be your PUBLIC_ADDRESS_PORT
+# Choose a port between 1024 and 65535. This will be your PUBLIC_ADDRESS_PORT
  sudo ufw allow proto tcp from any to any port <NUMBER BETWEEN 1024 AND 65535>
 
 # Re-enable firewall
