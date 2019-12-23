@@ -150,6 +150,7 @@ ufw allow from any to any port <CHOSE A PORT BETWEEN 1024 AND 65535> proto tcp
 #### Make a config file that ufw will load for Jormungandr
 Open all ports, except the REST_PORT that is accessed internally.  
 `sudo nano /etc/ufw/applications.d/jormungandr`  
+
 (copy/paste the following into /etc/ufw/applications.d/jormungandr)
 ```
 [jormungandr]
@@ -274,7 +275,7 @@ echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bash
 # ">>" means "take the output of the previous command and append it to the end of a file (.bashrc, in this case)
 ```
 
-## Configure Swap to handle memory spikes
+## Configure swap to handle memory spikes
 ```
 # Swap utilizes diskspace to temporarily handle spikes in memory usage
 # Skip this section if you have limited diskspace, (you're running a raspberry-pi, for instance).
@@ -312,6 +313,7 @@ sudo swapon -a
 
 # Verify swap is enabled
 free -h
+```
 
 # Optimize swap performance
 sudo nano /etc/sysctl.conf
