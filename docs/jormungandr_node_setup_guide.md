@@ -83,6 +83,13 @@ apt install -y build-essential libssl-dev
 apt install pkg-config
 apt install nload
 apt install python3-pip
+apt-get install tcptraceroute
+
+# Install tcpping
+cd /usr/bin
+sudo wget http://www.vdberg.org/~richard/tcpping
+sudo chmod 755 tcpping
+cd
 
 # Install ripgrep, because it's awesome
 curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
@@ -394,6 +401,13 @@ mkdir ~/logs
 touch ~/logs/node.out
 ```
 
+### Measure trusted peer latency
+```
+# Make note of the ip addresses with the shortest response time (end of each line, measured in ms)
+# This may take a few seconds to start
+check_peers
+```
+
 ### Modify node-config.yaml
 ```
 # Generate a hexidecimal string for your PUBLIC_ID
@@ -404,6 +418,7 @@ nano ~/files/node-config.yaml
 
 # Check Telegram (StakePool Best Practice Workgroup) pinned message for up-to-date genesis-hash & trusted peers
 
+# Reorder the trusted peers, moving the fastest nodes to the top of the list (Move both public_address & public_id)
 # Replace <THE PLACEHOLDERS> with the appropriate values
 ```
 ```
