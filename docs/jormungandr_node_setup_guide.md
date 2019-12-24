@@ -396,10 +396,13 @@ touch ~/logs/node.out
 
 ### Modify node-config.yaml
 ```
+# Generate a hexidecimal string for your PUBLIC_ID
+# Copy this to your clipboard
+openssl rand -hex 24
+
 nano ~/files/node-config.yaml
 
-# Check Telegram (StakePool Best Practice Workgroup) for up-to-date genesis-hash & trusted peers
-# https://t.me/CardanoStakePoolWorkgroup/74812
+# Check Telegram (StakePool Best Practice Workgroup) pinned message for up-to-date genesis-hash & trusted peers
 
 # Replace <THE PLACEHOLDERS> with the appropriate values
 ```
@@ -414,6 +417,7 @@ p2p:
     messages: low
   listen_address: "/ip4/0.0.0.0/tcp/<YOUR PUBLIC ADDRESS PORT>"
   public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<YOUR PUBLIC ADDRESS PORT>"
+  public_id: <THE PUBLIC_ID YOU JUST GENERATED>
   # Adjust max_connections based on your cpu/ram usage. 4096 typically works well for 2cpu/4G ram.
   # Monitor usage w/ "memory" function; press shift+i to measure the load across all cpu's
   max_connections: 4096
