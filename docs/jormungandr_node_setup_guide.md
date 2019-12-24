@@ -9,6 +9,13 @@
 -- Note: anything all-caps in between "<>" is an placeholder; e.g. `"<FILENAME>"` could be `"foo.txt"`.   
 -- Note: anything in between "${}" is a variable that will be evaluated by your shell.  
 
+* Author: Chris Graffagnino (stake-pool: MASTR)
+
+* Thanks to these expert contributors!
+@ilap - UNDR
+@mark-stopka - BLTN
+@pheelLikeWater - MONKY
+(TG) eysteinh - ANP
 	
 ## Create free account on Github
 [The world’s leading software development platform · GitHub](https://github.com/)
@@ -361,7 +368,7 @@ sysctl -p /etc/sysctl.conf
 exit 0
 ```
 
-## Edit /etc/chrony/chrony.conf
+### Edit /etc/chrony/chrony.conf
 `sudo nano /etc/chrony/chrony.conf`  
 (paste the following into /etc/chrony/chrony.conf)
 ```
@@ -394,11 +401,12 @@ rtcsync
 # one second, but only in the first three clock updates.
 makestep 0.1 3
 ```
-### Finish configuring chrony
+#### Finish configuring chrony
 ```
 # Reload our new config file
 sudo systemctl restart chrony
 ```
+
 
 ## Install Rust
 ```
