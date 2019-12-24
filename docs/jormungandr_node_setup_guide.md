@@ -9,13 +9,13 @@
 -- Note: anything all-caps in between "<>" is an placeholder; e.g. `"<FILENAME>"` could be `"foo.txt"`.   
 -- Note: anything in between "${}" is a variable that will be evaluated by your shell.  
 
-* Author: Chris Graffagnino (stake-pool: MASTR)
+* Author: Chris Graffagnino (stake-pool: __MASTR__)  
 
-* Thanks to these expert contributors!
-@ilap - UNDR
-@mark-stopka - BLTN
-@pheelLikeWater - MONKY
-(TG) eysteinh - ANP
+* Thanks to these expert contributors!  
+@ilap - __UNDR__  
+@mark-stopka - __BLTN__  
+@pheelLikeWater - __MONKY__  
+(TG) eysteinh - __ANP__  
 	
 ## Create free account on Github
 [The world’s leading software development platform · GitHub](https://github.com/)
