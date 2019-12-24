@@ -63,6 +63,14 @@ function empty_logs() {
     > ~/logs/node.out
 }
 
+function check_peers() {
+    sed -e '/ address/!d' -e '/#/d' -e 's@^.*/ip./\([^/]*\)/tcp/\([0-9]*\).*@\1 \2@' ~/files/node-config.yaml | \
+    while read addr port
+    do
+        tcpping -x 1 $addr $port
+    done
+}
+
 function leader_logs() {
     echo "Has this node been scheduled to be leader?"
     echo "$(jcli rest v0 leaders logs get -h http://127.0.0.1:${REST_PORT}/api)"
