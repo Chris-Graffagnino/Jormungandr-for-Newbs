@@ -84,6 +84,10 @@ apt install pkg-config
 apt install nload
 apt install python3-pip
 apt-get install tcptraceroute
+apt-get install chrony
+
+# Nuke the chrony config, (we'll fix it later)
+> /etc/chrony/chrony.config
 
 # Install tcpping
 cd /usr/bin
@@ -355,6 +359,45 @@ sleep 120
 sysctl -p /etc/sysctl.conf
 
 exit 0
+```
+
+## Edit /etc/chrony/chrony.conf
+`sudo nano /etc/chrony/chrony.conf`  
+(paste the following into /etc/chrony/chrony.conf)
+```
+pool ntp.ubuntu.com        iburst maxsources 3
+pool time.nist.giv         iburst maxsources 3
+pool us.pool.ntp.org       iburst maxsources 3
+
+# This directive specify the location of the file containing ID/key pairs for
+# NTP authentication.
+keyfile /etc/chrony/chrony.keys
+
+# This directive specify the file into which chronyd will store the rate
+# information.
+driftfile /var/lib/chrony/chrony.drift
+
+# Uncomment the following line to turn logging on.
+#log tracking measurements statistics
+
+# Log files location.
+logdir /var/log/chrony
+
+# Stop bad estimates upsetting machine clock.
+maxupdateskew 10.0
+
+# This directive enables kernel synchronisation (every 11 minutes) of the
+# real-time clock. Note that it can’t be used along with the 'rtcfile' directive.
+rtcsync
+
+# Step the system clock instead of slewing it if the adjustment is larger than
+# one second, but only in the first three clock updates.
+makestep 0.1 3
+```
+### Finish configuring chrony
+```
+# Reload our new config file
+sudo systemctl restart chrony
 ```
 
 ## Install Rust
