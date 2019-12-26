@@ -675,7 +675,7 @@ scp -P <YOUR SSH PORT> -i ~/.ssh/<YOUR PRIVATE KEY> <FILENAME> <USERNAME>@<VPS P
 df -H
 
 # How much diskspace is jormungandr using?
-jordsk
+disk
 ```
 
 ## Update 
