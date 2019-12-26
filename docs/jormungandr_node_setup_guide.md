@@ -429,10 +429,10 @@ cd jormungandr
 git tag
 (press shift+g to jump to the bottom of the list)
 
-# Take note of the last item in the list, (ie v0.8.5-alpha3)
+# Note the last item in the list; non-alpha tag is most recent, (ie v0.8.5 is newer than v0.8.5-alpha3)
 (press 'q' to exit the list)
 
-git checkout <THE LAST TAG IN THE LIST>
+git checkout <THE TAG>
 git checkout -b <NEW BRANCH NAME eg 8.5>
 
 # Update submodules
@@ -697,13 +697,13 @@ rustup update
 git pull
 
 # Use the tagged release
-git checkout <A VERSION NUMBER SUCH AS v0.8.0-rc9+1>
+git checkout <A VERSION NUMBER SUCH AS v0.8.5>
 
 # Can't find the tag you want?, delete what you have locally and re-download
 git tag -l | xargs git tag -d && git fetch -t
 
 # Create a new branch for yourself
-git checkout -b <NAME OF BRANCH, e.g. 8.0>
+git checkout -b <NAME OF BRANCH, e.g. 8.5>
 
 # Compile the binaries
 git submodule update --init --recursive
