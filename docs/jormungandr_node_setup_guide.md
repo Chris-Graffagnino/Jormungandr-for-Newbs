@@ -370,7 +370,9 @@ exit 0
 
 ### Edit /etc/chrony/chrony.conf
 `sudo nano /etc/chrony/chrony.conf`  
-(paste the following into /etc/chrony/chrony.conf)
+Paste the following into /etc/chrony/chrony.conf. You may improve performance by adding ntp servers closest to your node.  
+[NTP server list](https://www.ntppool.org/zone/@)
+
 ```
 pool ntp.ubuntu.com        iburst maxsources 3
 pool time.nist.giv         iburst maxsources 3
@@ -404,6 +406,7 @@ makestep 0.1 3
 #### Finish configuring chrony
 ```
 # Reload our new config file
+timedatectl set-timezone UTC
 sudo systemctl restart chrony
 ```
 
@@ -740,7 +743,7 @@ usage: ~/files/delegate-account.sh <ACCOUNT-SK> <STAKE_POOL_ID>:1
 ## Create stake pool
 ```
 # This may take a minute or two to finish
-~/files/createStakePool.sh ${REST_PORT} <TAX VALUE> <TAX RATIO> <TAX LIMIT> $(cat ~/files/receiver_secret.key)
+~/files/createStakePool.sh ${REST_PORT} <TAX VALUE> <TAX RATIO> $(cat ~/files/receiver_secret.key)
 
 # Move node_secret & stake_pool.id to ~/files
 mv node_secret.yaml ~/files && mv stake_pool.id ~/files
@@ -765,6 +768,10 @@ nano ~/files/node-config.yaml
 
 ### Run node as a leader candidate - “Connecting to a Genesis blockchain”
 ```
+# One final reboot to make sure our real-time-clock is UTC & synced by chrony
+# Wait 30 seconds before signing in...
+sudo reboot
+
 # Start the node as leader
 start_leader
 
