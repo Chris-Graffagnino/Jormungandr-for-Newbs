@@ -139,6 +139,11 @@ function tip() {
     cat ~/logs/node.out | grep tip
 }
 
+function leaders() {
+    echo "Has this node been scheduled to be leader?"
+    echo "$(jcli rest v0 leaders logs get -h http://127.0.0.1:${REST_PORT}/api)"
+}
+
 function next() {
   	NEWEPOCH=$(stats | grep Date | grep -Eo '[0-9]{1,3}' | awk 'NR==1{print $1}')
 	maxSlots=$(leaders | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | wc -l)
