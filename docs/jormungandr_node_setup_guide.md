@@ -51,6 +51,7 @@ ssh-copy-id -i ~/.ssh/<YOUR KEYNAME>.pub root@<YOUR VPS PUBLIC IP ADDRESS>
 ### If using Digital Ocean for vps, follow these instructions instead
 [How to Upload SSH Public Keys to a DigitalOcean Account :: DigitalOcean Product Documentation](https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/to-account/) 
 
+
 ## Add ssh public key to github
 
 ![go_to_settings](https://user-images.githubusercontent.com/8118351/70385781-575a3e00-1988-11ea-96e3-a792d8ffde68.png)
@@ -66,6 +67,7 @@ ssh-copy-id -i ~/.ssh/<YOUR KEYNAME>.pub root@<YOUR VPS PUBLIC IP ADDRESS>
 (paste the entire contents of your public key file (<FILENAME>.pub) in the larger text-box)
 ![add_ssh_key](https://user-images.githubusercontent.com/8118351/70385826-cafc4b00-1988-11ea-8938-f725aa12ad89.png)
 	
+
 
 ## Login to VPS via ssh
 `ssh -i ~/.ssh/<PATH TO SSH PRIVATE KEY ON YOUR LOCAL MACHINE> root@<YOUR VPS PUBLIC IP ADDRESS>`
