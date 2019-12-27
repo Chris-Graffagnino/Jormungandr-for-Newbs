@@ -15,7 +15,7 @@
 CLI="jcli"
 COLORS=1
 ADDRTYPE="--testing"
-TIMEOUT_NO_OF_BLOCKS=200
+TIMEOUT_NO_OF_BLOCKS=400
 
 getTip() {
   echo $($CLI rest v0 tip get -h "${REST_URL}")
