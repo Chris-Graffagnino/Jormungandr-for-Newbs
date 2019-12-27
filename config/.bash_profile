@@ -139,6 +139,28 @@ function tip() {
     cat ~/logs/node.out | grep tip
 }
 
+function next() {
+  	NEWEPOCH=$(stats | grep Date | grep -Eo '[0-9]{1,3}' | awk 'NR==1{print $1}')
+	maxSlots=$(leaders | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | wc -l)
+    	leaderSlots=$(leaders | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | awk -v i="$rowIndex" '{print $2}' | awk -F "." '{print $2}' | tr '"' ' ' | sort -r)
+	for (( rowIndex = 1; rowIndex <= $maxSlots ; rowIndex++ ))
+	do
+		currentSlotTime=$(stats | grep 'lastBlockDate: "'$NEWEPOCH'.' | awk -F "." '{print $2}' | tr '"' ' ')
+		blockCreatedSlotTime=$(awk -v i="$rowIndex" 'NR==i {print $1}' <<< $leaderSlots)
+
+		timeToNextSlotLead=$(($blockCreatedSlotTime-$currentSlotTime))
+
+		if [[ $timeToNextSlotLead -gt 0 ]];
+		then
+			currentTime=$(date +%s)
+			nextBlockDate=$((currentTime+timeToNextSlotLead))
+			echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<< $timeToNextSlotLead) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)")"
+			break;
+		fi		
+	done  
+}
+
+
 function delta() {
     RED='\033[0;31m'
     GREEN='\033[0;32m'
@@ -180,6 +202,8 @@ function delta() {
     echo "LastBlockCount: " $lastBlockCount
     echo "LastShelleyBlock: " $shelleyLastBlockCount
     echo "DeltaCount: " $deltaBlockCount
+	
+	next
 
     now=$(date +"%r")
 	
