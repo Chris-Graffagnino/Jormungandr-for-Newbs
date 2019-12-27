@@ -12,7 +12,7 @@ FEE_CERTIFICATE=$($CLI rest v0 settings get | grep 'certificate:' | sed -e 's/^[
 MAX_TXS_PER_BLOCK=$($CLI rest v0 settings get | grep 'maxTxsPerBlock:' | sed -e 's/^[[:space:]]*//' | sed -e 's/maxTxsPerBlock: //')
 SLOT_DURATION=$($CLI rest v0 settings get | grep 'slotDuration:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotDuration: //')
 SLOTS_PER_EPOCH=$($CLI rest v0 settings get | grep 'slotsPerEpoch:' | sed -e 's/^[[:space:]]*//' | sed -e 's/slotsPerEpoch: //')
-TIMEOUT_NO_OF_BLOCKS=200
+TIMEOUT_NO_OF_BLOCKS=400
 
 ### COLORS
 if [ ${COLORS} -eq 1 ]; then
