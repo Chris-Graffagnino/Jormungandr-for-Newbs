@@ -74,6 +74,10 @@ function when() {
     leader_logs | grep scheduled_at_time | sort
 }
 
+function leaders() {
+    leader_logs()
+}
+
 function elections() {
     echo "How many slots has this node been scheduled to be leader?"
     echo "$(jcli rest v0 leaders logs get -h http://127.0.0.1:${REST_PORT}/api | grep created_at_time | wc -l)"
@@ -137,11 +141,6 @@ function portsentry_stats() {
 
 function tip() {
     cat ~/logs/node.out | grep tip
-}
-
-function leaders() {
-    echo "Has this node been scheduled to be leader?"
-    echo "$(jcli rest v0 leaders logs get -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
 function next() {
