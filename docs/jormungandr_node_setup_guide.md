@@ -168,7 +168,7 @@ nano /etc/ssh/sshd_config
 
 # While we're here, let's give ourselves just a bit more time before getting disconnected, ie "broken pipe".
 # Change the line "#TCPKeepAlive yes" to "TCPKeepAlive no"
-# Change the line "#ClientAliveInterval 0" to "ClientAliveInterval 300"
+# Change the line "#ClientAliveInterval 0" to "ClientAliveInterval 1800"
 
 # Type ctrl+o to save, ctrl+x to exit
 ```
@@ -351,7 +351,6 @@ net.ipv4.ip_local_port_range = 1024 65535
 net.ipv4.ip_nonlocal_bind = 1
 net.ipv4.tcp_fin_timeout = 10
 net.ipv4.tcp_keepalive_time = 1800
-net.ipv4.tcp_keepalive_time = 300
 net.ipv4.tcp_max_orphans = 262144
 net.ipv4.tcp_max_syn_backlog = 100000
 net.ipv4.tcp_max_tw_buckets = 262144
