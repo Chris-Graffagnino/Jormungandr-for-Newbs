@@ -84,6 +84,10 @@ function when() {
     leader_logs | grep scheduled_at_time | sort
 }
 
+function leaders() {
+    leader_logs()
+}
+
 function elections() {
     echo "How many slots has this node been scheduled to be leader?"
     echo "$(jcli rest v0 leaders logs get -h http://127.0.0.1:${REST_PORT}/api | grep created_at_time | wc -l)"
@@ -166,10 +170,9 @@ function next() {
 			nextBlockDate=$((currentTime+timeToNextSlotLead))
 			echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<< $timeToNextSlotLead) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)")"
 			break;
-		fi
-	done
+		fi		
+	done  
 }
-
 
 function delta() {
     RED='\033[0;31m'
@@ -212,11 +215,11 @@ function delta() {
     echo "LastBlockCount: " $lastBlockCount
     echo "LastShelleyBlock: " $shelleyLastBlockCount
     echo "DeltaCount: " $deltaBlockCount
-
+	
 	next
 
     now=$(date +"%r")
-
+	
 	isNumberRegex='^[0-9]+$'
 	if [[  -z $lastBlockCount || ! $lastBlockCount =~ $isNumberRegex ]]; then
        echo -e ${RED}"$now: Your node is currently starting or not running at all. Write 'stats' to get more info"${NC}
