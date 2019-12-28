@@ -393,7 +393,16 @@ vm.vfs_cache_pressure = 50
 ```
 
 ### reload /etc/sysctl.conf
-`sudo sysctl -p /etc/sysctl.conf`
+```
+# Verify ip_conntrack is loaded
+sudo lsmod | grep conntrack
+
+# If nothing is returned, load ip_conntrack
+sudo modprobe ip_conntrack
+
+# Reload sysctl.conf
+sudo sysctl -p /etc/sysctl.conf
+```
 
 ### Create a file to preserve our system settings on reboot
 `sudo nano /etc/rc.local`   
