@@ -145,8 +145,8 @@ function tip() {
 
 function next() {
   	NEWEPOCH=$(stats | grep Date | grep -Eo '[0-9]{1,3}' | awk 'NR==1{print $1}')
-	maxSlots=$(leaders | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | wc -l)
-    	leaderSlots=$(leaders | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | awk -v i="$rowIndex" '{print $2}' | awk -F "." '{print $2}' | tr '"' ' ' | sort -r)
+	maxSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | wc -l)
+    	leaderSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | awk -v i="$rowIndex" '{print $2}' | awk -F "." '{print $2}' | tr '"' ' ' | sort -r)
 	for (( rowIndex = 1; rowIndex <= $maxSlots ; rowIndex++ ))
 	do
 		currentSlotTime=$(stats | grep 'lastBlockDate: "'$NEWEPOCH'.' | awk -F "." '{print $2}' | tr '"' ' ')
