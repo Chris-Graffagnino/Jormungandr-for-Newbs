@@ -149,9 +149,32 @@ function tip() {
     grep ~/logs/node.out
 }
 
+function next() {
+  	NEWEPOCH=$(stats | grep Date | grep -Eo '[0-9]{1,3}' | awk 'NR==1{print $1}')
+	maxSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | wc -l)
+    	leaderSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | awk -v i="$rowIndex" '{print $2}' | awk -F "." '{print $2}' | tr '"' ' ' | sort -r)
+	for (( rowIndex = 1; rowIndex <= $maxSlots ; rowIndex++ ))
+	do
+		currentSlotTime=$(stats | grep 'lastBlockDate: "'$NEWEPOCH'.' | awk -F "." '{print $2}' | tr '"' ' ')
+		blockCreatedSlotTime=$(awk -v i="$rowIndex" 'NR==i {print $1}' <<< $leaderSlots)
+
+		timeToNextSlotLead=$(($blockCreatedSlotTime-$currentSlotTime))
+
+		if [[ $timeToNextSlotLead -gt 0 ]];
+		then
+			currentTime=$(date +%s)
+			nextBlockDate=$((currentTime+timeToNextSlotLead))
+			echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<< $timeToNextSlotLead) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)")"
+			break;
+		fi
+	done
+}
+
+
 function delta() {
     RED='\033[0;31m'
     GREEN='\033[0;32m'
+	ORANGE='\033[0;33m'
     NC='\033[0m' # No Color
 
     lastBlockHash=`stats | head -n 6 | tail -n 1 | awk '{print $2}'`
@@ -190,9 +213,25 @@ function delta() {
     echo "LastShelleyBlock: " $shelleyLastBlockCount
     echo "DeltaCount: " $deltaBlockCount
 
-    if [[ $deltaBlockCount > $deltaMax ]]; then
-        echo -e ${RED}"Your node was possibily forked"${NC}
-    else
-        echo -e ${GREEN}"Your node is running well"${NC}
+	next
+
+    now=$(date +"%r")
+
+	isNumberRegex='^[0-9]+$'
+	if [[  -z $lastBlockCount || ! $lastBlockCount =~ $isNumberRegex ]]; then
+       echo -e ${RED}"$now: Your node is currently starting or not running at all. Write 'stats' to get more info"${NC}
+	   return
+    fi
+    if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
+       echo -e ${ORANGE}"$now: WARNING: Your node is about to beeing forked"${NC}
+	   return
+    fi
+    if [[ $deltaBlockCount -gt $deltaMax ]]; then
+       echo -e ${RED}"$now: WARNING: Your node was possibly forked"${NC}
+	   return
+    fi
+    if [[ $deltaBlockCount -le 0 ]]; then
+       echo -e ${GREEN}"$now: Your node is running well"${NC}
+	   return
     fi
 }
