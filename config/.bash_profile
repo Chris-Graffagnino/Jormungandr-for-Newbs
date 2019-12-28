@@ -222,15 +222,15 @@ function delta() {
 	
 	isNumberRegex='^[0-9]+$'
 	if [[  -z $lastBlockCount || ! $lastBlockCount =~ $isNumberRegex ]]; then
-       echo -e ${RED}"$now: Your node is currently starting or not running at all. Write 'stats' to get more info"${NC}
+       echo -e ${RED}"$now: Your node appears to be starting or not running at all. Execute 'stats' to get more info."${NC}
 	   return
     fi
     if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
-       echo -e ${ORANGE}"$now: WARNING: Your node is about to beeing forked"${NC}
+       echo -e ${ORANGE}"$now: WARNING: Your node is starting to drift. It could end up on an invalid fork soon."${NC}
 	   return
     fi
     if [[ $deltaBlockCount -gt $deltaMax ]]; then
-       echo -e ${RED}"$now: WARNING: Your node was possibly forked"${NC}
+       echo -e ${RED}"$now: WARNING: Your node might be forked."${NC}
 	   return
     fi
     if [[ $deltaBlockCount -le 0 ]]; then
