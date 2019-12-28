@@ -219,7 +219,7 @@ function delta() {
 
 	isNumberRegex='^[0-9]+$'
 	if [[  -z $lastBlockCount || ! $lastBlockCount =~ $isNumberRegex ]]; then
-       echo -e ${RED}"$now: Your node is currently starting or not running at all. Write 'stats' to get more info"${NC}
+       echo -e ${RED}"$now: Your node appears to be starting or not running at all. Execute 'stats' to get more info."${NC}
 	   return
     fi
     if [[ $deltaBlockCount -lt $deltaMax && $deltaBlockCount -gt 0 ]]; then
