@@ -108,6 +108,7 @@ chsh -s /bin/bash <USERNAME>
 apt update
 apt upgrade
 apt install -y build-essential libssl-dev
+apt install git
 apt install pkg-config
 apt install nload
 apt install python3-pip
@@ -535,8 +536,8 @@ log:
   level: info
 p2p:
   topics_of_interest:
-    blocks: normal
-    messages: low
+    blocks: high
+    messages: high
   listen_address: "/ip4/0.0.0.0/tcp/<YOUR PUBLIC ADDRESS PORT>"
   public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<YOUR PUBLIC ADDRESS PORT>"
   public_id: <THE PUBLIC_ID YOU JUST GENERATED>
@@ -807,32 +808,26 @@ mv node_secret.yaml ~/files && mv stake_pool.id ~/files
 is_pool_visible
 ```
 
-### Stop node, edit node-config.yaml
+### Restart node as leader-candidate
 ```
+# After restarting, you will be eligible to receive rewards at the start of
+# the next epoch
+
 # Stop jormungandr
 stop
 
 # Dump the logs
 empty_logs
 
-# Edit node-config.yaml so blocks=high, messages=high
-nano ~/files/node-config.yaml
-```
-
-### Run node as a leader candidate - “Connecting to a Genesis blockchain”
-```
-# One final reboot to make sure our real-time-clock is UTC & synced by chrony
-# Wait 30 seconds before signing in...
-sudo reboot
-
 # Start the node as leader
 start_leader
 
-# Always check the logs for errors when starting the node
+# Always check the logs for errors when starting the node to
+# make sure there were no errors.
 logs
 ```
 
-# Delegate your funds to your stake pool
+### Delegate your funds to your stake pool
 ```
 ~/files/delegate-account.sh $(cat ~/files/receiver_secret.key) $(cat ~/files/stake_pool.id):1
 ```
