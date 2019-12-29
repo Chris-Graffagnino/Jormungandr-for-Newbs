@@ -38,6 +38,10 @@ function nodes() {
     printf "%s\n" "${nodes}" "----------" "Total:" "${total}"
 }
 
+function sockets() {
+    netstat -tn | tail -n +3 | awk "{ print \$6 }" | sort | uniq -c | sort -n
+}
+
 function num_open_files() {
     echo "Calculating number of open files..."
     echo "$(lsof -u $(whoami) | wc -l)"
