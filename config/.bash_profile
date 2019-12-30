@@ -15,6 +15,39 @@ function stats() {
     echo "$(jcli rest v0 node stats get -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
+function current_blocktime() {
+        chainstartdate=$(settings | grep "block0Time:" | awk '{print $2}' | tr -
+        echo $chainstartdate
+        nowtime=$(date +%s)
+
+        chaintime=$(($nowtime-$chainstartdate))
+
+        slot=$((($chaintime % 86400)))
+        epoch=$(($chaintime / 86400))
+}
+
+function next() {
+        newepoch=$(stats | grep Date | grep -Eo '[0-9]{1,3}' | awk 'NR==1{print $1}')
+        maxSlots=$(leaders | grep -P 'scheduled_at_date: "'$newepoch'.' | grep -P '[0-9]+' | wc -l)
+        leaderSlots=$(leaders | grep -P 'scheduled_at_date: "'$newepoch'.' | grep -P '[0-9]+' | awk -v i="$rowIndex" '{print $2}' | awk -F "." '{print $2}' | tr '"' ' ' | sort -V)
+        for (( rowIndex = 1; rowIndex <= $maxSlots ; rowIndex++ ))
+        do
+                current_blocktime
+                currentSlotTime=$((slot))
+                #currentSlotTime=$(stats | grep 'lastBlockDate: "'$newepoch'.' | awk -F "." '{print $2}' | tr '"' ' ')
+                blockCreatedSlotTime=$(awk -v i="$rowIndex" 'NR==i {print $1}' <<< $leaderSlots)
+
+                if [[ $blockCreatedSlotTime -ge $currentSlotTime ]];
+                then
+                        timeToNextSlotLead=$(($blockCreatedSlotTime-$currentSlotTime))
+                        currentTime=$(date +%s)
+                        nextBlockDate=$(($chainstartdate+$blockCreatedSlotTime+($epoch)*86400))
+                        echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<< $timeToNextSlotLead) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)") - $(($blockCreatedSlotTime/2))"
+                        break;
+                fi
+        done
+}
+
 function bal() {
     echo "$(jcli rest v0 account get $(cat ~/files/receiver_account.txt) -h  http://127.0.0.1:${REST_PORT}/api)"
 }
