@@ -41,7 +41,7 @@ function next() {
 			timeToNextSlotLead=$(($blockCreatedSlotTime-$currentSlotTime))
 			currentTime=$(date +%s)
 			nextBlockDate=$(($chainstartdate+$blockCreatedSlotTime*2+($epoch)*86400))
-			echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<< $(($timeToNextSlotLead*2))) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)") - $(($blockCreatedSlotTime))"
+			echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600))":"int(($1/60)%60)":"int($1%60)}' <<< $(($timeToNextSlotLead*2))) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)") - $(($blockCreatedSlotTime))"
 			break;
 		fi		
 	done  
