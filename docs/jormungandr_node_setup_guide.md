@@ -539,7 +539,7 @@ nano ~/files/node-config.yaml
 
 # Check Telegram (StakePool Best Practice Workgroup) pinned message for up-to-date genesis-hash & trusted peers
 
-# Reorder the trusted peers, moving the fastest nodes to the top of the list (Move both public_address & public_id)
+# Comment (add a "#" to the beginning of the line) for the slowest nodes (both public_address & public_id)
 # Replace <THE PLACEHOLDERS> with the appropriate values
 ```
 ```
