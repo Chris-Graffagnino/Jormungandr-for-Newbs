@@ -16,7 +16,7 @@ function stats() {
 }
 
 function bal() {
-    echo "$(jcli rest v0 account get $(cat ~/files/receiver_account.txt) -h  http://127.0.0.1:${REST_PORT}/api)"
+    echo "$(jcli rest v0 account get $(cat ~/files/receiver_account.txt) -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
 function get_ip() {
