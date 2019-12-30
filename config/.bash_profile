@@ -17,7 +17,6 @@ function stats() {
 
 function current_blocktime() {
         chainstartdate=$(settings | grep "block0Time:" | awk '{print $2}' | tr -
-        echo $chainstartdate
         nowtime=$(date +%s)
 
         chaintime=$(($nowtime-$chainstartdate))
