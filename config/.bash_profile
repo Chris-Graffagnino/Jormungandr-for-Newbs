@@ -81,7 +81,7 @@ function leader_logs() {
 }
 
 function schedule() {
-    leader_logs | grep scheduled_at_date | sort
+    leader_logs | grep scheduled_at_date | cut -d'"' -f2 | cut -d'.' -f2 | sort -g
 }
 
 function when() {
