@@ -436,7 +436,7 @@ Paste the following into /etc/chrony/chrony.conf. You may improve performance by
 
 ```
 pool ntp.ubuntu.com        iburst maxsources 3
-pool time.nist.giv         iburst maxsources 3
+pool time.nist.gov         iburst maxsources 3
 pool us.pool.ntp.org       iburst maxsources 3
 
 # This directive specify the location of the file containing ID/key pairs for
