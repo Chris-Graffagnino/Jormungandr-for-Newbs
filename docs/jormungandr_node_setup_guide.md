@@ -350,47 +350,54 @@ fs.nr_open = 10000000
 
 net.core.netdev_max_backlog = 100000
 net.core.somaxconn = 100000
-
 net.ipv4.icmp_echo_ignore_broadcasts = 1
-net.ipv4.icmp_ignore_bogus_error_responses = 1
-
 net.ipv4.ip_local_port_range = 1024 65535
 net.ipv4.ip_nonlocal_bind = 1
-net.ipv4.tcp_fin_timeout = 10
-
-# If a node hasn't responded in 60 secondes, send 5 keepalive probes, before closing the socket
-net.ipv4.tcp_keepalive_time = 60
-net.ipv4.tcp_keepalive_intvl = 8
-net.ipv4.tcp_keepalive_probes = 5
-
+net.ipv4.tcp_fin_timeout = 15
 net.ipv4.tcp_max_orphans = 262144
-net.ipv4.tcp_max_syn_backlog = 100000
-net.ipv4.tcp_max_tw_buckets = 262144
+net.ipv4.tcp_max_tw_buckets = 598016
 net.ipv4.tcp_mem = 786432 1697152 1945728
 net.ipv4.tcp_reordering = 3
 net.ipv4.tcp_rmem = 4096 87380 16777216
 net.ipv4.tcp_sack = 0
 net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_syn_retries = 5
+net.ipv4.tcp_syn_retries = 3
+net.ipv4.tcp_synack_retries = 3
+net.ipv4.tcp_max_syn_backlog = 100000
 net.ipv4.tcp_tw_reuse = 1
 net.ipv4.tcp_wmem = 4096 16384 16777216
+
+net.ipv4.tcp_window_scaling = 1
+net.core.dev_weight = 64
+net.core.optmem_max = 65535
+net.ipv4.tcp_orphan_retries = 0
+net.ipv4.ipfrag_high_thresh = 512000
+net.ipv4.ipfrag_low_thresh = 446464
+net.ipv4.tcp_no_metrics_save = 1
+net.ipv4.tcp_moderate_rcvbuf = 1
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+
+# If you have less than 4GB RAM, consider setting this lower
+net.core.netdev_budget = 400
 
 net.netfilter.nf_conntrack_max = 10485760
 net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 30
 net.netfilter.nf_conntrack_tcp_timeout_time_wait = 15
-net.netfilter.nf_conntrack_generic_timeout = 60
-net.netfilter.nf_conntrack_icmp_timeout = 10
-net.netfilter.nf_conntrack_tcp_timeout_close_wait = 20
-net.netfilter.nf_conntrack_tcp_timeout_established = 600
-net.netfilter.nf_conntrack_tcp_timeout_max_retrans = 120
-net.netfilter.nf_conntrack_tcp_timeout_unacknowledged = 180
-net.netfilter.nf_conntrack_tcp_timeout_syn_recv = 30
-net.netfilter.nf_conntrack_tcp_timeout_syn_sent = 60
-net.netfilter.nf_conntrack_log_invalid = 6
+
+net.ipv4.tcp_keepalive_time = 60
+net.ipv4.tcp_keepalive_intvl = 10
+net.ipv4.tcp_keepalive_probes = 3
 
 kernel.panic = 10
 kernel.randomize_va_space = 2
 kernel.pid_max = 65536
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+
+# Use Google's congestion control algorithm
+net.core.default_qdisc = fq
+net.ipv4.tcp_congestion_control = bbr
 
 vm.swappiness = 5
 vm.vfs_cache_pressure = 50
