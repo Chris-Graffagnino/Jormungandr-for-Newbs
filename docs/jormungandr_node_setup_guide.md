@@ -472,11 +472,13 @@ local stratum 10
 ```
 #### Finish configuring chrony
 ```
-# Reload our new config file
-timedatectl set-timezone UTC
+# Set UTC, disable timesyncd, restart chrony, sync hwclock
+sudo timedatectl set-timezone UTC
+sudo systemctl stop systemd-timesyncd
+sudo systemctl disable systemd-timesyncd
 sudo systemctl restart chrony
+sudo hwclock -w
 ```
-
 
 ## Install Rust
 ```
