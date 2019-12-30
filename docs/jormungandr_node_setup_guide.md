@@ -809,6 +809,7 @@ usage: ~/files/delegate-account.sh <ACCOUNT-SK> <STAKE_POOL_ID>:1
 
 ## Create stake pool
 ```
+# Before continuing, make sure receiver_account.txt has a balance of at least 500,300,000 lovelaces
 # This may take a minute or two to finish
 ~/files/createStakePool.sh ${REST_PORT} <TAX VALUE> <TAX RATIO> $(cat ~/files/receiver_secret.key)
 
