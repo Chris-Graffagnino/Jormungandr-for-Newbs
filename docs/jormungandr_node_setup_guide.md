@@ -456,6 +456,12 @@ rtcsync
 # Step the system clock instead of slewing it if the adjustment is larger than
 # one second, but only in the first three clock updates.
 makestep 0.1 3
+
+# Get TAI-UTC offset and leap seconds from the system tz database
+leapsectz right/UTC
+
+# Serve time even if not synchronized to a time source.
+local stratum 10
 ```
 #### Finish configuring chrony
 ```
