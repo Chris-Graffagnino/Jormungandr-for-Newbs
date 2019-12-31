@@ -226,7 +226,7 @@ sudo nano /etc/ssh/sshd_config
 
 # Restart the ssh daemon
 # NOTE: You will only be able to log-in using your SSH private key as non-root user
-sudo service sshd restart
+sudo service sshd reload
 ```
 
 ## Download some scripts
