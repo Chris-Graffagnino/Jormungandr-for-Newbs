@@ -81,7 +81,8 @@ function leader_logs() {
 }
 
 function schedule() {
-    leader_logs | grep scheduled_at_date | sort
+    echo "Which block dates are this node scheduled to generate a block during this epoch?"
+    leader_logs | grep scheduled_at_date | cut -d'"' -f2 | cut -d'.' -f2 | sort -g
 }
 
 function when() {
