@@ -558,7 +558,7 @@ p2p:
   listen_address: "/ip4/0.0.0.0/tcp/<YOUR PUBLIC ADDRESS PORT>"
   public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<YOUR PUBLIC ADDRESS PORT>"
   public_id: <THE PUBLIC_ID YOU JUST GENERATED>
-  # Adjust max_connections based on your cpu/ram usage. 512 to 1024 typically works well for 2cpu/4G ram.
+  # Adjust max_connections based on cpu/ram usage. 512 to 1024 typically works well for 2cpu/4G ram.
   # Monitor usage w/ "memory" function; Adjust max_connections down if load reaches 100%.
   max_connections: 1024
   gossip_interval: 10s
