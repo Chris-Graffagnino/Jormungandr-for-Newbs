@@ -527,6 +527,8 @@ touch ~/logs/node.out
 ### Measure trusted peer latency
 ```
 # Make note of the ip addresses with the shortest response time (end of each line, measured in ms)
+# If your node takes longer than 3-4 minutes to bootstrap, try commenting the trusted-peers with
+# the longest response time in node-config.yaml
 # This may take a few seconds to start
 check_peers
 ```
@@ -556,10 +558,10 @@ p2p:
   listen_address: "/ip4/0.0.0.0/tcp/<YOUR PUBLIC ADDRESS PORT>"
   public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<YOUR PUBLIC ADDRESS PORT>"
   public_id: <THE PUBLIC_ID YOU JUST GENERATED>
-  # Adjust max_connections based on your cpu/ram usage. 4096 typically works well for 2cpu/4G ram.
-  # Monitor usage w/ "memory" function; press shift+i to measure the load across all cpu's
-  max_connections: 4096
-  gossip_interval: 20s
+  # Adjust max_connections based on your cpu/ram usage. 512 to 1024 typically works well for 2cpu/4G ram.
+  # Monitor usage w/ "memory" function; Adjust max_connections down if load reaches 100%.
+  max_connections: 1024
+  gossip_interval: 10s
   trusted_peers:
     - address: "/ip4/13.56.0.226/tcp/3000"
       id: 7ddf203c86a012e8863ef19d96aabba23d2445c492d86267
