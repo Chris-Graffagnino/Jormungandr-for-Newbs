@@ -70,7 +70,7 @@ function empty_logs() {
 function check_peers() {
     sed -e '/ address/!d' -e '/#/d' -e 's@^.*/ip./\([^/]*\)/tcp/\([0-9]*\).*@\1 \2@' ~/files/node-config.yaml | \
     while read addr port
-    do
+    do 
         tcpping -x 1 $addr $port
     done
 }
@@ -89,13 +89,17 @@ function when() {
     leader_logs | grep scheduled_at_time | sort
 }
 
+function leaders() {
+    leader_logs()
+}
+
 function elections() {
     echo "How many slots has this node been scheduled to be leader?"
     echo "$(jcli rest v0 leaders logs get -h http://127.0.0.1:${REST_PORT}/api | grep created_at_time | wc -l)"
 }
 
 function pool_stats() {
-    echo "$(jcli rest v0 stake-pool get $(cat ~/files/stake_pool.id) -h http://127.0.0.1:${REST_PORT}/api)"
+    echo "$(jcli rest v0 stake-pool get $(cat ~/files/node_secret.yaml | grep node_id | awk -F: '{print $2 }') -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
 function problems() {
@@ -151,40 +155,43 @@ function portsentry_stats() {
 }
 
 function tip() {
-    grep tip ~/logs/node.out
+    grep ~/logs/node.out
+}
+
+function settings() {
+    echo "$(jcli rest v0 settings get --host ${REST_URL})"
 }
 
 function current_blocktime() {
-    chainstartdate=$(settings | grep "block0Time:" | awk '{print $2}' | tr -d '"' | xargs -I{} date "+%s" -d {})
-    nowtime=$(date +%s)
+	chainstartdate=$(settings | grep "block0Time:" | awk '{print $2}' | tr -d '"' | xargs -I{} date "+%s" -d {})
+	nowtime=$(date +%s)
 
-    chaintime=$(($nowtime-$chainstartdate))
+	chaintime=$(($nowtime-$chainstartdate))
 
-    slot=$((($chaintime % 86400)))
-    epoch=$(($chaintime / 86400))
+	slot=$((($chaintime % 86400)))
+	epoch=$(($chaintime / 86400))
 }
 
 function next() {
-    NEWEPOCH=$(stats | grep Date | grep -Eo '[0-9]{1,3}' | awk 'NR==1{print $1}')
-    maxSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | wc -l)
+  	NEWEPOCH=$(stats | grep Date | grep -Eo '[0-9]{1,3}' | awk 'NR==1{print $1}')
+	maxSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | wc -l)
     leaderSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | awk -v i="$rowIndex" '{print $2}' | awk -F "." '{print $2}' | tr '"' ' ' | sort -V)
-    for (( rowIndex = 1; rowIndex <= $maxSlots ; rowIndex++ ))
-    do
-        current_blocktime
-        currentSlotTime=$((slot/2))
-        #currentSlotTime=$(stats | grep 'lastBlockDate: "'$NEWEPOCH'.' | awk -F "." '{print $2}' | tr '"' ' ')
-        blockCreatedSlotTime=$(awk -v i="$rowIndex" 'NR==i {print $1}' <<< $leaderSlots)
+	for (( rowIndex = 1; rowIndex <= $maxSlots ; rowIndex++ ))
+	do
+		current_blocktime
+		currentSlotTime=$((slot/2))
+		#currentSlotTime=$(stats | grep 'lastBlockDate: "'$NEWEPOCH'.' | awk -F "." '{print $2}' | tr '"' ' ')
+		blockCreatedSlotTime=$(awk -v i="$rowIndex" 'NR==i {print $1}' <<< $leaderSlots)
 
-        if [[ $blockCreatedSlotTime -ge $currentSlotTime ]];
-        then
-            timeToNextSlotLead=$(($blockCreatedSlotTime-$currentSlotTime))
-            currentTime=$(date +%s)
-            nextBlockDate=$(($chainstartdate+$blockCreatedSlotTime*2+($epoch)*86400))
-            echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<< $(($timeToNextSlotLead*2))) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)") - $(($
-blockCreatedSlotTime))"
-            break;
-        fi
-    done
+		if [[ $blockCreatedSlotTime -ge $currentSlotTime ]];
+		then
+			timeToNextSlotLead=$(($blockCreatedSlotTime-$currentSlotTime))
+			currentTime=$(date +%s)
+			nextBlockDate=$(($chainstartdate+$blockCreatedSlotTime*2+($epoch)*86400))
+			echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<< $(($timeToNextSlotLead*2))) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)") - $(($blockCreatedSlotTime))"
+			break;
+		fi
+	done
 }
 
 function delta() {
@@ -251,3 +258,5 @@ function delta() {
 	   return
     fi
 }
+
+export PATH="$HOME/.cargo/bin:$PATH"
