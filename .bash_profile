@@ -151,7 +151,7 @@ function portsentry_stats() {
 }
 
 function tip() {
-    grep ~/logs/node.out
+    grep tip ~/logs/node.out
 }
 
 function settings() {
