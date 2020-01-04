@@ -158,25 +158,40 @@ function tip() {
     grep ~/logs/node.out
 }
 
+function settings() {
+    echo "$(jcli rest v0 settings get --host ${REST_URL})"
+}
+
+function current_blocktime() {
+	chainstartdate=$(settings | grep "block0Time:" | awk '{print $2}' | tr -d '"' | xargs -I{} date "+%s" -d {})
+	nowtime=$(date +%s)
+
+	chaintime=$(($nowtime-$chainstartdate))
+
+	slot=$((($chaintime % 86400)))
+	epoch=$(($chaintime / 86400))
+}
+
 function next() {
   	NEWEPOCH=$(stats | grep Date | grep -Eo '[0-9]{1,3}' | awk 'NR==1{print $1}')
 	maxSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | wc -l)
-    	leaderSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | awk -v i="$rowIndex" '{print $2}' | awk -F "." '{print $2}' | tr '"' ' ' | sort -r)
+    leaderSlots=$(leader_logs | grep -P 'scheduled_at_date: "'$NEWEPOCH'.' | grep -P '[0-9]+' | awk -v i="$rowIndex" '{print $2}' | awk -F "." '{print $2}' | tr '"' ' ' | sort -V)
 	for (( rowIndex = 1; rowIndex <= $maxSlots ; rowIndex++ ))
 	do
-		currentSlotTime=$(stats | grep 'lastBlockDate: "'$NEWEPOCH'.' | awk -F "." '{print $2}' | tr '"' ' ')
+		current_blocktime
+		currentSlotTime=$((slot/2))
+		#currentSlotTime=$(stats | grep 'lastBlockDate: "'$NEWEPOCH'.' | awk -F "." '{print $2}' | tr '"' ' ')
 		blockCreatedSlotTime=$(awk -v i="$rowIndex" 'NR==i {print $1}' <<< $leaderSlots)
 
-		timeToNextSlotLead=$(($blockCreatedSlotTime-$currentSlotTime))
-
-		if [[ $timeToNextSlotLead -gt 0 ]];
+		if [[ $blockCreatedSlotTime -ge $currentSlotTime ]];
 		then
+			timeToNextSlotLead=$(($blockCreatedSlotTime-$currentSlotTime))
 			currentTime=$(date +%s)
-			nextBlockDate=$((currentTime+timeToNextSlotLead))
-			echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<< $timeToNextSlotLead) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)")"
+			nextBlockDate=$(($chainstartdate+$blockCreatedSlotTime*2+($epoch)*86400))
+			echo "TimeToNextSlotLead: " $(awk '{print int($1/(3600*24))":"int($1/60)":"int($1%60)}' <<< $(($timeToNextSlotLead*2))) "("$(awk '{print strftime("%c",$1)}' <<< $nextBlockDate)") - $(($blockCreatedSlotTime))"
 			break;
-		fi		
-	done  
+		fi
+	done
 }
 
 function delta() {
@@ -220,11 +235,11 @@ function delta() {
     echo "LastBlockCount: " $lastBlockCount
     echo "LastShelleyBlock: " $shelleyLastBlockCount
     echo "DeltaCount: " $deltaBlockCount
-	
+
 	next
 
     now=$(date +"%r")
-	
+
 	isNumberRegex='^[0-9]+$'
 	if [[  -z $lastBlockCount || ! $lastBlockCount =~ $isNumberRegex ]]; then
        echo -e ${RED}"$now: Your node appears to be starting or not running at all. Execute 'stats' to get more info."${NC}
@@ -239,7 +254,9 @@ function delta() {
 	   return
     fi
     if [[ $deltaBlockCount -le 0 ]]; then
-       echo -e ${GREEN}"$now: Your node is running well"${NC}
+       echo -e ${GREEN}"$now: Your node is running well."${NC}
 	   return
     fi
 }
+
+export PATH="$HOME/.cargo/bin:$PATH"
