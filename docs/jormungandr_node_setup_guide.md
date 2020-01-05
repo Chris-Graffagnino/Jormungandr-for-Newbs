@@ -521,12 +521,6 @@ cargo install --path jcli --force
 chmod +x ./scripts/bootstrap
 ```
 
-### Create directory & file for logging
-```
-mkdir ~/logs
-touch ~/logs/node.out
-```
-
 ### Measure trusted peer latency
 ```
 # Make note of the ip addresses with the shortest response time (end of each line, measured in ms)
@@ -541,9 +535,10 @@ nano ~/files/node-config.yaml
 (replace placeholders with appropriate values)
 ```
 log:
-- output: stderr
-  format: plain
+- format: plain
   level: info
+  output:
+    file: "/var/log/jormungandr.log"  
 p2p:
   topics_of_interest:
     blocks: high
