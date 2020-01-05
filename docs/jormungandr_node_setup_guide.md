@@ -412,6 +412,9 @@ sudo lsmod | grep conntrack
 sudo modprobe ip_conntrack
 
 # Reload sysctl.conf
+# You will see a list of all changes made, and possibly some errors if
+# a particular modudle is not installed. If you don't see anything, you
+# may be using a VPS that doesn't support kernel mods.
 sudo sysctl -p /etc/sysctl.conf
 ```
 
@@ -534,18 +537,8 @@ check_peers
 ```
 
 ### Modify node-config.yaml
-```
-# Generate a hexidecimal string for your PUBLIC_ID
-# Copy this to your clipboard
-openssl rand -hex 24
-
 nano ~/files/node-config.yaml
-
-# Check Telegram (StakePool Best Practice Workgroup) pinned message for up-to-date genesis-hash & trusted peers
-
-# Comment (add a "#" to the beginning of the line) for the slowest nodes (both public_address & public_id)
-# Replace <THE PLACEHOLDERS> with the appropriate values
-```
+(replace placeholders with appropriate values)
 ```
 log:
 - output: stderr
@@ -555,9 +548,6 @@ p2p:
   topics_of_interest:
     blocks: high
     messages: high
-  listen_address: "/ip4/0.0.0.0/tcp/<YOUR PUBLIC ADDRESS PORT>"
-  public_address: "/ip4/<YOUR PUBLIC IP ADDRESS>/tcp/<YOUR PUBLIC ADDRESS PORT>"
-  public_id: <THE PUBLIC_ID YOU JUST GENERATED>
   # Adjust max_connections based on cpu/ram usage. 512 to 1024 works well for 2cpu/4G ram.
   # Monitor usage w/ "memory" function; Adjust max_connections down if CPU load reaches 100%.
   max_connections: 1024
