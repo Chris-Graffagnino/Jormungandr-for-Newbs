@@ -7,9 +7,6 @@ p2p:
   topics_of_interest:
     blocks: high 
     messages: high
-  listen_address: "/ip4/0.0.0.0/tcp/<PUBLIC_ADDRESS_PORT>"
-  public_address: "/ip4/<YOUR NODE'S PUBLIC IP ADDRESS>/tcp/<PUBLIC_ADDRESS_PORT>"
-  public_id: <PASTE FROM PUBLIC_ID FROM openssl rand -hex 24>
   max_connections: 512
   gossip_interval: 20s
   trusted_peers:
