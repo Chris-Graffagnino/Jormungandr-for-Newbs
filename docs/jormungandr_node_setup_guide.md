@@ -290,7 +290,6 @@ printenv
 echo "export USERNAME='<YOUR USERNAME>'" >> ~/.bashrc
 echo "export PUBLIC_IP_ADDR='<YOUR PUBLIC IP ADDRESS>'" >> ~/.bashrc
 echo "export REST_PORT='<YOUR REST PORT>'" >> ~/.bashrc
-echo "export PUBLIC_ADDRESS_PORT='<YOUR PUBLIC ADDRESS PORT>'" >> ~/.bashrc
 echo "export REST_URL='http://127.0.0.1:<YOUR REST PORT>/api'" >> ~/.bashrc
 echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bashrc
 
@@ -438,9 +437,9 @@ Paste the following into /etc/chrony/chrony.conf. You may improve performance by
 [NTP server list](https://www.ntppool.org/zone/@)
 
 ```
-pool ntp.ubuntu.com        iburst maxsources 3
-pool time.nist.gov         iburst maxsources 3
-pool us.pool.ntp.org       iburst maxsources 3
+pool ntp.ubuntu.com        iburst maxsources 3 maxdelay 0.3
+pool time.nist.gov         iburst maxsources 3 maxdelay 0.3
+pool us.pool.ntp.org       iburst maxsources 3 maxdelay 0.3
 
 # This directive specify the location of the file containing ID/key pairs for
 # NTP authentication.
@@ -504,7 +503,7 @@ cd jormungandr
 git tag
 (press shift+g to jump to the bottom of the list)
 
-# Note the last item in the list; non-alpha tag is most recent, (ie v0.8.5 is newer than v0.8.5-alpha3)
+# NOTE: the last item in the list; non-alpha tag is most recent, (ie v0.8.5 is newer than v0.8.5-alpha3)
 (press 'q' to exit the list)
 
 git checkout <THE TAG>
@@ -518,7 +517,6 @@ git submodule update --init --recursive
 ```
 cargo install --path jormungandr --force
 cargo install --path jcli --force
-chmod +x ./scripts/bootstrap
 ```
 
 ### Create directory & file for logging
