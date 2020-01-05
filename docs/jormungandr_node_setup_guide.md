@@ -120,13 +120,13 @@ apt-get install chrony
 
 # Install tcpping
 cd /usr/bin
-sudo wget http://www.vdberg.org/~richard/tcpping
-sudo chmod 755 tcpping
+wget http://www.vdberg.org/~richard/tcpping
+chmod 755 tcpping
 cd
 
 # Install ripgrep, because it's awesome
 curl -LO https://github.com/BurntSushi/ripgrep/releases/download/11.0.2/ripgrep_11.0.2_amd64.deb
-sudo dpkg -i ripgrep_11.0.2_amd64.deb
+dpkg -i ripgrep_11.0.2_amd64.deb
 rm ripgrep_11.0.2_amd64.deb
 
 # These instructions will prevent certain errors when installing Rust
@@ -141,7 +141,7 @@ chown <USERNAME> /home/<USERNAME>/.profile
 nano /etc/security/limits.conf
 
 # Add the following at the bottom of the file
-<USERNAME> soft nofile 32768
+<USERNAME> soft nofile 800000
 <USERNAME> hard nofile 1048576
 
 # Save & close the file
@@ -291,7 +291,7 @@ echo "export USERNAME='<YOUR USERNAME>'" >> ~/.bashrc
 echo "export PUBLIC_IP_ADDR='<YOUR PUBLIC IP ADDRESS>'" >> ~/.bashrc
 echo "export REST_PORT='<YOUR REST PORT>'" >> ~/.bashrc
 echo "export PUBLIC_ADDRESS_PORT='<YOUR PUBLIC ADDRESS PORT>'" >> ~/.bashrc
-echo "export JORMUNGANDR_RESTAPI_URL='http://127.0.0.1:<YOUR REST PORT>/api'" >> ~/.bashrc
+echo "export REST_URL='http://127.0.0.1:<YOUR REST PORT>/api'" >> ~/.bashrc
 echo "export JORMUNGANDR_STORAGE_DIR='/home/<YOUR USERNAME>/storage'" >> ~/.bashrc
 
 # What did we just do?
