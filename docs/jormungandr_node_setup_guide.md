@@ -111,12 +111,13 @@ apt install -y build-essential libssl-dev
 apt install git
 apt install pkg-config
 apt install nload
+apt install jq
 apt install python3-pip
 apt-get install tcptraceroute
 apt-get install chrony
 
 # Nuke the chrony config, (we'll fix it later)
-> /etc/chrony/chrony.config
+> /etc/chrony/chrony.conf
 
 # Install tcpping
 cd /usr/bin
@@ -186,8 +187,12 @@ ufw limit proto tcp from any to any port <THE PORT YOU JUST CHOSE IN sshd_config
 # REST_PORT: Chose a port number between 1024 and 65535, (do not choose 3000 or 3100).
 # REST_PORT: We will use this port to make queries to the REST api
 # REST_PORT: because this port is accessed internally,  we exclude it from our list of open ports.
-sudo ufw allow proto tcp from any to any port 1024:<REST_PORT MINUS ONE>
-sudo ufw allow proto tcp from any to any port <REST_PORT PLUS ONE>:65535
+
+# Open all ports from 1024 up to, but not including your REST_PORT
+ufw allow proto tcp from any to any port 1024:<REST_PORT MINUS ONE>
+
+# Open all ports that are greater than your REST_PORT
+ufw allow proto tcp from any to any port <REST_PORT PLUS ONE>:65535
 
 # Re-enable firewall
 ufw enable
@@ -235,10 +240,7 @@ sudo service sshd reload
 git clone https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs.git -b files-only --single-branch files
 
 # Make the scripts executable
-chmod +x ~/files/send-lovelaces.sh
-chmod +x ~/files/createStakePool.sh
-chmod +x ~/files/send-certificate.sh
-chmod +x ~/files/delegate-account.sh
+chmod +x ~/files/*.sh
 
 # Create .bashrc && .bash_profile
 # Note: You downloaded these to the files directory, although they are hidden. Type "ls -la ~/files"
