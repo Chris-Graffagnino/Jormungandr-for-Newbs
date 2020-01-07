@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Author: pheelLikeWater
+
 initial=true
 while true
 do
