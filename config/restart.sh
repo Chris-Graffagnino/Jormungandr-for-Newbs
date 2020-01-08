@@ -59,7 +59,7 @@ do
  now=$(date +"%F %T")
  if [[ !initial && $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || $deltaBlockCount -gt $deltaMax || -z $lastBlockCount ]]; then
      echo -e ${RED}$now": Block was not found within main chain. Your node will be automatically restarted."${NC}
-     echo $now": Your node was out of sync at block $lastBlockCount. Trying to restart." >> logs/restart.sh
+     echo $now": Your node was out of sync at block $lastBlockCount. Trying to restart." >> logs/restart.out
      echo $now": Trying to restart the node..."
      stop
      sleep 5
@@ -71,7 +71,7 @@ do
      now=$(date +"%F %T")
      if [[ ! -z $lastBlockHash ]]; then
         echo -e ${GREEN}"$now: Node was restarted successfully. Next check in 15 minutes."${NC}
-        echo "$now: Your node was restarted successfully." >> logs/restart.sh
+        echo "$now: Your node was restarted successfully." >> logs/restart.out
      fi
  else
      echo -e ${GREEN}$now": Node is in sync with the blockchain. Next check in 15 minutes."${NC}
