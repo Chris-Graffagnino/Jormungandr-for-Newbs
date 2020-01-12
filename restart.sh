@@ -40,7 +40,7 @@ do
  echo "LastShelleyBlock: " $shelleyLastBlockCount
  echo "DeltaCount: " $deltaBlockCount
  echo $initial
- while [[ $bootstrapCounter -le $tries && ! initial ]]
+ while [[ $bootstrapCounter -le $tries && ! $initial ]]
  do
 
      lastBlockCount=`stats | head -n 7 | tail -n 1 | awk '{print $2}' | tr -d \"`
@@ -55,7 +55,7 @@ do
      sleep 60
  done
  echo $deltaBlockCount
- if [[ !initial && $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || $deltaBlockCount -gt $deltaMax || -z $lastBlockCount ]]; then
+ if [[ !$initial && $(echo $shelleyExplorerJson | grep -o '"message":"[^"]*' | cut -d'"' -f4) == *"Couldn't find block's contents in explorer"* || $deltaBlockCount -gt $deltaMax || -z $lastBlockCount ]]; then
      now=$(date +"%r")
      echo -e ${RED}$now": Block was not found within main chain. Your node will be automatically restarted."${NC}
      echo $now": Your node was out of sync at block $lastBlockCount. Trying to restart." >> logs/restart.out
