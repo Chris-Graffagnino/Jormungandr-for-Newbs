@@ -38,6 +38,11 @@ function nodes() {
     printf "%s\n" "${nodes}" "----------" "Total:" "${total}"
 }
 
+function connections() {
+    echo "Show ip addresses that are connected more than once:"
+    netstat -tn 2>/dev/null | awk '{print $5}' | cut -d: -f1 | sort | uniq -c | sort -nr | head
+}
+
 function sockets() {
     netstat -tn | tail -n +3 | awk "{ print \$6 }" | sort | uniq -c | sort -n
 }
