@@ -53,6 +53,7 @@ function num_open_files() {
 }
 
 function is_pool_visible() {
+    GREEN=$(printf "\033[0;32m")
     stake_pool_id="$(cat ~/files/node_secret.yaml | grep node_id | awk -F: '{print $2 }')"
     echo "Display my stake pool id if it is visible on the blockchain. Otherwise, return nothing."
     echo ${GREEN}$(jcli rest v0 stake-pools get --host "http://127.0.0.1:${REST_PORT}/api" | grep $stake_pool_id)
