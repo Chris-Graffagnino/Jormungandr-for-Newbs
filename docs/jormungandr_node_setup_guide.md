@@ -240,6 +240,7 @@ git clone https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs.git -b file
 
 # Make the scripts executable
 chmod +x ~/files/*.sh
+chmod +x ~/files/env
 
 # Create .bashrc && .bash_profile
 # Note: You downloaded these to the files directory, although they are hidden. Type "ls -la ~/files"
