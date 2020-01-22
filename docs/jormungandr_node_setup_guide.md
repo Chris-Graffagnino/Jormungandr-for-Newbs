@@ -108,7 +108,6 @@ chsh -s /bin/bash <USERNAME>
 apt update
 apt upgrade
 apt install -y build-essential libssl-dev
-apt install git
 apt install pkg-config
 apt install nload
 apt install jq
