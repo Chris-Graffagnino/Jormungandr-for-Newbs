@@ -183,15 +183,8 @@ ufw default allow outgoing
 # Open ssh port (rate limiting enabled - max 10 attempts within 30 seconds)
 ufw limit proto tcp from any to any port <THE PORT YOU JUST CHOSE IN sshd_config>
 
-# REST_PORT: Chose a port number between 1024 and 65535, (do not choose 3000 or 3100).
-# REST_PORT: We will use this port to make queries to the REST api
-# REST_PORT: because this port is accessed internally,  we exclude it from our list of open ports.
-
-# Open all ports from 1024 up to, but not including your REST_PORT
-ufw allow proto tcp from any to any port 1024:<REST_PORT MINUS ONE>
-
-# Open all ports that are greater than your REST_PORT
-ufw allow proto tcp from any to any port <REST_PORT PLUS ONE>:65535
+# Open a port for your public_address. This is the port other nodes will connect to.
+ufw allow proto tcp from any to any port 3000
 
 # Re-enable firewall
 ufw enable
