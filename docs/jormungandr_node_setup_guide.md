@@ -548,10 +548,8 @@ p2p:
   topics_of_interest:
     blocks: high
     messages: high
-  # Adjust max_connections based on cpu/ram usage. 512 to 1024 works well for 2cpu/4G ram.
-  # Monitor usage w/ "memory" function; Adjust max_connections down if CPU load reaches 100%.
-  max_connections: 1024
-  gossip_interval: 10s
+  public_address: "/ip4/<YOUR IP ADDRESS>/tcp/3000"
+  gossip_interval: 5s
   trusted_peers:
     - address: "/ip4/13.56.0.226/tcp/3000"
       id: 7ddf203c86a012e8863ef19d96aabba23d2445c492d86267
@@ -589,9 +587,9 @@ rest:
   listen: "127.0.0.1:<REST_PORT>"
 storage: /home/<YOUR USERNAME>/storage
 mempool:
-    fragment_ttl: 2h
+    fragment_ttl: 15m
     log_ttl: 24h
-    garbage_collection_interval: 2h
+    garbage_collection_interval: 30m
 ```
 
 (Did you remember to replace the PLACEHOLDERS with the appropriate values)?
