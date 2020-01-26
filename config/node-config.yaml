@@ -46,6 +46,6 @@ rest:
   listen: "127.0.0.1:<REST_PORT>"
 storage: /home/<YOUR USERNAME>/storage
 mempool:
-    fragment_ttl: 15m
+    fragment_ttl: 2h
     log_ttl: 24h
-    garbage_collection_interval: 30m
+    garbage_collection_interval: 2h
