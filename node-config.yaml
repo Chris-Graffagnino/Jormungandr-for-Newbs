@@ -7,8 +7,8 @@ p2p:
   topics_of_interest:
     blocks: high 
     messages: high
-  max_connections: 512
-  gossip_interval: 20s
+  public_address: "/ip4/<YOUR IP ADDRESS>/tcp/3000"
+  gossip_interval: 5s
   trusted_peers:
     - address: "/ip4/3.124.116.145/tcp/3000"
       id: 99cb10f53185fbef110472d45a36082905ee12df8a049b74
