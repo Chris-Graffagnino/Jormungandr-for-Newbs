@@ -15,6 +15,11 @@ function stats() {
     echo "$(jcli rest v0 node stats get -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
+function tcp_stats() {
+    cat /proc/net/netstat | awk '(f==0) { i=1; while ( i<=NF) {n[i] = $i; i++ }; f=1; next} \
+    (f==1){ i=2; while ( i<=NF){ printf "%s = %d\n", n[i], $i; i++}; f=0}'
+}
+
 function bal() {
     echo "$(jcli rest v0 account get $(cat ~/files/receiver_account.txt) -h http://127.0.0.1:${REST_PORT}/api)"
 }
