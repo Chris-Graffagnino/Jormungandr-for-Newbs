@@ -1,15 +1,15 @@
 # Guide to implementing pooltool.io sendmytip.sh
 
--- DISCLAIMER: This guide is for educational purposes only.
--- DISCLAIMER: By using this guide, you assume sole risk and waive any claims of liability against the author.
+-- DISCLAIMER: This guide is for educational purposes only.  
+-- DISCLAIMER: By using this guide, you assume sole risk and waive any claims of liability against the author.  
 
--- Note: This guide is for implementing a script to report lastBlockHeight to pooltool.io
--- Note: anything preceded by "#" is a comment.
--- Note: anything all-caps in between "<>" is an placeholder; e.g. `"<FILENAME>"` could be `"foo.txt"`.
+-- Note: This guide is for implementing a script to report lastBlockHeight to pooltool.io  
+-- Note: anything preceded by "#" is a comment.  
+-- Note: anything all-caps in between "<>" is an placeholder; e.g. `"<FILENAME>"` could be `"foo.txt"`.  
 
 * Guide Author: Chris Graffagnino (stake-pool: __MASTR__)  
 * Script Author: Mike, aka papacarp from [pooltool.io](https://pooltool.io/)  
-Consider delegating Mike's pool, __LOVE__
+-- Consider delegating Mike's pool, __LOVE__  
 
 ## About sendmytip.sh
 sendmytip.sh shows lastBlockHeight, as reported by participating nodes. It is a useful alternative to Shelley explorer, which
@@ -53,7 +53,7 @@ poolToolHeight=$(sendtip)
 ```
 (Please replace the <PLACEHOLDERS> above with appropriate values)
 
-## Call the script mannually, for testing purposes
+## Call the script manually, for testing purposes
 ```
 # Make the script executable
 chmod +x ~/files/sendmytip.sh
