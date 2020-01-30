@@ -2,7 +2,7 @@
 shopt -s expand_aliases
 RESTAPI_PORT=<YOUR REST PORT>
 MY_POOL_ID="<YOUR STAKE POOL ID>"
-MY_USER_ID="<YOUR API KEY FROM  https://pooltool.io/profile>"
+MY_USER_ID="<YOUR POOLTOOL API KEY>"  # https://pooltool.io/profile
 THIS_GENESIS="8e4d2a343f3dcf93"   # We only actually look at the first 7 characters
 
 function sendtip() {
