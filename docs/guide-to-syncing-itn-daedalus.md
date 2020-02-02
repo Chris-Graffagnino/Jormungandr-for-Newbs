@@ -58,3 +58,8 @@ sudo mv ./jormungandr-config.yaml /Applications/"Daedalus - Rewards v1.app"/Cont
 
 ## Open Daedalus - Rewards wallet
 Daedalus may take a while to download the blockchain. I recommend restarting every 20 minutes until complete.
+
+## Thank you for supporting my efforts! My ADA address:
+```
+DdzFFzCqrhsxYxFWE4iD2XuyjTdKU5ywA98ggnD4qxJ1nreiC3X65ACTa8m8KsYAy7fCNV1BLbFGdR6NLSthMnJZ1gKXqbqFi37qjrYq
+```
