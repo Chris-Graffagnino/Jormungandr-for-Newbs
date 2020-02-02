@@ -5,11 +5,7 @@
 -- Note: This guide should __NOT__ be used to modify main-net Daedalus.  
 
 -- DISCLAIMER: By using this guide, you assume sole risk and waive any claims of liability against the author.  
--- DISCLAIMER: By using this guide, you agree to make a backup copy of jormungandr-config.yaml, and that you will not proceed until you have done so.  
-
--- Note: anything preceded by "#" is a comment.   
--- Note: anything all-caps in between "<>" is an placeholder; e.g. `"<FILENAME>"` could be `"foo.txt"`.   
--- Note: anything in between "${}" is a variable that will be evaluated by your shell.  
+-- DISCLAIMER: By using this guide, you agree to make a backup copy of jormungandr-config.yaml.  
 
 * Guide Author: Chris Graffagnino (stake-pool: __MASTR__)  
 * Special thanks to @cryptobaer (stake-pool: __HRMS__)
