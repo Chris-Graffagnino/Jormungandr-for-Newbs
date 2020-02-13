@@ -421,13 +421,12 @@ exit 0
 
 ### Edit /etc/chrony/chrony.conf
 `sudo nano /etc/chrony/chrony.conf`  
-Paste the following into /etc/chrony/chrony.conf. You may improve performance by adding ntp servers closest to your node.  
-[NTP server list](https://www.ntppool.org/zone/@)
-
+Paste the following into /etc/chrony/chrony.conf
 ```
-pool ntp.ubuntu.com        iburst maxsources 3 maxdelay 0.3
-pool time.nist.gov         iburst maxsources 3 maxdelay 0.3
-pool us.pool.ntp.org       iburst maxsources 3 maxdelay 0.3
+pool time.google.com       iburst minpoll 1 maxpoll 1 maxsources 3 prefer
+pool ntp.ubuntu.com        iburst minpoll 1 maxpoll 1 maxsources 3 maxdelay 0.3
+pool time.nist.gov         iburst minpoll 1 maxpoll 1 maxsources 3 maxdelay 0.3
+pool us.pool.ntp.org       iburst minpoll 1 maxpoll 1 maxsources 3 maxdelay 0.3
 
 # This directive specify the location of the file containing ID/key pairs for
 # NTP authentication.
@@ -444,7 +443,7 @@ driftfile /var/lib/chrony/chrony.drift
 logdir /var/log/chrony
 
 # Stop bad estimates upsetting machine clock.
-maxupdateskew 10.0
+maxupdateskew 5.0
 
 # This directive enables kernel synchronisation (every 11 minutes) of the
 # real-time clock. Note that it can’t be used along with the 'rtcfile' directive.
@@ -452,7 +451,7 @@ rtcsync
 
 # Step the system clock instead of slewing it if the adjustment is larger than
 # one second, but only in the first three clock updates.
-makestep 0.1 3
+makestep 0.1 -1
 
 # Get TAI-UTC offset and leap seconds from the system tz database
 leapsectz right/UTC
@@ -460,14 +459,10 @@ leapsectz right/UTC
 # Serve time even if not synchronized to a time source.
 local stratum 10
 ```
+
 #### Finish configuring chrony
 ```
-# Set UTC, disable timesyncd, restart chrony, sync hwclock
-sudo timedatectl set-timezone UTC
-sudo systemctl stop systemd-timesyncd
-sudo systemctl disable systemd-timesyncd
 sudo systemctl restart chrony
-sudo hwclock -w
 ```
 
 ## Install Rust
