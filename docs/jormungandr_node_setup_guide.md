@@ -350,7 +350,7 @@ net.ipv4.tcp_sack = 0
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_syn_retries = 3
 net.ipv4.tcp_synack_retries = 3
-net.ipv4.tcp_max_syn_backlog = 100000
+net.ipv4.tcp_max_syn_backlog = 2048
 net.ipv4.tcp_tw_reuse = 1
 net.ipv4.tcp_wmem = 4096 16384 16777216
 
@@ -373,9 +373,9 @@ net.netfilter.nf_conntrack_max = 10485760
 net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 30
 net.netfilter.nf_conntrack_tcp_timeout_time_wait = 15
 
-net.ipv4.tcp_keepalive_time = 60
-net.ipv4.tcp_keepalive_intvl = 10
-net.ipv4.tcp_keepalive_probes = 3
+net.ipv4.tcp_keepalive_time = 2
+net.ipv4.tcp_keepalive_intvl = 1
+net.ipv4.tcp_keepalive_probes = 5
 
 kernel.panic = 10
 kernel.randomize_va_space = 2
