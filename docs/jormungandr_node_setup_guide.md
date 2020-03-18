@@ -490,7 +490,7 @@ git tag
 (press 'q' to exit the list)
 
 git checkout <THE TAG>
-git checkout -b <NEW BRANCH NAME eg 8.5>
+git checkout -b <NEW BRANCH NAME eg 8.14>
 
 # Update submodules
 git submodule update --init --recursive
@@ -567,10 +567,6 @@ p2p:
 rest:
   listen: "127.0.0.1:<REST_PORT>"
 storage: /home/<YOUR USERNAME>/storage
-mempool:
-    fragment_ttl: 2h
-    log_ttl: 24h
-    garbage_collection_interval: 2h
 ```
 
 (Did you remember to replace the PLACEHOLDERS with the appropriate values)?
