@@ -93,17 +93,16 @@ cd jormungandr
 
 ## Get your rewards credentials
 ```
-# If you previously used my "guide 4newbs", you're probably used to seeing
-# receiver_secret.key, receiver_public.key, receiver_account.txt
-# The keys created in the following step will REPLACE those, once the real incentivized-testnet launches.
+# If you have NOT already created your public/private keys, complete the following steps:
+# If you previously created keys from "Guide for Newbs," use those instead.
 
-jcli key generate --type ed25519 | tee owner.prv | jcli key to-public > owner.pub
+jcli key generate --type ed25519 | tee receiver_secret.key | jcli key to-public > receiver_public.key
 
-jcli address account --testing --prefix addr $(cat owner.pub) > owner.addr
+jcli address account --testing --prefix addr $(cat receiver_public.key) > receiver_account.txt 
 ```
 
-### Make a .json file with the contents of owner.pub as the filename.  
-`nano "$(cat owner.pub)".json`
+### Make a .json file with the contents of receiver_public.key as the filename.
+`nano "$(cat receiver_public.key)".json
 
 
 ### Paste the follwing into the .json file, and replace the values with your own.
@@ -119,9 +118,9 @@ jcli address account --testing --prefix addr $(cat owner.pub) > owner.addr
 ```
 
 
-NOTE: "owner" is the contents of `owner.pub`.  
-NOTE: "pledge_address" is the contents of `owner.addr` (OR) some other "addr" prefixed address (for which you possess the pub/private keys).
-(ctrl+o to save the file, ctrl+x to exit) . 
+NOTE: "owner" is the contents of receiver_public.key.
+NOTE: "pledge_address" is the contents of `receiver_account.txt` (OR) some other "addr" prefixed address (for which you possess the pub/private keys).
+(ctrl+o to save the file, ctrl+x to exit)
 
 ### IMPORTANT
 The "owner" public key must match the key-pair that you register your node on the blockchain via createStakePool.sh (see jormungandr_node_setup_guide.md)
@@ -132,7 +131,7 @@ https://github.com/Chris-Graffagnino/Jormungandr-for-Newbs/blob/master/docs/jorm
 
 ### Execute the following command (as-is) to sign the .json file. This will create a .sig file
 ```
-jcli key sign --secret-key owner.prv --output "$(cat owner.pub)".sig "$(cat owner.pub)".json
+jcli key sign --secret-key receiver_secret.key --output "$(cat receiver_public.key)".sig "$(cat receiver_public.key)".json
 ```
 
 ### Copy the .json & .sig file to your current location
