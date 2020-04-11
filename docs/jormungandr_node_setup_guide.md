@@ -732,17 +732,18 @@ empty_logs
 # Consider making a backup copy of these files before deleting them, in case you change your mind.
 rm -rf ${JORMUNGANDR_STORAGE_DIR}
 
+cd
 rustup update
 git pull
 
 # Use the tagged release
-git checkout <A VERSION NUMBER SUCH AS v0.8.5>
+git checkout <A VERSION NUMBER SUCH AS v0.8.18>
 
 # Can't find the tag you want?, delete what you have locally and re-download
 git tag -l | xargs git tag -d && git fetch -t
 
 # Create a new branch for yourself
-git checkout -b <NAME OF BRANCH, e.g. 8.5>
+git checkout -b <NAME OF BRANCH, e.g. 8.18>
 
 # Compile the binaries
 git submodule update --init --recursive
