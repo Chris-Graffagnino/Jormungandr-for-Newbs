@@ -332,55 +332,11 @@ free -h
 
 (Add the following to the bottom of /etc/sysctl.conf)
 ```
-fs.file-max = 10000000
-fs.nr_open = 10000000
-
-net.core.netdev_max_backlog = 100000
-net.core.somaxconn = 100000
-net.ipv4.icmp_echo_ignore_broadcasts = 1
-net.ipv4.ip_local_port_range = 1024 65535
-net.ipv4.ip_nonlocal_bind = 1
-net.ipv4.tcp_fin_timeout = 15
-net.ipv4.tcp_max_orphans = 262144
-net.ipv4.tcp_max_tw_buckets = 598016
-net.ipv4.tcp_mem = 786432 1697152 1945728
-net.ipv4.tcp_reordering = 3
-net.ipv4.tcp_rmem = 4096 87380 16777216
-net.ipv4.tcp_sack = 0
 net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_syn_retries = 3
-net.ipv4.tcp_synack_retries = 3
 net.ipv4.tcp_max_syn_backlog = 2048
-net.ipv4.tcp_tw_reuse = 1
-net.ipv4.tcp_wmem = 4096 16384 16777216
-
-net.ipv4.tcp_window_scaling = 1
-net.core.dev_weight = 64
-net.core.optmem_max = 65535
-net.ipv4.tcp_orphan_retries = 0
-net.ipv4.ipfrag_high_thresh = 512000
-net.ipv4.ipfrag_low_thresh = 446464
-net.ipv4.tcp_no_metrics_save = 1
-net.ipv4.tcp_moderate_rcvbuf = 1
-net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1
-net.ipv6.conf.lo.disable_ipv6 = 1
-
-# If you have less than 4GB RAM, consider setting this lower
-net.core.netdev_budget = 400
-
-net.netfilter.nf_conntrack_max = 10485760
-net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 30
-net.netfilter.nf_conntrack_tcp_timeout_time_wait = 15
-
 net.ipv4.tcp_keepalive_time = 2
 net.ipv4.tcp_keepalive_intvl = 1
 net.ipv4.tcp_keepalive_probes = 5
-
-kernel.panic = 10
-kernel.randomize_va_space = 2
-kernel.pid_max = 65536
-net.ipv4.icmp_ignore_bogus_error_responses = 1
 
 # Use Google's congestion control algorithm
 net.core.default_qdisc = fq
@@ -392,16 +348,6 @@ vm.vfs_cache_pressure = 50
 
 ### reload /etc/sysctl.conf
 ```
-# Verify ip_conntrack is loaded
-sudo lsmod | grep conntrack
-
-# If nothing is returned, load ip_conntrack
-sudo modprobe ip_conntrack
-
-# Reload sysctl.conf
-# You will see a list of all changes made, and possibly some errors if
-# a particular modudle is not installed. If you don't see anything, you
-# may be using a VPS that doesn't support kernel mods.
 sudo sysctl -p /etc/sysctl.conf
 ```
 
