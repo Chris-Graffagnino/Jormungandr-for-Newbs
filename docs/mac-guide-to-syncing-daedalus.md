@@ -56,7 +56,7 @@ curl https://raw.githubusercontent.com/Chris-Graffagnino/Jormungandr-for-Newbs/f
 -- copy/paste the following in to the terminal program, then press enter
 (When prompted, enter your login password)
 ```
-sudo mv ./jormungandr-config.yaml /Applications/"Daedalus - Rewards v1.app"/Contents/MacOS/
+sudo mv ./jormungandr-config.yaml /Applications/"Daedalus - Rewards v1.app"/Resources/
 ```
 
 ## Open Daedalus - Rewards wallet
