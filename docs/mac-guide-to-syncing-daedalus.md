@@ -26,17 +26,20 @@
 
 ![daedalus_guide_show_pkg_contents](https://user-images.githubusercontent.com/39073373/73613563-f731f200-45ee-11ea-9c06-5212a4c6cad3.png)
 
-## Open MacOS directory
+## Open resources directory
 
-![daedalus_guide_choose_macos](https://user-images.githubusercontent.com/39073373/73613569-0fa20c80-45ef-11ea-9afd-011fe1623e28.png)
+![choose_resources_directory](https://user-images.githubusercontent.com/8118351/79615874-499c8e00-80c9-11ea-8361-804e5d8626e2.png)
 
 ## Press the control-key while clicking jormungandr-config.yaml
 
-![daedalus_guide_ctrl_click_config](https://user-images.githubusercontent.com/39073373/73613586-4ed05d80-45ef-11ea-8d0e-9933933913ee.png)
+![rename_jormungandr-config](https://user-images.githubusercontent.com/8118351/79616501-d0059f80-80ca-11ea-8edb-1b1c10344549.png)
+
 
 ## Rename the file to jormungandr-config-copy.yaml
 
-![daedalus_guide_rename_config](https://user-images.githubusercontent.com/39073373/73613592-64de1e00-45ef-11ea-906f-7fc4b415fff2.png)
+![rename_jormungandr-config-copy](https://user-images.githubusercontent.com/8118351/79616582-06431f00-80cb-11ea-8613-f6b58c7f8274.png)
+
+
 
 ## Press command+spacebar, and type "terminal" to open the program
 
