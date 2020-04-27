@@ -334,7 +334,11 @@ free -h
 ```
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_max_syn_backlog = 2048
-net.ipv4.tcp_keepalive_time = 2
+
+# If you suffer from low connections, set this to 60.
+# Alternatively, if you want to conserve memory, try a lower number.
+net.ipv4.tcp_keepalive_time = 30
+
 net.ipv4.tcp_keepalive_intvl = 1
 net.ipv4.tcp_keepalive_probes = 5
 
