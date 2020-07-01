@@ -8,7 +8,7 @@ function start() {
 }
 
 function stop() {
-    echo "$(jcli rest v0 shutdown get -h http://127.0.0.1:${REST_PORT}/api)"
+    echo "$(jcli rest v0 shutdown post -h http://127.0.0.1:${REST_PORT}/api)"
 }
 
 function stats() {
