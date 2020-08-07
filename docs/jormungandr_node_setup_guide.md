@@ -25,7 +25,7 @@
 ```
 # Generate private & public keys on your *LOCAL MACHINE* (public key will have a ".pub" extension)
 # When prompted, name it something other than "id_rsa" (in case you're using that somewhere else)
-ssh-keygen
+ssh-keygen -o -a 100 -t ed25519 -f ~/.ssh/id_ed25519 -C "<YOUR EMAIL HERE>"
 
 # Lock down private key
 chmod 400 ~/.ssh/<YOUR KEY>
