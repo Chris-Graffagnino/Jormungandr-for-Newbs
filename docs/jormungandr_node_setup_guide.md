@@ -332,21 +332,56 @@ free -h
 
 (Add the following to the bottom of /etc/sysctl.conf)
 ```
+fs.file-max = 2097152
+fs.nr_open = 2097152
+kernel.printk = 4 4 1 7
+kernel.panic = 10
+kernel.sysrq = 0
+kernel.shmmax = 2147483648
+kernel.shmall = 2147483648
+kernel.randomize_va_space = 1
+kernel.pid_max = 65536
+net.core.netdev_max_backlog = 262144
+net.core.somaxconn = 65535
+net.core.optmem_max = 25165824
+net.ipv4.neigh.default.gc_thresh1 = 4096
+net.ipv4.neigh.default.gc_thresh2 = 8192
+net.ipv4.neigh.default.gc_thresh3 = 16384
+net.ipv4.neigh.default.gc_interval = 5
+net.ipv4.neigh.default.gc_stale_time = 120
+net.ipv4.tcp_slow_start_after_idle = 0
+net.ipv4.ip_no_pmtu_disc = 1
+net.ipv4.route.flush = 1
+net.ipv4.route.max_size = 8048576
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+net.ipv4.tcp_max_tw_buckets = 1440000
+net.ipv4.tcp_fin_timeout = 15
+net.ipv4.tcp_max_syn_backlog = 16384
+net.ipv4.tcp_sack = 0
 net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_max_syn_backlog = 2048
-
-# If you suffer from low connections, set this to 60.
-# Alternatively, if you want to conserve memory, try a lower number.
-net.ipv4.tcp_keepalive_time = 30
-
-net.ipv4.tcp_keepalive_intvl = 1
+net.ipv4.tcp_keepalive_time = 60
+net.ipv4.tcp_keepalive_intvl = 4
 net.ipv4.tcp_keepalive_probes = 5
+net.ipv4.ip_forward = 0
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.all.accept_source_route = 0
+net.ipv4.conf.all.rp_filter = 1
+
+# Disable IPV6
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+net.ipv6.conf.eth0.disable_ipv6 = 1
 
 # Use Google's congestion control algorithm
 net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
 
-vm.swappiness = 5
+vm.swappiness = 20
+vm.dirty_ratio = 80
+vm.dirty_background_ratio = 5
 vm.vfs_cache_pressure = 50
 ```
 
@@ -373,10 +408,11 @@ exit 0
 `sudo nano /etc/chrony/chrony.conf`  
 Paste the following into /etc/chrony/chrony.conf
 ```
-pool time.google.com       iburst minpoll 1 maxpoll 1 maxsources 3 prefer
-pool ntp.ubuntu.com        iburst minpoll 1 maxpoll 1 maxsources 3 maxdelay 0.3
-pool time.nist.gov         iburst minpoll 1 maxpoll 1 maxsources 3 maxdelay 0.3
-pool us.pool.ntp.org       iburst minpoll 1 maxpoll 1 maxsources 3 maxdelay 0.3
+pool time.google.com       iburst minpoll 2 maxpoll 2 maxsources 3 maxdelay 0.3
+pool time.facebook.com     iburst minpoll 2 maxpoll 2 maxsources 3 maxdelay 0.3
+pool time.euro.apple.com   iburst minpoll 2 maxpoll 2 maxsources 3 maxdelay 0.3
+pool time.apple.com        iburst minpoll 2 maxpoll 2 maxsources 3 maxdelay 0.3
+pool ntp.ubuntu.com        iburst minpoll 2 maxpoll 2 maxsources 3 maxdelay 0.3
 
 # This directive specify the location of the file containing ID/key pairs for
 # NTP authentication.
