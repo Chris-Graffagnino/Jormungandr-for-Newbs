@@ -332,8 +332,8 @@ free -h
 
 (Add the following to the bottom of /etc/sysctl.conf)
 ```
-fs.file-max = 2097152
-fs.nr_open = 2097152
+fs.file-max = 10000000
+fs.nr_open = 10000000
 kernel.printk = 4 4 1 7
 kernel.panic = 10
 kernel.sysrq = 0
@@ -342,13 +342,8 @@ kernel.shmall = 2147483648
 kernel.randomize_va_space = 1
 kernel.pid_max = 65536
 net.core.netdev_max_backlog = 262144
-net.core.somaxconn = 65535
+net.core.somaxconn = 16384
 net.core.optmem_max = 25165824
-net.ipv4.neigh.default.gc_thresh1 = 4096
-net.ipv4.neigh.default.gc_thresh2 = 8192
-net.ipv4.neigh.default.gc_thresh3 = 16384
-net.ipv4.neigh.default.gc_interval = 5
-net.ipv4.neigh.default.gc_stale_time = 120
 net.ipv4.tcp_slow_start_after_idle = 0
 net.ipv4.ip_no_pmtu_disc = 1
 net.ipv4.route.flush = 1
@@ -380,8 +375,6 @@ net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
 
 vm.swappiness = 20
-vm.dirty_ratio = 80
-vm.dirty_background_ratio = 5
 vm.vfs_cache_pressure = 50
 ```
 
