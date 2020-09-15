@@ -334,20 +334,15 @@ free -h
 ```
 fs.file-max = 10000000
 fs.nr_open = 10000000
-kernel.printk = 4 4 1 7
 kernel.panic = 10
 kernel.sysrq = 0
-kernel.shmmax = 2147483648
-kernel.shmall = 2147483648
-kernel.randomize_va_space = 1
+kernel.randomize_va_space = 2
+kernel.dmesg_restrict = 0
+kernel.kptr_restrict = 2
 kernel.pid_max = 65536
 net.core.netdev_max_backlog = 262144
 net.core.somaxconn = 16384
-net.core.optmem_max = 25165824
-net.ipv4.tcp_slow_start_after_idle = 0
 net.ipv4.ip_no_pmtu_disc = 1
-net.ipv4.route.flush = 1
-net.ipv4.route.max_size = 8048576
 net.ipv4.icmp_echo_ignore_broadcasts = 1
 net.ipv4.icmp_ignore_bogus_error_responses = 1
 net.ipv4.tcp_max_tw_buckets = 1440000
@@ -358,13 +353,16 @@ net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_keepalive_time = 60
 net.ipv4.tcp_keepalive_intvl = 4
 net.ipv4.tcp_keepalive_probes = 5
+net.ipv4.tcp_slow_start_after_idle = 0
 net.ipv4.ip_forward = 0
 net.ipv4.conf.all.accept_redirects = 0
 net.ipv4.conf.all.send_redirects = 0
 net.ipv4.conf.all.accept_source_route = 0
 net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.eth0.rp_filter = 1
 
-# Disable IPV6
+# Disable ipv6
 net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
