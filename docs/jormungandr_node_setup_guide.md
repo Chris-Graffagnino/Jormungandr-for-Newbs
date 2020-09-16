@@ -335,13 +335,9 @@ free -h
 fs.file-max = 10000000
 fs.nr_open = 10000000
 kernel.panic = 10
-kernel.sysrq = 0
 kernel.randomize_va_space = 2
 kernel.dmesg_restrict = 0
 kernel.kptr_restrict = 2
-kernel.pid_max = 65536
-net.core.netdev_max_backlog = 262144
-net.core.somaxconn = 16384
 net.ipv4.ip_no_pmtu_disc = 1
 net.ipv4.icmp_echo_ignore_broadcasts = 1
 net.ipv4.icmp_ignore_bogus_error_responses = 1
