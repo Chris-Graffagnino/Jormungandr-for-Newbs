@@ -339,12 +339,10 @@ kernel.randomize_va_space = 2
 kernel.dmesg_restrict = 0
 kernel.kptr_restrict = 2
 net.ipv4.ip_no_pmtu_disc = 1
-net.ipv4.icmp_echo_ignore_broadcasts = 1
 net.ipv4.icmp_ignore_bogus_error_responses = 1
 net.ipv4.tcp_max_tw_buckets = 1440000
 net.ipv4.tcp_fin_timeout = 15
 net.ipv4.tcp_max_syn_backlog = 16384
-net.ipv4.tcp_sack = 0
 net.ipv4.tcp_syncookies = 1
 net.ipv4.tcp_keepalive_time = 60
 net.ipv4.tcp_keepalive_intvl = 4
@@ -357,17 +355,12 @@ net.ipv4.conf.all.accept_source_route = 0
 net.ipv4.conf.all.rp_filter = 1
 net.ipv4.conf.default.rp_filter = 1
 net.ipv4.conf.eth0.rp_filter = 1
-
-# Disable ipv6
 net.ipv6.conf.all.disable_ipv6 = 1
 net.ipv6.conf.default.disable_ipv6 = 1
 net.ipv6.conf.lo.disable_ipv6 = 1
 net.ipv6.conf.eth0.disable_ipv6 = 1
-
-# Use Google's congestion control algorithm
 net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
-
 vm.swappiness = 20
 vm.vfs_cache_pressure = 50
 ```
