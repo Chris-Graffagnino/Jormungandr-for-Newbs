@@ -334,37 +334,17 @@ free -h
 ```
 fs.file-max = 10000000
 fs.nr_open = 10000000
-kernel.panic = 10
-kernel.randomize_va_space = 1
-kernel.dmesg_restrict = 0
-kernel.kptr_restrict = 2
-net.ipv4.ip_no_pmtu_disc = 1
-net.ipv4.icmp_echo_ignore_broadcasts = 1
-net.ipv4.icmp_ignore_bogus_error_responses = 1
-net.ipv4.tcp_max_tw_buckets = 1440000
-net.ipv4.tcp_fin_timeout = 15
-net.ipv4.tcp_max_syn_backlog = 100000
+
 net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_tw_reuse = 1
-net.ipv4.tcp_keepalive_time = 60
+net.ipv4.tcp_max_syn_backlog = 2048
+
+net.ipv4.tcp_keepalive_time = 240
 net.ipv4.tcp_keepalive_intvl = 4
 net.ipv4.tcp_keepalive_probes = 5
-net.ipv4.tcp_slow_start_after_idle = 0
-net.ipv4.ip_forward = 0
-net.ipv4.conf.all.accept_redirects = 0
-net.ipv4.conf.all.send_redirects = 0
-net.ipv4.conf.all.accept_source_route = 0
-net.ipv4.conf.all.rp_filter = 1
-net.ipv4.conf.default.rp_filter = 1
-net.ipv4.conf.eth0.rp_filter = 1
-net.ipv6.conf.all.disable_ipv6 = 1
-net.ipv6.conf.default.disable_ipv6 = 1
-net.ipv6.conf.lo.disable_ipv6 = 1
-net.ipv6.conf.eth0.disable_ipv6 = 1
+
+# Use Google's congestion control algorithm
 net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
-vm.swappiness = 20
-vm.vfs_cache_pressure = 50
 ```
 
 ### reload /etc/sysctl.conf
@@ -916,6 +896,6 @@ f() { find . -iname "*$1*"; }
 ```
 # You finished! Buy me a beer?
 ```
-DdzFFzCqrht3kMqsjpaLjr3L8tw5Jn2E9Vr9id9R33jB1P4TqRKZ87UVkzrF9NMarNLNKx5fuahvHiaD4Cz9K71CD69QQDBzS5mExsMr
+addr1qyp3rzntv2h0jknpy4hfjdu9ks4qzjuepmcrpvf9ekuchyqlfe4qmzk8s5st8drrrm3ecs70t425ktfn5h9mlackd8fsv6n0dr
 ```
 
