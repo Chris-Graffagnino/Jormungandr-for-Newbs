@@ -88,9 +88,6 @@ passwd root
 
 # Copy pub key to new user
 rsync --archive --chown=<USERNAME>:<USERNAME> ~/.ssh /home/<USERNAME>
-
-# Set new user shell to bash
-chsh -s /bin/bash <USERNAME>
 ```
 
 (Do not log out as root user just yet...)
