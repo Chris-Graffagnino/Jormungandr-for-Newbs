@@ -74,24 +74,17 @@ ssh-copy-id -i ~/.ssh/<YOUR KEYNAME>.pub root@<YOUR VPS PUBLIC IP ADDRESS>
 
 ## Create non-root user
 ```
-# Create user and password
-useradd <USERNAME> && passwd <USERNAME>
+# Create group for ssh-users
+groupadd ssh-users
 
-# Add non-root user to sudo group
-usermod -aG sudo <USERNAME>
+# Create admin user
+useradd -c “<SOME COMMENT HERE>” -m -d /home/<YOUR_ADMIN_USER> -s /bin/bash -G sudo,ssh-users <YOUR_ADMIN_USER>
 
-# Give permissions to new user (please type sudo here... even as root user)
-sudo visudo
+# Change password for admin user
+passwd <USERNAME>
 
-# You should now be in the editor called "nano"
-# ctrl+o to save, ctrl+x to quit
-# add entry for new user under "User privilege specification"
-<USERNAME> ALL=(ALL:ALL) ALL
-
-# Now that you've saved & quit the file above...
-# Add dir and permissions
-mkdir /home/<USERNAME>
-chown <USERNAME>:<USERNAME> /home/<USERNAME> -R
+# Change password for root user
+passwd root
 
 # Copy pub key to new user
 rsync --archive --chown=<USERNAME>:<USERNAME> ~/.ssh /home/<USERNAME>
@@ -167,9 +160,8 @@ nano /etc/ssh/sshd_config
 # Change the line "#Port 22", to "Port <CHOOSE A PORT BETWEEN 1024 AND 65535>"
 # Remember to remove the "#"
 
-# While we're here, let's give ourselves just a bit more time before getting disconnected, ie "broken pipe".
-# Change the line "#TCPKeepAlive yes" to "TCPKeepAlive no"
-# Change the line "#ClientAliveInterval 0" to "ClientAliveInterval 1800"
+# Add this line anywhere in the file
+AllowGroups ssh-users
 
 # Type ctrl+o to save, ctrl+x to exit
 ```
