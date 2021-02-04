@@ -1,4 +1,4 @@
-# Setup Cardano Shelley staking node (Ubuntu 18.04)
+# Setup Cardano Shelley staking node (Ubuntu 20.04)
 
 -- DISCLAIMER: This guide is for educational purposes only. Do not use in production with real funds.  
 -- DISCLAIMER: By using this guide, you assume sole risk and waive any claims of liability against the author.  
