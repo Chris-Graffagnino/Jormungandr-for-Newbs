@@ -15,6 +15,7 @@ do
  sleep 5
  tries=10
  deltaMax=25
+ maxCheck=900
  counter=0
  bootstrapCounter=0
  while [[ $counter -le $tries ]]
@@ -68,13 +69,21 @@ do
      lastBlockHash=$(stats | head -n 6 | tail -n 1 | awk '{print $2}')
      now=$(date +"%r")
      if [[ ! -z $lastBlockHash ]]; then
-        echo -e ${GREEN}"$now: Node was restarted successfully. Next check in 15 minutes."${NC}
+        echo -e ${GREEN}"$now: Node was restarted successfully."${NC}
         echo "$now: Your node was restarted successfully." >> logs/restart.out
      fi
  else
-     echo -e ${GREEN}$now": Node is in sync with the blockchain. Next check in 15 minutes."${NC}
+     echo -e ${GREEN}$now": Node is in sync with the blockchain."${NC}
      #./sendmytip.sh >> /dev/null
  fi
  initial=false
- sleep 900
+ sleepFor=$(bc <<< "scale=1; $maxCheck * (1 - $deltaBlockCount / $deltaMax)")
+ sleepFor=$(bc <<< "sclae=0; $sleepFor/1")
+ echo -e ${GREEN}"Next check in $sleepFor seconds."${NC}
+ while [ $sleepFor -ge 0 ]
+ do
+#     ./sendmytip.sh >> /dev/null
+     sleep 5
+     sleepFor=&(bc <<< "$sleepFor - 5")
+ done
 done
