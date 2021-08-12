@@ -882,9 +882,4 @@ alias claer="clear"
 
 # a "Recursively search current directory for file" that's easy to remember. Call it like this: f <FILENAME>
 f() { find . -iname "*$1*"; }
-```
-# You finished! Buy me a beer?
-```
-addr1qyp3rzntv2h0jknpy4hfjdu9ks4qzjuepmcrpvf9ekuchyqlfe4qmzk8s5st8drrrm3ecs70t425ktfn5h9mlackd8fsv6n0dr
-```
 
